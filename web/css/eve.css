@@ -1,0 +1,70 @@
+body, html {
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 400;
+}
+
+.eve-panel {
+    background-color: rgba(0,0,0,0.7);
+    padding: 25px;
+    border: 1px solid rgba(100,100,100,0.6);
+}
+
+.eve-panel .eve-panel-body {
+    background-color: #222222;
+    padding: 15px;
+    color: #eeeeee;
+}
+
+.eve-btn {
+    border: none;
+    font-weight: 700;
+}
+
+.eve-btn-big {
+    padding: 15px 20px;
+}
+
+.eve-btn-primary {
+    background-color: #428bca;
+    border-bottom: 2px solid #2c55a9;
+}
+
+.eve-btn-primary:hover {
+    background-color: #3e83be;
+}
+
+.eve-btn-default {
+    background-color: #716d74;
+    border-bottom: 2px solid #4e4b53;
+}
+
+.eve-btn-default:hover {
+    background-color: #68656b;
+}
+
+.eve-btn-warning {
+    background-color: #cb8f1c;
+    border-bottom: 2px solid #a46c1b;
+}
+
+.eve-btn-warning:hover {
+    background-color: #b9821a;
+}
+
+.eve-btn-success {
+    background-color: #22ab24;
+    border-bottom: 2px solid #208121;
+}
+
+.eve-btn-success:hover {
+    background-color: #1f9b21;
+}
+
+.eve-btn-danger {
+    background-color: #be2f29;
+    border-bottom: 2px solid #9e2924;
+}
+
+.eve-btn-danger:hover {
+    background-color: #ab2b25;
+}

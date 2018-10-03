@@ -1,0 +1,43 @@
+body {
+    background-image: url("http://photos.napalm.net/clubsi/2560x1440g-07a.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.scope-panel {
+    border: 1px solid #555;
+    background: #444;
+    margin-bottom: 15px;
+}
+
+.scope-key {
+    padding: 5px 10px;
+    border-bottom: 1px solid #555;
+}
+
+.scope-title {
+    padding: 5px 10px;
+}
+
+.reg-btn {
+    width: 60%;
+}
+
+.form-control {
+    color: #eee;
+    border-radius: 0;
+    background-color: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #666;
+    outline: none;
+    box-shadow: none!important;
+}
+
+.control-label {
+    text-transform: uppercase;
+    font-weight: 400;
+    color: #ccc;
+}
