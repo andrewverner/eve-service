@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Hash;
 use app\models\RegForm;
+use app\models\User;
 use DenisKhodakovskiyESI\EVESwaggerAPI;
 use Yii;
+use yii\db\Expression;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -139,6 +142,55 @@ class SiteController extends Controller
     {
         $model = new RegForm();
 
+        if ($data = Yii::$app->request->post('RegForm')) {
+            $model->setAttributes($data);
+            if ($model->validate()) {
+                $user = new User();
+                $user->username = $model->username;
+                $user->password = md5($model->password1);
+                $user->email = $model->email;
+                if ($user->save()) {
+                    Hash::create($user->id);
+
+                    return $this->redirect(Yii::$app->urlManager->createUrl('site/reg-complete'));
+                }
+            }
+        }
+
         return $this->render('registration', ['model' => $model]);
+    }
+
+    public function actionRegComplete()
+    {
+        return $this->render('reg-complete');
+    }
+
+    public function actionActivate($code)
+    {
+        /**
+         * @var Hash $hash
+         */
+        $hash = Hash::find()->where([
+            'type' => Hash::TYPE_ACTIVATE_ACCOUNT,
+            'is_used' => 0,
+            'value' => $code,
+        ])->one();
+
+        if (!$hash) {
+            echo 'Not found';
+            return;
+        }
+
+        if (new \DateTime($hash->expired) <= new \DateTime()) {
+            echo 'Expired';
+            return;
+        }
+
+        $user = User::findOne($hash->user_id);
+        $user->active = 1;
+        if ($user->save()) {
+            $hash->is_used = 1;
+            $hash->save();
+        }
     }
 }

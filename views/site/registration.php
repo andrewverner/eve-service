@@ -32,10 +32,10 @@ RegistrationAsset::register($this);
                         </div>
                         <div class="row">
                             <div class="col-md-6 text-left">
-                                <input type="submit" class="eve-btn eve-btn-big eve-btn-default reg-btn" value="CANCEL" />
+                                <a class="eve-btn eve-btn-big eve-btn-default reg-btn" href="#">Cancel</a>
                             </div>
                             <div class="col-md-6 text-right">
-                                <input type="submit" class="eve-btn eve-btn-big eve-btn-primary reg-btn" value="AUTHORIZE" />
+                                <input type="submit" class="eve-btn eve-btn-big eve-btn-primary reg-btn" value="Authorize" />
                             </div>
                         </div>
                     </div>

@@ -68,3 +68,12 @@ body, html {
 .eve-btn-danger:hover {
     background-color: #ab2b25;
 }
+
+a.eve-btn {
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    color: #eee;
+    text-transform: uppercase;
+}

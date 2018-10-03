@@ -34,14 +34,11 @@ body {
     border-bottom: 1px solid #666;
     outline: none;
     box-shadow: none!important;
+    padding: 6px 0;
 }
 
 .control-label {
     text-transform: uppercase;
     font-weight: 400;
     color: #ccc;
-}
-
-.has-success .help-block, .has-success .control-label, .has-success .radio, .has-success .checkbox, .has-success .radio-inline, .has-success .checkbox-inline, .has-success.radio label, .has-success.checkbox label, .has-success.radio-inline label, .has-success.checkbox-inline label {
-    color: #eee;
 }
