@@ -17,6 +17,9 @@ use Yii;
  * @property string $scopes
  * @property string $created
  * @property string $updated
+ * @property int $user_id
+ * @property string $refresh_token
+ * @property string $access_token
  */
 class Token extends \yii\db\ActiveRecord
 {
@@ -34,11 +37,11 @@ class Token extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['character_id', 'character_name', 'expires_on', 'scopes', 'created'], 'required'],
-            [['character_id'], 'integer'],
+            [['character_id', 'character_name', 'expires_on', 'scopes', 'created', 'user_id', 'refresh_token', 'access_token'], 'required'],
+            [['character_id', 'user_id'], 'integer'],
             [['expires_on', 'created', 'updated'], 'safe'],
             [['scopes'], 'string'],
-            [['character_name', 'token_type', 'character_owner_hash', 'intellectual_property'], 'string', 'max' => 255],
+            [['character_name', 'token_type', 'character_owner_hash', 'intellectual_property', 'refresh_token', 'access_token'], 'string', 'max' => 255],
         ];
     }
 
@@ -58,6 +61,13 @@ class Token extends \yii\db\ActiveRecord
             'scopes' => 'Scopes',
             'created' => 'Created',
             'updated' => 'Updated',
+            'user_id' => 'User ID',
+            'refresh_token' => 'Refresh Token',
         ];
+    }
+
+    public function getCharacter()
+    {
+        return EVEAPI::api()->character($this->character_id, $this->access_token);
     }
 }

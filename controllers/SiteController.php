@@ -5,9 +5,7 @@ namespace app\controllers;
 use app\models\Hash;
 use app\models\RegForm;
 use app\models\User;
-use DenisKhodakovskiyESI\EVESwaggerAPI;
 use Yii;
-use yii\db\Expression;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -66,14 +64,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $api = new EVESwaggerAPI();
-        $alliancesList = [];
-        try {
-            $alliancesList = $api->eve()->alliancesList();
-        } catch (\Exception $exception) {
-
-        }
-        return $this->render('index', ['alliances' => $alliancesList]);
+        return $this->render('index', ['alliances' => []]);
     }
 
     /**
@@ -89,7 +80,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(Yii::$app->urlManager->createUrl('my'));
         }
 
         $model->password = '';

@@ -37,8 +37,23 @@ body {
     padding: 6px 0;
 }
 
+.form-control:focus {
+    background-color: transparent;
+}
+
 .control-label {
     text-transform: uppercase;
     font-weight: 400;
     color: #ccc;
+}
+
+.card {
+    border: none;
+    border-radius: 0;
+    background-color: transparent;
+    border-right: 1px solid #888;
+}
+
+.card:last-child {
+    border-right: none;
 }

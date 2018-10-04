@@ -21,6 +21,8 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'https://fonts.googleapis.com/css?family=Exo+2:400,400i,700,700i',
+        'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
+        'https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css',
         'css/site.css',
         'css/eve.css',
     ];

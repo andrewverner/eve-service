@@ -12,6 +12,7 @@ use app\models\EVEAPI;
 use app\models\Token;
 use DenisKhodakovskiyESI\EVESwaggerAPI;
 use DenisKhodakovskiyESI\src\EVESSO;
+use yii\db\Exception;
 use yii\db\Expression;
 use yii\web\Controller;
 
@@ -63,15 +64,31 @@ class SsoController extends Controller
             if ($ssoToken) {
                 $verify = $this->sso->verify($ssoToken->accessToken);
                 if ($verify) {
-                    $token = new Token();
-                    $token->character_id = $verify->characterID;
-                    $token->character_name = $verify->characterName;
-                    $token->expires_on = $verify->expiresOn->format('Y-m-d H:i:s');
-                    $token->token_type = $verify->tokenType;
-                    $token->character_owner_hash = $verify->characterOwnerHash;
-                    $token->intellectual_property = $verify->intellectualProperty;
-                    $token->scopes = serialize($verify->scopes);
-                    $token->created = new Expression('NOW()');
+                    $token = Token::findOne([
+                        'character_id' => $verify->characterID,
+                        'user_id' => \Yii::$app->user->id,
+                    ]);
+                    if ($token) {
+                        $token->expires_on = $verify->expiresOn->format('Y-m-d H:i:s');
+                        $token->scopes = serialize($verify->scopes);
+                        $token->updated = new Expression('NOW()');
+                        $token->user_id = \Yii::$app->user->id;
+                        $token->refresh_token = $ssoToken->refreshToken;
+                        $token->access_token = $ssoToken->accessToken;
+                    } else {
+                        $token = new Token();
+                        $token->character_id = $verify->characterID;
+                        $token->character_name = $verify->characterName;
+                        $token->expires_on = $verify->expiresOn->format('Y-m-d H:i:s');
+                        $token->token_type = $verify->tokenType;
+                        $token->character_owner_hash = $verify->characterOwnerHash;
+                        $token->intellectual_property = $verify->intellectualProperty;
+                        $token->scopes = serialize($verify->scopes);
+                        $token->created = new Expression('NOW()');
+                        $token->user_id = \Yii::$app->user->id;
+                        $token->refresh_token = $ssoToken->refreshToken;
+                        $token->access_token = $ssoToken->accessToken;
+                    }
                     if ($token->validate()) {
                         $token->save();
                     } else {

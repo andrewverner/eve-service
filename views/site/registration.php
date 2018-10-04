@@ -10,7 +10,7 @@ RegistrationAsset::register($this);
 <div class="site-index">
     <div class="body-content">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <div class="col-xs-12 col-sm-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
                 <div class="eve-panel">
                     <?php $form = \yii\widgets\ActiveForm::begin([
                         'id' => 'reg-form',
@@ -31,10 +31,10 @@ RegistrationAsset::register($this);
                             ])->textInput(); ?>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 text-left">
+                            <div class="col-6 text-left">
                                 <a class="eve-btn eve-btn-big eve-btn-default reg-btn" href="#">Cancel</a>
                             </div>
-                            <div class="col-md-6 text-right">
+                            <div class="col-6 text-right">
                                 <input type="submit" class="eve-btn eve-btn-big eve-btn-primary reg-btn" value="Authorize" />
                             </div>
                         </div>
