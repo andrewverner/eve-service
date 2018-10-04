@@ -91,6 +91,8 @@ class SsoController extends Controller
                     }
                     if ($token->validate()) {
                         $token->save();
+
+                        return $this->redirect(\Yii::$app->urlManager->createUrl('my'));
                     } else {
                         print_r($token->errors);
                     }

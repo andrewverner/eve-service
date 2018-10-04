@@ -41,7 +41,8 @@ class Token extends \yii\db\ActiveRecord
             [['character_id', 'user_id'], 'integer'],
             [['expires_on', 'created', 'updated'], 'safe'],
             [['scopes'], 'string'],
-            [['character_name', 'token_type', 'character_owner_hash', 'intellectual_property', 'refresh_token', 'access_token'], 'string', 'max' => 255],
+            [['character_name', 'token_type', 'character_owner_hash', 'intellectual_property', 'access_token'], 'string', 'max' => 255],
+            [['refresh_token'], 'string', 'max' => 512],
         ];
     }
 
