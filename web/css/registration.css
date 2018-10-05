@@ -57,3 +57,8 @@ body {
 .card:last-child {
     border-right: none;
 }
+
+.scope-info {
+    cursor: pointer;
+    float: right;
+}

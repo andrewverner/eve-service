@@ -47,6 +47,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'character/<id:\d+>' => 'character/index',
             ],
         ],
         'i18n' => [

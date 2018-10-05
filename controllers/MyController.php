@@ -9,10 +9,12 @@
 namespace app\controllers;
 
 use app\models\EVEAPI;
+use app\models\Scope;
 use app\models\Token;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class MyController extends Controller
 {
@@ -53,11 +55,9 @@ class MyController extends Controller
         $sso = $api->sso();
 
         if ($scopes = \Yii::$app->request->post('Scopes')) {
-            return $this->redirect($sso->getAuthUrl($scopes));
+            return $this->redirect($sso->getAuthUrl(array_merge($scopes, Scope::DEFAULT_SCOPES)));
         }
 
-        return $this->render('add', [
-            'scopes' => $sso->getScopesList(),
-        ]);
+        return $this->render('add');
     }
 }

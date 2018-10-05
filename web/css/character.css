@@ -1,0 +1,9 @@
+ul.character-menu {
+    list-style: none inside;
+    padding: 0;
+    margin: 0;
+}
+
+ul.character-menu a {
+
+}

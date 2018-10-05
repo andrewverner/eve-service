@@ -25,6 +25,7 @@ body, html {
     font-weight: 700;
     cursor: pointer;
     padding: 5px 10px;
+    color: #eee;
 }
 
 .eve-btn-big {
@@ -82,4 +83,44 @@ a.eve-btn {
     display: inline-block;
     color: #eee;
     text-transform: uppercase;
+}
+
+.note {
+    padding: 10px 15px;
+    margin: 15px 0;
+}
+
+.note-info {
+    background-color: #428bca;
+    border-left: 5px solid #2c55a9;
+}
+
+.note-default {
+    background-color: #716d74;
+    border-left: 5px solid #4e4b53;
+}
+
+.note-warning {
+    background-color: #cb8f1c;
+    border-left: 5px solid #a46c1b;
+}
+
+.note-success {
+    background-color: #22ab24;
+    border-left: 5px solid #208121;
+}
+
+.note-danger {
+    background-color: #be2f29;
+    border-left: 5px solid #9e2924;
+}
+
+.eve-link {
+    text-decoration: none;
+    color: #cb8f1c;
+}
+
+.eve-link:hover {
+    text-decoration: underline;
+    color: #cb8f1c;
 }

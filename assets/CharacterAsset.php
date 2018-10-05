@@ -2,23 +2,22 @@
 /**
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
- * Date: 03.10.18
- * Time: 8:47
+ * Date: 05.10.18
+ * Time: 14:06
  */
 
 namespace app\assets;
 
 use yii\web\AssetBundle;
 
-class RegistrationAsset extends AssetBundle {
+class CharacterAsset extends AssetBundle
+{
     public $css = [
-        'css/registration.css',
+        'css/character.css',
     ];
     public $js = [
-        'js/registration.js',
     ];
     public $depends = [
-        'yii\web\JqueryAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
 }

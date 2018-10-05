@@ -71,4 +71,9 @@ class Token extends \yii\db\ActiveRecord
     {
         return EVEAPI::api()->character($this->character_id, $this->access_token);
     }
+
+    public function getScopes()
+    {
+        return unserialize($this->scopes);
+    }
 }

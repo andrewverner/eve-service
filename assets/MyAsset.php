@@ -10,15 +10,11 @@ namespace app\assets;
 
 use yii\web\AssetBundle;
 
-class RegistrationAsset extends AssetBundle {
+class MyAsset extends AssetBundle {
     public $css = [
-        'css/registration.css',
+        'css/my.css'
     ];
-    public $js = [
-        'js/registration.js',
-    ];
-    public $depends = [
-        'yii\web\JqueryAsset',
+    /*public $depends = [
         'yii\bootstrap\BootstrapAsset',
-    ];
+    ];*/
 }

@@ -1,0 +1,35 @@
+.character-select-container {
+    display: inline-block;
+    padding: 10px;
+    background-color: rgba(58, 72, 88, 0.75);
+    border-bottom: 2px solid #4f5c6b;
+    cursor: pointer;
+    transition: background-color 250ms;
+    margin-bottom: 30px;
+}
+
+.character-select-container:hover {
+    background-color: rgba(58, 72, 88, 1);
+    transition: background-color 250ms;
+}
+
+.character-select-name {
+    margin-top: 10px;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.character-select-container img {
+    border: 1px solid rgba(200,200,200,0.2);
+}
+
+@media (max-width: 767px) {
+    .character-select-container {
+        width: 100%;
+    }
+
+    .character-select-container img {
+        width: 100%;
+    }
+}

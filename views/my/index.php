@@ -1,7 +1,11 @@
 <?php
 /**
+ * @var \yii\web\View $this
  * @var \app\models\Token[] $tokens
  */
+
+use app\assets\MyAsset;
+MyAsset::register($this);
 ?>
 <div class="site-index">
     <div class="body-content">
@@ -12,11 +16,18 @@
                 </span>
             </div>
         </div>-->
-        <div class="row text-center">
+        <div class="row">
             <?php if ($tokens): ?>
                 <?php foreach ($tokens as $token): ?>
-                <div class="col-lg-4 col-md-4 col-sm-4 text-center">
-                    <?= \yii\helpers\Html::img($token->getCharacter()->portrait()->px256x256) ?>
+                <div class="col-lg-4 col-md-6 col-sm-6 col-6 text-center">
+                    <div class="character-select-container">
+                        <div class="character-select-portrait">
+                            <?= \yii\helpers\Html::img($token->getCharacter()->portrait()->px256x256); ?>
+                        </div>
+                        <div class="character-select-name">
+                            <?= $token->character_name; ?>
+                        </div>
+                    </div>
                 </div>
                 <?php endforeach; ?>
             <?php else: ?>
