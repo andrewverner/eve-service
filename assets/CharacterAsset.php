@@ -19,5 +19,6 @@ class CharacterAsset extends AssetBundle
     ];
     public $depends = [
         'yii\bootstrap\BootstrapAsset',
+        'app\assets\AppAsset',
     ];
 }

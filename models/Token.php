@@ -76,4 +76,21 @@ class Token extends \yii\db\ActiveRecord
     {
         return unserialize($this->scopes);
     }
+
+    public function can(string $scope)
+    {
+        return in_array($scope, $this->getScopes());
+    }
+
+    public function check()
+    {
+        if (new \DateTime($this->expires_on) >= new \DateTime()) {
+            $api = EVEAPI::api();
+            $token = $api->sso()->refreshToken($this->refresh_token);
+            if ($token) {
+                $this->access_token = $token->accessToken;
+                $this->save();
+            }
+        }
+    }
 }

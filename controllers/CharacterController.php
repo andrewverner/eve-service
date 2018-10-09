@@ -22,6 +22,8 @@ class CharacterController extends Controller
     public function actionIndex($id)
     {
         $token = Token::findOne(['character_id' => $id]);
+        $token->check();
+
         if (!$token || $token->user_id != \Yii::$app->user->id) {
             throw new NotFoundHttpException('Character not found');
         }
