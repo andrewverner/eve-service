@@ -2,34 +2,61 @@
 /**
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
- * Date: 09.10.18
- * Time: 13:06
+ * Date: 10.10.18
+ * Time: 9:00
  */
 
 namespace app\components\esi;
 
-use app\components\esi\components\EVERequest;
-use app\components\esi\components\EVESSO;
-use yii\base\Component;
+use app\components\esi\character\Character;
+use app\components\esi\components\Request;
+use app\components\esi\components\SecureRequest;
+use app\components\esi\sso\SSO;
+use app\models\Token;
 
-class EVE extends Component
+class EVE
 {
-    public $clientId;
-    public $secretKey;
-    public $callback;
-
     /**
-     * @param string $uri
-     * @param string|null $type
-     * @return EVERequest
+     * @param $uri
+     * @param array|null $params
+     * @param null $type
+     * @return Request
      */
-    public function request(string $uri, string $type = null)
+    public static function request($uri, array $params = null, $type = null)
     {
-        return new EVERequest($uri, $type);
+        return new Request($uri, $type);
     }
 
-    public function sso()
+    /**
+     * @param $uri
+     * @param Token $token
+     * @param string $type
+     * @return SecureRequest
+     */
+    public static function secureRequest($uri, Token $token, $type = null)
     {
-        return new EVESSO($this->clientId, $this->secretKey, $this->callback);
+        return new SecureRequest($uri, $token, $type);
+    }
+
+    /**
+     * @return SSO
+     */
+    public static function sso()
+    {
+        return new SSO(
+            \Yii::$app->params['esi']['clientId'],
+            \Yii::$app->params['esi']['secretKey'],
+            \Yii::$app->params['esi']['callback']
+        );
+    }
+
+    /**
+     * @param $characterId
+     * @param Token|null $token
+     * @return Character
+     */
+    public static function character($characterId, Token $token = null)
+    {
+        return new Character($characterId, $token);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\esi\EVE;
 use Yii;
 
 /**
@@ -276,7 +277,7 @@ class Scope extends \yii\db\ActiveRecord
 
     public static function getScopeTitle($scope)
     {
-        $scopes = EVEAPI::api()->sso()->getScopesList();
+        $scopes = EVE::sso()->getScopesList();
         return $scopes[$scope] ?? '';
     }
 

@@ -2,6 +2,7 @@
 /**
  * @var \yii\web\View $this
  * @var \app\components\esi\character\Character $character
+ * @var \app\components\esi\assets\CharacterAssetItem[] $assets
  */
 
 use app\assets\CharacterAsset;
@@ -29,7 +30,7 @@ $this->title = $character->name;
         <div class="character-content-container">
             <div class="row">
                 <div class="col-12">
-                    123
+                    <?php var_dump($assets); ?>
                 </div>
             </div>
         </div>

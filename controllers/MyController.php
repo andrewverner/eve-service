@@ -8,13 +8,12 @@
 
 namespace app\controllers;
 
-use app\models\EVEAPI;
+use app\components\esi\EVE;
 use app\models\Scope;
 use app\models\Token;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 
 class MyController extends Controller
 {
@@ -51,9 +50,7 @@ class MyController extends Controller
 
     public function actionAdd()
     {
-        $api = EVEAPI::api();
-        $sso = $api->sso();
-
+        $sso = EVE::sso();
         if ($scopes = \Yii::$app->request->post('Scopes')) {
             return $this->redirect($sso->getAuthUrl(array_merge($scopes, Scope::DEFAULT_SCOPES)));
         }

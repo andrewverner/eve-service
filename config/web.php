@@ -17,7 +17,7 @@ $config = [
             'cookieValidationKey' => 'IELLKJFHBkR_yta1LsGfIvb9MXi8sB89',
         ],
         'cache' => [
-            'class' => 'yii\caching\FileCache',
+            'class' => 'yii\redis\Cache',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -48,6 +48,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 'character/<id:\d+>' => 'character/index',
+                'character/<id:\d+>/assets' => 'character/assets',
             ],
         ],
         'i18n' => [
@@ -63,11 +64,11 @@ $config = [
                 ],
             ],
         ],
-        'eve' => [
-            'class' => 'app\components\esi\EVE',
-            'clientId' => '37d1a7140d8c4f24a243dd9a759f414d',
-            'secretKey' => 'uDJI6DSo0irqudRmihcSqkw2eRvAstQfEHCVW3Fy',
-            'callback' => 'http://eve.local/sso/auth',
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => 'localhost',
+            'port' => 6379,
+            'database' => 0,
         ],
     ],
     'params' => $params,

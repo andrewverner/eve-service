@@ -2,13 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
- * Date: 09.10.18
- * Time: 14:47
+ * Date: 10.10.18
+ * Time: 9:56
  */
 
-namespace app\components\esi\components;
+namespace app\components\esi\sso;
 
-class SSOVerify extends BaseObject
+use app\components\esi\components\EVEObject;
+
+class SSOVerify extends EVEObject
 {
     /**
      * @var int

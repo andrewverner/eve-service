@@ -2,15 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
- * Date: 09.10.18
- * Time: 14:04
+ * Date: 10.10.18
+ * Time: 9:54
  */
 
 namespace app\components\esi\components;
 
-class BaseObject
+class EVEObject
 {
-    public function __construct($data)
+    public function __construct(array $data)
     {
         foreach ($data as $key => $value) {
             $key = lcfirst(str_replace('_', '', ucwords($key, '_')));

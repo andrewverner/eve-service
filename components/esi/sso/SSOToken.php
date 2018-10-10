@@ -2,13 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
- * Date: 09.10.18
- * Time: 14:03
+ * Date: 10.10.18
+ * Time: 9:54
  */
 
-namespace app\components\esi\components;
+namespace app\components\esi\sso;
 
-class SSOToken extends BaseObject
+use app\components\esi\components\EVEObject;
+
+class SSOToken extends EVEObject
 {
     /**
      * @var string

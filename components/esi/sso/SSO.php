@@ -2,13 +2,15 @@
 /**
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
- * Date: 09.10.18
- * Time: 13:56
+ * Date: 10.10.18
+ * Time: 9:51
  */
 
-namespace app\components\esi\components;
+namespace app\components\esi\sso;
 
-class EVESSO
+use app\components\esi\components\Request;
+
+class SSO
 {
     private $clientId;
     private $secretKey;
@@ -39,13 +41,12 @@ class EVESSO
 
     /**
      * @param $code
-     * @return SSOToken|bool
+     * @return SSOToken
      */
     public function getAccessToken($code)
     {
         $base64 = base64_encode("{$this->clientId}:{$this->secretKey}");
-        $response = (new EVERequest("{$this->host}/token"))
-            ->post()
+        $response = (new Request("{$this->host}/token", Request::TYPE_POST))
             ->body([
                 'grant_type' => 'authorization_code',
                 'code' => $code
@@ -53,22 +54,17 @@ class EVESSO
             ->headers(["Authorization: Basic {$base64}"])
             ->send();
 
-        if (!$response) {
-            return false;
-        }
-
         return new SSOToken($response);
     }
 
     /**
      * @param $refreshToken
-     * @return SSOToken|bool
+     * @return SSOToken
      */
     public function refreshToken($refreshToken)
     {
         $base64 = base64_encode("{$this->clientId}:{$this->secretKey}");
-        $response = (new EVERequest("{$this->host}/token"))
-            ->post()
+        $response = (new Request("{$this->host}/token", Request::TYPE_POST))
             ->body([
                 'grant_type' => 'refresh_token',
                 'refresh_token' => $refreshToken,
@@ -76,40 +72,20 @@ class EVESSO
             ->headers(["Authorization: Basic {$base64}"])
             ->send();
 
-        if (!$response) {
-            return false;
-        }
-
         return new SSOToken($response);
     }
 
     /**
      * @param $accessToken
-     * @return SSOVerify|bool
+     * @return SSOVerify
      */
     public function verify($accessToken)
     {
-        $response = (new EVERequest("{$this->host}/verify"))
+        $response = (new Request("{$this->host}/verify"))
             ->headers(["Authorization: Bearer {$accessToken}"])
             ->send();
 
-        if (!$response) {
-            return false;
-        }
-
         return new SSOVerify($response);
-    }
-
-    /**
-     * @param $accessToken
-     * @return Character
-     * @throws \Exception
-     */
-    public function getCharacter($accessToken)
-    {
-        $verify = $this->verify($accessToken);
-
-        return new Character($verify->characterID, $accessToken);
     }
 
     /**

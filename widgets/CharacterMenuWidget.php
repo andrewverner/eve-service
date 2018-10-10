@@ -62,7 +62,7 @@ class CharacterMenuWidget extends Widget
     private function addMenuItem($scope, $link, $title)
     {
         if (in_array($scope, $this->scopes)) {
-            $this->menu[$title] = $link;
+            $this->menu[$title] = \Yii::$app->urlManager->createUrl($link);
         }
     }
 }

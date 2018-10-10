@@ -21,17 +21,42 @@ class CharacterController extends Controller
 
     public function actionIndex($id)
     {
-        $token = Token::findOne(['character_id' => $id]);
-        $token->check();
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('index', [
+            'character' => $character,
+        ]);
+    }
+
+    public function actionAssets($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        $data = $character->assets();
+        $assets = [];
+        foreach ($data as $item) {
+            $assets[$item->locationId][] = $item;
+        }
+
+        return $this->render('assets', [
+            'character' => $character,
+            'assets' => $assets,
+        ]);
+    }
+
+    private function getToken($id)
+    {
+        $token = Token::findOne([
+            'character_id' => $id,
+            'user_id' => \Yii::$app->user->id,
+        ]);
 
         if (!$token || $token->user_id != \Yii::$app->user->id) {
             throw new NotFoundHttpException('Character not found');
         }
-        $character = $token->getCharacter();
 
-        return $this->render('index', [
-            'character' => $character,
-            'token' => $token,
-        ]);
+        return $token;
     }
 }

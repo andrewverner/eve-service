@@ -2,7 +2,9 @@
 
 namespace app\models;
 
-use Yii;
+use app\components\esi\components\Request;
+use app\components\esi\EVE;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "token".
@@ -39,7 +41,7 @@ class Token extends \yii\db\ActiveRecord
         return [
             [['character_id', 'character_name', 'expires_on', 'scopes', 'created', 'user_id', 'refresh_token', 'access_token'], 'required'],
             [['character_id', 'user_id'], 'integer'],
-            [['expires_on', 'created', 'updated'], 'safe'],
+            [['expires_on', 'created', 'updated', 'scopes'], 'safe'],
             [['scopes'], 'string'],
             [['character_name', 'token_type', 'character_owner_hash', 'intellectual_property', 'access_token'], 'string', 'max' => 255],
             [['refresh_token'], 'string', 'max' => 512],
@@ -69,7 +71,7 @@ class Token extends \yii\db\ActiveRecord
 
     public function getCharacter()
     {
-        return EVEAPI::api()->character($this->character_id, $this->access_token);
+        return EVE::character($this->character_id, $this);
     }
 
     public function getScopes()
@@ -82,15 +84,45 @@ class Token extends \yii\db\ActiveRecord
         return in_array($scope, $this->getScopes());
     }
 
-    public function check()
+    public function isExpired()
     {
-        if (new \DateTime($this->expires_on) >= new \DateTime()) {
-            $api = EVEAPI::api();
-            $token = $api->sso()->refreshToken($this->refresh_token);
-            if ($token) {
-                $this->access_token = $token->accessToken;
-                $this->save();
-            }
+        return new \DateTime($this->expires_on) <= (new \DateTime())->modify('-15 sec');
+    }
+
+    public function refresh()
+    {
+        $sso = EVE::sso();
+        $token = $sso->refreshToken($this->refresh_token);
+        if (!$token) {
+            return false;
         }
+
+        $verify = $sso->verify($token->accessToken);
+        if (!$verify) {
+            return false;
+        }
+
+        $this->access_token = $token->accessToken;
+        $this->refresh_token = $token->refreshToken;
+        $this->expires_on = $verify->expiresOn->format('Y-m-d H:i:s');
+        $this->scopes = serialize($verify->scopes);
+        $this->save();
+
+        return true;
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->updated = new Expression('NOW()');
+    }
+
+    public function hasAccess($scope)
+    {
+        return in_array($scope, $this->getScopes());
+    }
+
+    public function character()
+    {
+        return EVE::character($this->character_id, $this);
     }
 }

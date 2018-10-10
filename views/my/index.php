@@ -21,12 +21,14 @@ MyAsset::register($this);
                 <?php foreach ($tokens as $token): ?>
                 <div class="col-lg-4 col-md-6 col-sm-6 col-6 text-center">
                     <div class="character-select-container">
-                        <div class="character-select-portrait">
-                            <?= \yii\helpers\Html::img($token->getCharacter()->portrait()->px256x256); ?>
-                        </div>
-                        <div class="character-select-name">
-                            <?= $token->character_name; ?>
-                        </div>
+                        <a href="<?= Yii::$app->urlManager->createUrl("/character/{$token->character_id}") ?>">
+                            <div class="character-select-portrait">
+                                <?= \yii\helpers\Html::img($token->getCharacter()->portrait()->px256x256); ?>
+                            </div>
+                            <div class="character-select-name">
+                                <?= $token->character_name; ?>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <?php endforeach; ?>
