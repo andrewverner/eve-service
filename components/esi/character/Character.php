@@ -12,6 +12,7 @@ use app\components\esi\assets\CharacterAssetItem;
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
 use app\models\Token;
+use app\components\esi\location\CharacterLocation;
 
 class Character extends EVEObject
 {
@@ -142,5 +143,19 @@ class Character extends EVEObject
         }
 
         return $this->portrait;
+    }
+
+    /**
+     * @return bool|CharacterLocation
+     */
+    public function location()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/location/", $this->token);
+        $location = $request->send(['character_id' => $this->characterId]);
+        if (!$location) {
+            return false;
+        }
+
+        return new CharacterLocation($location);
     }
 }

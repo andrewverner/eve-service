@@ -113,7 +113,12 @@ class Token extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
+        if ($this->isNewRecord) {
+            $this->created = new Expression('NOW()');
+        }
         $this->updated = new Expression('NOW()');
+
+        return parent::beforeSave($insert);
     }
 
     public function hasAccess($scope)

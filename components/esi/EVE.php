@@ -12,6 +12,7 @@ use app\components\esi\character\Character;
 use app\components\esi\components\Request;
 use app\components\esi\components\SecureRequest;
 use app\components\esi\sso\SSO;
+use app\components\esi\universe\Universe;
 use app\models\Token;
 
 class EVE
@@ -58,5 +59,13 @@ class EVE
     public static function character($characterId, Token $token = null)
     {
         return new Character($characterId, $token);
+    }
+
+    /**
+     * @return Universe
+     */
+    public static function universe()
+    {
+        return new Universe();
     }
 }

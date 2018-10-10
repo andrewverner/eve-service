@@ -2,7 +2,8 @@
 /**
  * @var \yii\web\View $this
  * @var \app\components\esi\character\Character $character
- * @var \app\components\esi\assets\CharacterAssetItem[] $assets
+ * @var \app\components\esi\assets\CharacterAssetsList $assets
+ * @var \app\components\esi\location\CharacterLocation $location
  */
 
 use app\assets\CharacterAsset;
@@ -30,7 +31,12 @@ $this->title = $character->name;
         <div class="character-content-container">
             <div class="row">
                 <div class="col-12">
-                    <?php var_dump($assets); ?>
+                    <?php foreach ($assets->stations as $id => $assetsList): ?>
+                        <?php $systemId = \app\components\esi\EVE::universe()->station($id)->systemId; ?>
+                        <?php if ($location): ?>
+                            <?php var_dump(\app\components\esi\EVE::universe()->route($location->solarSystemId, $systemId)) ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>

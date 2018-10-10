@@ -8,6 +8,7 @@
 
 namespace app\controllers;
 
+use app\components\esi\assets\CharacterAssetsList;
 use app\models\Token;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -34,15 +35,12 @@ class CharacterController extends Controller
         $token = $this->getToken($id);
         $character = $token->character();
 
-        $data = $character->assets();
-        $assets = [];
-        foreach ($data as $item) {
-            $assets[$item->locationId][] = $item;
-        }
+        $assets = $character->assets();
 
         return $this->render('assets', [
             'character' => $character,
-            'assets' => $assets,
+            'assets' => new CharacterAssetsList($assets),
+            'location' => $character->location(),
         ]);
     }
 

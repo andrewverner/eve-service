@@ -20,6 +20,7 @@ class SecureRequest extends Request
 
     const SCOPE_MAP = [
         '/characters/{character_id}/assets/' => Scope::SCOPE_ASSETS_READ,
+        '/characters/{character_id}/location/' => Scope::SCOPE_LOCATION_READ,
     ];
 
     public function __construct($uri, Token $token, string $type = null)
