@@ -36,12 +36,26 @@ class Universe
         return new SolarSystem($system);
     }
 
-    public function route($start, $end)
+    public function route($start, $end, $flag = Route::FLAG_SHORTEST, array $avoid = [])
     {
+        $cacheKey = "route:{$start}:{$end}:{$flag}";
+        if ($avoid) {
+            $cacheKey .= ':' . md5(implode(':', $avoid));
+        }
         $request = EVE::request('/route/{origin}/{destination}/');
         return $request->send([
             'origin' => $start,
             'destination' => $end,
-        ]);
+        ], $cacheKey);
+    }
+
+    public function type($typeId)
+    {
+        $cacheKey = "type:{$typeId}";
+        $request = EVE::request("/universe/types/{type_id}/");
+        $request->cacheDuration = 3600 * 24;
+        $type = $request->send(['type_id' => $typeId], $cacheKey);
+
+        return new Type($type);
     }
 }

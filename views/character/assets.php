@@ -9,7 +9,7 @@
 use app\assets\CharacterAsset;
 CharacterAsset::register($this);
 
-$this->title = $character->name;
+$this->title = "{$character->name}: Assets";
 ?>
 <div class="site-index">
     <div class="body-content">
@@ -32,10 +32,7 @@ $this->title = $character->name;
             <div class="row">
                 <div class="col-12">
                     <?php foreach ($assets->stations as $id => $assetsList): ?>
-                        <?php $systemId = \app\components\esi\EVE::universe()->station($id)->systemId; ?>
-                        <?php if ($location): ?>
-                            <?php var_dump(\app\components\esi\EVE::universe()->route($location->solarSystemId, $systemId)) ?>
-                        <?php endif; ?>
+
                     <?php endforeach; ?>
                 </div>
             </div>

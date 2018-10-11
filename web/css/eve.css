@@ -93,6 +93,7 @@ a.eve-btn {
 .note-info {
     background-color: #428bca;
     border-left: 5px solid #2c55a9;
+    color: #eee;
 }
 
 .note-default {
@@ -123,4 +124,9 @@ a.eve-btn {
 .eve-link:hover {
     text-decoration: underline;
     color: #cb8f1c;
+}
+
+.cache-info {
+    float: right;
+    cursor: pointer;
 }

@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use app\components\esi\EVE;
 use app\models\Token;
+use yii\db\Expression;
 use yii\web\Controller;
 
 class SsoController extends Controller
@@ -53,12 +54,15 @@ class SsoController extends Controller
             $token->character_owner_hash = $verify->characterOwnerHash;
             $token->intellectual_property = $verify->intellectualProperty;
             $token->user_id = \Yii::$app->user->id;
+            $token->created = new Expression('NOW()');
         }
 
         if ($token->validate()) {
             $token->save();
 
             return $this->redirect(\Yii::$app->urlManager->createUrl('my'));
+        } else {
+            print_r($token->errors);
         }
     }
 }

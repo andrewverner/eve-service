@@ -1,0 +1,27 @@
+.skill-progress {
+    position: relative;
+    display: block;
+    background-color: #428bca;
+    height: 3px;
+}
+
+.queued-skill {
+    border-bottom: 1px solid #ddd;
+    background-color: #fff;
+}
+
+.queued-skill:last-child {
+    border-bottom: none;
+}
+
+.queued-skill:hover {
+    background-color: #e5f0ff;
+}
+
+.skill-data {
+    padding: 5px 10px;
+}
+
+.queued-skill-end-date {
+    float: right;
+}

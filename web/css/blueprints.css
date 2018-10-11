@@ -1,0 +1,24 @@
+.bp-container {
+    margin: 10px;
+    display: inline-block;
+}
+
+.bp-img {
+    display: table-cell;
+    width: 64px;
+    height: 64px;
+    text-align: right;
+    vertical-align: bottom;
+    cursor: pointer;
+}
+
+span.bp-count {
+    display: inline-block;
+    background-color: rgba(0,0,0,0.6);
+    color: #fff;
+    font-size: 11px;
+    padding: 1px 4px;
+    min-width: 20px;
+    bottom: 0;
+    border: 1px solid #aaa;
+}

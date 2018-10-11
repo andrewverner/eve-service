@@ -11,6 +11,8 @@ namespace app\components\esi\character;
 use app\components\esi\assets\CharacterAssetItem;
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
+use app\components\esi\location\CharacterShip;
+use app\components\esi\skills\QueuedSkill;
 use app\models\Token;
 use app\components\esi\location\CharacterLocation;
 
@@ -157,5 +159,63 @@ class Character extends EVEObject
         }
 
         return new CharacterLocation($location);
+    }
+
+    /**
+     * @param int $page
+     * @return CharacterBlueprint[]
+     */
+    public function blueprints($page = 1)
+    {
+        $cacheKey = "character:{$this->characterId}:blueprints:{$page}";
+
+        $request = EVE::secureRequest("/characters/{character_id}/blueprints/", $this->token);
+        $request->cacheDuration = 3600;
+        $blueprints = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        foreach ($blueprints as &$blueprint) {
+            $blueprint = new CharacterBlueprint($blueprint);
+        }
+
+        return $blueprints;
+    }
+
+    /**
+     * @return QueuedSkill[]
+     */
+    public function skillQueue()
+    {
+        $cacheKey = "skillqueue:{$this->characterId}";
+        $request = EVE::secureRequest("/characters/{character_id}/skillqueue/", $this->token);
+        $request->cacheDuration = 120;
+        $queue = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        if (!$queue) {
+            return [];
+        }
+
+        foreach ($queue as &$skill) {
+            $skill = new QueuedSkill($skill);
+        }
+
+        usort($queue, function ($first, $second) {
+            return $first->queuePosition <=> $second->queuePosition;
+        });
+
+        return $queue;
+    }
+
+    /**
+     * @return CharacterShip|null
+     */
+    public function ship()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/ship/", $this->token);
+        $ship = $request->send(['character_id' => $this->characterId]);
+        if (!$ship) {
+            return null;
+        }
+
+        return new CharacterShip($ship);
     }
 }

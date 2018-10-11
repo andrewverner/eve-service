@@ -49,6 +49,7 @@ $config = [
             'rules' => [
                 'character/<id:\d+>' => 'character/index',
                 'character/<id:\d+>/assets' => 'character/assets',
+                'character/<id:\d+>/bps' => 'character/bps',
             ],
         ],
         'i18n' => [

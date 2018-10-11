@@ -27,6 +27,9 @@ class CharacterController extends Controller
 
         return $this->render('index', [
             'character' => $character,
+            'location' => $character->location(),
+            'ship' => $character->ship(),
+            'skillQueue' => $character->skillQueue(),
         ]);
     }
 
@@ -41,6 +44,17 @@ class CharacterController extends Controller
             'character' => $character,
             'assets' => new CharacterAssetsList($assets),
             'location' => $character->location(),
+        ]);
+    }
+
+    public function actionBps($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('blueprints', [
+            'character' => $character,
+            'blueprints' => $character->blueprints(),
         ]);
     }
 
