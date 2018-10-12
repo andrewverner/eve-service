@@ -12,9 +12,11 @@ use app\components\esi\assets\CharacterAssetItem;
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
 use app\components\esi\location\CharacterShip;
+use app\components\esi\mail\MailBody;
 use app\components\esi\skills\QueuedSkill;
 use app\models\Token;
 use app\components\esi\location\CharacterLocation;
+use app\components\esi\mail\CharacterMailListItem;
 
 class Character extends EVEObject
 {
@@ -93,8 +95,10 @@ class Character extends EVEObject
         $this->characterId = $characterId;
         $this->token = $token;
 
+        $cacheKey = "character:{$characterId}";
         $request = EVE::request("/characters/{character_id}/");
-        $data = $request->send(['character_id' => $this->characterId]);
+        $request->cacheDuration = 1800;
+        $data = $request->send(['character_id' => $this->characterId], $cacheKey);
 
         parent::__construct($data);
         $this->birthday = new \DateTime($this->birthday);
@@ -173,6 +177,10 @@ class Character extends EVEObject
         $request->cacheDuration = 3600;
         $blueprints = $request->send(['character_id' => $this->characterId], $cacheKey);
 
+        if (!$blueprints) {
+            return [];
+        }
+
         foreach ($blueprints as &$blueprint) {
             $blueprint = new CharacterBlueprint($blueprint);
         }
@@ -217,5 +225,60 @@ class Character extends EVEObject
         }
 
         return new CharacterShip($ship);
+    }
+
+    /**
+     * @param null $lastMailId
+     * @return CharacterMailListItem[]
+     */
+    public function mailList($lastMailId = null)
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/mail/", $this->token);
+        if ($lastMailId) {
+            $request->query(['last_mail_id' => $lastMailId]);
+        }
+        $mails = $request->send(['character_id' => $this->characterId]);
+
+
+        if (!$mails) {
+            return [];
+        }
+
+        foreach ($mails as &$mail) {
+            $mail = new CharacterMailListItem($mail);
+        }
+
+        usort($mails, function ($first, $second) {
+            return $first->timestamp <=> $second->timestamp;
+        });
+
+        return array_reverse($mails);
+    }
+
+    /**
+     * @param $mailId
+     * @return MailBody|bool
+     */
+    public function mailBody($mailId)
+    {
+        $request = EVE::secureRequest('/characters/{character_id}/mail/{mail_id}/', $this->token);
+        $mailBody = $request->send([
+            'character_id' => $this->characterId,
+            'mail_id' => $mailId,
+        ]);
+
+        if (!$mailBody) {
+            return false;
+        }
+
+        return new MailBody($mailBody);
+    }
+
+    /**
+     * @return Token
+     */
+    public function getToken()
+    {
+        return $this->token;
     }
 }

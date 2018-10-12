@@ -19,11 +19,14 @@ $shift = 0;
     <?php $progressWidth = $currentSkillTime/$totalTime * 100 ?>
     <div class="queued-skill">
         <div class="skill-data">
-            <?= $skill->type()->name; ?> - Level <?= $skill->finishedLevel ?>.
+            Lvl <?= $skill->finishedLevel; ?> | <?= $skill->type()->name; ?>
             <span class="queued-skill-end-date"><code>Ended at <?= $skill->finishDate->format('Y-m-d H:i:s') ?></code></span>
         </div>
         <div class="skill-progress" style="left: <?= $shift ?>%; width: <?= $progressWidth ?>%"></div>
     </div>
     <?php $shift += $progressWidth; ?>
     <?php endforeach; ?>
+    <div class="w-100 text-right p-3">
+        Total time: <strong><?= $lastSkill->finishDate->diff(new DateTime())->format('%a d %H h %I m %S s') ?></strong>
+    </div>
 </div>

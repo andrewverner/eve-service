@@ -12,21 +12,8 @@ $this->title = "{$character->name}: Blueprints";
 ?>
 <div class="site-index">
     <div class="body-content">
-        <div class="character-menu-container">
-            <div class="character-photo-container">
-                <a class="go-back-link eve-btn eve-btn-primary" href="<?= Yii::$app->urlManager->createUrl('my') ?>"><i class="fas fa-chevron-circle-left"></i> Go back</a>
-                <div class="character-menu-portrait text-center">
-                    <?= \yii\helpers\Html::img($character->portrait()->px256x256); ?>
-                </div>
-                <div class="character-menu-name text-center">
-                    <?= $character->name; ?>
-                </div>
-            </div>
-            <div class="character-menu">
-                <?php $menu = \app\widgets\CharacterMenuWidget::begin(['characterId' => $character->characterId]); ?>
-                <?php \app\widgets\CharacterMenuWidget::end(); ?>
-            </div>
-        </div>
+        <?php $menu = \app\widgets\CharacterMenuWidget::begin(['characterId' => $character->characterId]); ?>
+        <?php \app\widgets\CharacterMenuWidget::end(); ?>
         <div class="character-content-container">
             <div class="row">
                 <div class="col-12">
@@ -44,7 +31,7 @@ $this->title = "{$character->name}: Blueprints";
                                 data-runs="<?= $blueprint->runs; ?>" data-time="<?= $blueprint->timeEfficiency; ?>"
                                 data-type-id="<?= $blueprint->typeId; ?>">
                                 <div class="bp-img" style="background-image: url(http://image.eveonline.com/Type/<?= $blueprint->typeId ?>_64.png)">
-                                    <span class="bp-count"><?= $blueprint->quantity == -2 ? 'C' : ($blueprint->quantity == -1 ? 'O' : $blueprint->quantity); ?></span>
+                                    <span class="bp-count text-center"><?= $blueprint->quantity == -2 ? 'C' : ($blueprint->quantity == -1 ? 'O' : $blueprint->quantity); ?></span>
                                 </div>
                             </div>
                         <?php endforeach; ?>

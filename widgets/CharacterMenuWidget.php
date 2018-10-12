@@ -44,7 +44,7 @@ class CharacterMenuWidget extends Widget
         $this->addMenuItem(Scope::SCOPE_INDUSTRY_JOBS_READ, "character/{$this->characterId}/industry", 'Industry jobs');
         $this->addMenuItem(Scope::SCOPE_KILL_MAILS_READ, "character/{$this->characterId}/killmails", 'Kill mails');
         $this->addMenuItem(Scope::SCOPE_LP_READ, "character/{$this->characterId}/lp", 'Loyalty points');
-        $this->addMenuItem(Scope::SCOPE_MAIL_READ, "character/{$this->characterId}/mail", 'Mail');
+        $this->addMenuItem(Scope::SCOPE_MAIL_READ, "character/{$this->characterId}/mail-list", 'Mail');
         $this->addMenuItem(Scope::SCOPE_MARKET_ORDERS_READ, "character/{$this->characterId}/market-orders", 'Market orders');
         $this->addMenuItem(Scope::SCOPE_MINING_READ, "character/{$this->characterId}/mining", 'Mining statistics');
         $this->addMenuItem(Scope::SCOPE_NOTIFICATIONS_READ, "character/{$this->characterId}/notifications", 'Notifications');
@@ -56,7 +56,7 @@ class CharacterMenuWidget extends Widget
         $this->addMenuItem(Scope::SCOPE_WALLET_READ, "character/{$this->characterId}/wallet", 'Wallet');
         $this->addMenuItem(Scope::SCOPE_WAY_POINT_WRITE, "character/{$this->characterId}/routes", 'Routes');
 
-        return $this->render('character-menu', ['menu' => $this->menu]);
+        return $this->render('character-menu', ['menu' => $this->menu, 'character' => $token->character()]);
     }
 
     private function addMenuItem($scope, $link, $title)

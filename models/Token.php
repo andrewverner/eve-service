@@ -25,6 +25,8 @@ use yii\db\Expression;
  */
 class Token extends \yii\db\ActiveRecord
 {
+    private $character;
+
     /**
      * {@inheritdoc}
      */
@@ -69,26 +71,34 @@ class Token extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getCharacter()
-    {
-        return EVE::character($this->character_id, $this);
-    }
-
+    /**
+     * @return array
+     */
     public function getScopes()
     {
         return unserialize($this->scopes);
     }
 
+    /**
+     * @param string $scope
+     * @return bool
+     */
     public function can(string $scope)
     {
         return in_array($scope, $this->getScopes());
     }
 
+    /**
+     * @return bool
+     */
     public function isExpired()
     {
         return new \DateTime($this->expires_on) <= (new \DateTime())->modify('-15 sec');
     }
 
+    /**
+     * @return bool
+     */
     public function refresh()
     {
         $sso = EVE::sso();
@@ -118,13 +128,24 @@ class Token extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    /**
+     * @param $scope
+     * @return bool
+     */
     public function hasAccess($scope)
     {
         return in_array($scope, $this->getScopes());
     }
 
+    /**
+     * @return \app\components\esi\character\Character
+     */
     public function character()
     {
-        return EVE::character($this->character_id, $this);
+        if (!$this->character) {
+            $this->character = EVE::character($this->character_id, $this);
+        }
+
+        return $this->character;
     }
 }
