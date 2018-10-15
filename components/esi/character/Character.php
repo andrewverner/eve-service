@@ -11,6 +11,7 @@ namespace app\components\esi\character;
 use app\components\esi\assets\CharacterAssetItem;
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
+use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
 use app\components\esi\mail\MailBody;
 use app\components\esi\skills\QueuedSkill;
@@ -97,7 +98,7 @@ class Character extends EVEObject
 
         $cacheKey = "character:{$characterId}";
         $request = EVE::request("/characters/{character_id}/");
-        $request->cacheDuration = 1800;
+        $request->cacheDuration = 3600;
         $data = $request->send(['character_id' => $this->characterId], $cacheKey);
 
         parent::__construct($data);
@@ -144,7 +145,7 @@ class Character extends EVEObject
             $cacheKey = "character:{$this->characterId}:portrait";
 
             $request = EVE::request('/characters/{character_id}/portrait/');
-            $request->cacheDuration = 3600;
+            $request->cacheDuration = 3600 * 6;
             $this->portrait = new CharacterPortrait($request->send(['character_id' => $this->characterId], $cacheKey));
         }
 
@@ -272,6 +273,17 @@ class Character extends EVEObject
         }
 
         return new MailBody($mailBody);
+    }
+
+    /**
+     * @return CharacterOnline|bool
+     */
+    public function online()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/online/", $this->token);
+        $data = $request->send(['character_id' => $this->characterId]);
+
+        return new CharacterOnline($data);
     }
 
     /**

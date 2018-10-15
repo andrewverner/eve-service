@@ -8,6 +8,9 @@
 
 namespace app\components\esi\assets;
 
+use app\components\esi\EVE;
+use app\components\esi\universe\Type;
+
 class CharacterAssetItem extends AssetItem
 {
     /**
@@ -49,4 +52,16 @@ class CharacterAssetItem extends AssetItem
      * @var int
      */
     public $typeId;
+
+    /**
+     * @var Type
+     */
+    public $type;
+
+    public function __construct(array $data)
+    {
+        parent::__construct($data);
+
+        $this->type = EVE::universe()->type($this->typeId);
+    }
 }

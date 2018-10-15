@@ -59,15 +59,18 @@ class CharacterController extends Controller
 
     public function actionAssets($id)
     {
+        $page = \Yii::$app->request->getQueryParam('page', 1);
+
         $token = $this->getToken($id);
         $character = $token->character();
 
-        $assets = $character->assets();
+        $assets = $character->assets($page);
 
         return $this->render('assets', [
             'character' => $character,
             'assets' => new CharacterAssetsList($assets),
             'location' => $character->location(),
+            'online' => $character->online(),
         ]);
     }
 

@@ -82,3 +82,9 @@ ul.character-menu a:hover {
     background-color: #fff;
     padding: 10px;
 }
+
+.eve-columns-container .character-panel {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+}

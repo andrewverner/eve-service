@@ -130,3 +130,15 @@ a.eve-btn {
     float: right;
     cursor: pointer;
 }
+
+@media (max-width: 1499px) {
+    .eve-columns-container {
+        column-count: 1;
+    }
+}
+
+@media (min-width: 1500px) {
+    .eve-columns-container {
+        column-count: 2;
+    }
+}
