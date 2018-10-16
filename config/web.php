@@ -51,6 +51,8 @@ $config = [
                 'character/<id:\d+>/assets' => 'character/assets',
                 'character/<id:\d+>/bps' => 'character/bps',
                 'character/<id:\d+>/mail-list' => 'character/mail-list',
+                'character/<id:\d+>/agents' => 'character/agents',
+                'character/<id:\d+>/bookmarks' => 'character/bookmarks',
             ],
         ],
         'i18n' => [

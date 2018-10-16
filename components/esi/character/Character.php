@@ -9,6 +9,7 @@
 namespace app\components\esi\character;
 
 use app\components\esi\assets\CharacterAssetItem;
+use app\components\esi\bookmarks\CharacterBookmark;
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
 use app\components\esi\location\CharacterOnline;
@@ -284,6 +285,46 @@ class Character extends EVEObject
         $data = $request->send(['character_id' => $this->characterId]);
 
         return new CharacterOnline($data);
+    }
+
+    /**
+     * @return CharacterAgentResearch[]
+     */
+    public function agentsResearch()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/agents_research/", $this->token);
+        $request->cacheDuration = 1800;
+        $researches = $request->send(['character_id' => $this->characterId]);
+
+        if (!$researches) {
+            return [];
+        }
+
+        foreach ($researches as &$research) {
+            $research = new CharacterAgentResearch($research);
+        }
+
+        return $researches;
+    }
+
+    /**
+     * @return CharacterBookmark[]
+     */
+    public function bookmarks()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/bookmarks/", $this->token);
+        $request->cacheDuration = 1800;
+        $bookmarks = $request->send(['character_id' => $this->characterId]);
+
+        if (!$bookmarks) {
+            return [];
+        }
+
+        foreach ($bookmarks as &$bookmark) {
+            $bookmark = new CharacterBookmark($bookmark);
+        }
+
+        return $bookmarks;
     }
 
     /**

@@ -16,6 +16,7 @@ class CharacterAsset extends AssetBundle
         'css/character.css',
     ];
     public $js = [
+        'js/assets.js'
     ];
     public $depends = [
         'yii\bootstrap\BootstrapAsset',

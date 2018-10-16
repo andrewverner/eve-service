@@ -132,6 +132,39 @@ class CharacterController extends Controller
         $this->asJson(['data' => $data]);
     }
 
+    public function actionAgents($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('agents', [
+            'agents' => $character->agentsResearch(),
+            'token' => $token,
+            'character' => $character,
+        ]);
+    }
+
+    public function actionBookmarks($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+        $bookmarks = $character->bookmarks();
+
+        $folders = [];
+        foreach ($bookmarks as $bookmark) {
+            $folders[$bookmark->folderId][] = $bookmark;
+        }
+
+        $folders = [];
+
+
+        return $this->render('bookmarks', [
+            'bookmarks' => $folders,
+            'token' => $token,
+            'character' => $character,
+        ]);
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([
