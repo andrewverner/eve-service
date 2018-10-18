@@ -10,6 +10,8 @@ namespace app\components\esi\character;
 
 use app\components\esi\assets\CharacterAssetItem;
 use app\components\esi\bookmarks\CharacterBookmark;
+use app\components\esi\bookmarks\CharacterBookmarkFolder;
+use app\components\esi\calendar\CharacterCalendarEvent;
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
 use app\components\esi\location\CharacterOnline;
@@ -325,6 +327,45 @@ class Character extends EVEObject
         }
 
         return $bookmarks;
+    }
+
+    /**
+     * @return CharacterBookmarkFolder[]
+     */
+    public function bookmarksFolders()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/bookmarks/folders/", $this->token);
+        $request->cacheDuration = 1800;
+        $folders = $request->send(['character_id' => $this->characterId]);
+
+        if (!$folders) {
+            return [];
+        }
+
+        foreach ($folders as &$folder) {
+            $folder = new CharacterBookmarkFolder($folder);
+        }
+
+        return $folders;
+    }
+
+    /**
+     * @return CharacterCalendarEvent[]
+     */
+    public function calendarEvents()
+    {
+        $request = EVE::secureRequest("/characters/{character_id}/calendar/", $this->token);
+        $events = $request->send(['character_id' => $this->characterId]);
+
+        if (!$events) {
+            return [];
+        }
+
+        foreach ($events as &$event) {
+            $event = new CharacterCalendarEvent($event);
+        }
+
+        return $events;
     }
 
     /**

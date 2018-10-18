@@ -9,6 +9,8 @@
 namespace app\controllers;
 
 use app\components\esi\assets\CharacterAssetsList;
+use app\components\esi\bookmarks\CharacterBookmarkFolder;
+use app\components\esi\EVE;
 use app\models\Scope;
 use app\models\Token;
 use yii\filters\AccessControl;
@@ -148,19 +150,33 @@ class CharacterController extends Controller
     {
         $token = $this->getToken($id);
         $character = $token->character();
-        $bookmarks = $character->bookmarks();
+        $data = $character->bookmarks();
 
-        $folders = [];
-        foreach ($bookmarks as $bookmark) {
-            $folders[$bookmark->folderId][] = $bookmark;
+        $bookmarks = [];
+        foreach ($data as $bookmark) {
+            $bookmarks[$bookmark->folderId][] = $bookmark;
         }
 
+        $foldersData = $character->bookmarksFolders();
         $folders = [];
-
+        foreach ($foldersData as $folder) {
+            $folders[$folder->folderId] = $folder;
+        }
 
         return $this->render('bookmarks', [
-            'bookmarks' => $folders,
-            'token' => $token,
+            'character' => $character,
+            'bookmarks' => $bookmarks,
+            'folders' => $folders,
+        ]);
+    }
+
+    public function actionCalendar($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('calendar', [
+            'events' => $character->calendarEvents(),
             'character' => $character,
         ]);
     }

@@ -30,6 +30,8 @@ class SecureRequest extends Request
         '/ui/autopilot/waypoint/' => Scope::SCOPE_WAY_POINT_WRITE,
         '/characters/{character_id}/agents_research/' => Scope::SCOPE_AGENT_RESEARCH_READ,
         '/characters/{character_id}/bookmarks/' => Scope::SCOPE_BOOKMARKS_READ,
+        '/characters/{character_id}/bookmarks/folders/' => Scope::SCOPE_BOOKMARKS_READ,
+        '/characters/{character_id}/calendar/' => Scope::SCOPE_CALENDAR_READ,
     ];
 
     public function __construct($uri, Token $token, string $type = null)
