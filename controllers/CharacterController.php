@@ -115,7 +115,8 @@ class CharacterController extends Controller
 
         $token = $this->getToken(\Yii::$app->request->getQueryParam('characterId'));
         $character = $token->character();
-        $mailBody = $character->mailBody(\Yii::$app->request->getQueryParam('mailId'));
+        $mailId = \Yii::$app->request->getQueryParam('mailId');
+        $mailBody = $character->mailBody($mailId);
 
         if (!$mailBody) {
             throw new NotFoundHttpException('Mail not found');
@@ -125,8 +126,15 @@ class CharacterController extends Controller
             'mailBody' => $mailBody,
             'write' => $token->can(Scope::SCOPE_MAIL_WRITE),
             'update' => $token->can(Scope::SCOPE_MAIL_UPDATE_DELETE),
+            'characterId' => $character->characterId,
+            'mailId' => $mailId,
         ]);
         $this->asJson(['data' => $data]);
+    }
+
+    public function actionDropMail()
+    {
+
     }
 
     private function getToken($id)

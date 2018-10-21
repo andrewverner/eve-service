@@ -8,9 +8,11 @@
 
 namespace app\components\esi;
 
+use app\components\esi\alliance\Alliance;
 use app\components\esi\character\Character;
 use app\components\esi\components\Request;
 use app\components\esi\components\SecureRequest;
+use app\components\esi\corporation\Corporation;
 use app\components\esi\sso\SSO;
 use app\components\esi\universe\Universe;
 use app\models\Token;
@@ -52,7 +54,7 @@ class EVE
     }
 
     /**
-     * @param $characterId
+     * @param int $characterId
      * @param Token|null $token
      * @return Character
      */
@@ -67,5 +69,24 @@ class EVE
     public static function universe()
     {
         return new Universe();
+    }
+
+    /**
+     * @param int $corporationId
+     * @param Token|null $token
+     * @return Corporation
+     */
+    public static function corporation($corporationId, Token $token = null)
+    {
+        return new Corporation($corporationId, $token);
+    }
+
+    /**
+     * @param int $allianceId
+     * @return Alliance
+     */
+    public static function alliance($allianceId)
+    {
+        return new Alliance($allianceId);
     }
 }
