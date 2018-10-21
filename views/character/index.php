@@ -34,10 +34,12 @@ $this->title = $character->name;
                                         - @TODO STRUCTURE
                                     <?php endif; ?>
                                 </div>
-                                <?php if ($location->stationId): ?>
+                                <?php if ($location->stationId || $ship): ?>
                                     <div class="text-left">
-                                        <?php $station = \app\components\esi\EVE::universe()->station($location->stationId) ?>
-                                        <?= \yii\helpers\Html::img("http://image.eveonline.com/Render/{$station->typeId}_128.png") ?>
+                                        <?php if ($location->stationId): ?>
+                                            <?php $station = \app\components\esi\EVE::universe()->station($location->stationId) ?>
+                                            <?= \yii\helpers\Html::img("http://image.eveonline.com/Render/{$station->typeId}_128.png") ?>
+                                        <?php endif; ?>
                                         <?php if ($ship): ?>
                                             <?= \yii\helpers\Html::img("http://image.eveonline.com/Render/{$ship->shipTypeId}_128.png") ?>
                                         <?php endif; ?>

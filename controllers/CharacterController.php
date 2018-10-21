@@ -9,6 +9,8 @@
 namespace app\controllers;
 
 use app\components\esi\assets\CharacterAssetsList;
+use app\components\esi\bookmarks\CharacterBookmarkFolder;
+use app\components\esi\EVE;
 use app\models\Scope;
 use app\models\Token;
 use yii\filters\AccessControl;
@@ -59,15 +61,18 @@ class CharacterController extends Controller
 
     public function actionAssets($id)
     {
+        $page = \Yii::$app->request->getQueryParam('page', 1);
+
         $token = $this->getToken($id);
         $character = $token->character();
 
-        $assets = $character->assets();
+        $assets = $character->assets($page);
 
         return $this->render('assets', [
             'character' => $character,
             'assets' => new CharacterAssetsList($assets),
             'location' => $character->location(),
+            'online' => $character->online(),
         ]);
     }
 
@@ -135,6 +140,53 @@ class CharacterController extends Controller
     public function actionDropMail()
     {
 
+    }
+
+    public function actionAgents($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('agents', [
+            'agents' => $character->agentsResearch(),
+            'token' => $token,
+            'character' => $character,
+        ]);
+    }
+
+    public function actionBookmarks($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+        $data = $character->bookmarks();
+
+        $bookmarks = [];
+        foreach ($data as $bookmark) {
+            $bookmarks[$bookmark->folderId][] = $bookmark;
+        }
+
+        $foldersData = $character->bookmarksFolders();
+        $folders = [];
+        foreach ($foldersData as $folder) {
+            $folders[$folder->folderId] = $folder;
+        }
+
+        return $this->render('bookmarks', [
+            'character' => $character,
+            'bookmarks' => $bookmarks,
+            'folders' => $folders,
+        ]);
+    }
+
+    public function actionCalendar($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('calendar', [
+            'events' => $character->calendarEvents(),
+            'character' => $character,
+        ]);
     }
 
     private function getToken($id)

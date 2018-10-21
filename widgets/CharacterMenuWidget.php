@@ -28,7 +28,7 @@ class CharacterMenuWidget extends Widget
 
         $this->scopes = $token->getScopes();
 
-        $this->addMenuItem(Scope::SCOPE_AGENT_RESEARCH_READ, "character/{$this->characterId}/agents", 'Agents');
+        $this->addMenuItem(Scope::SCOPE_AGENT_RESEARCH_READ, "character/{$this->characterId}/agents", 'Agents researches');
         $this->addMenuItem(Scope::SCOPE_ASSETS_READ, "character/{$this->characterId}/assets", 'Assets');
         $this->addMenuItem(Scope::SCOPE_BP_READ, "character/{$this->characterId}/bps", 'Blueprints');
         $this->addMenuItem(Scope::SCOPE_BOOKMARKS_READ, "character/{$this->characterId}/bookmarks", 'Bookmarks');

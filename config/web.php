@@ -52,6 +52,9 @@ $config = [
                 'character/<id:\d+>/bps' => 'character/bps',
                 'character/<id:\d+>/mail-list' => 'character/mail-list',
                 'DELETE character/<id:\d+>/mail/<mailId:\d+>' => 'character/drop-mail',
+                'character/<id:\d+>/agents' => 'character/agents',
+                'character/<id:\d+>/bookmarks' => 'character/bookmarks',
+                'character/<id:\d+>/calendar' => 'character/calendar',
             ],
         ],
         'i18n' => [

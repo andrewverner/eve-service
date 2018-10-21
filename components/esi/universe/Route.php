@@ -19,8 +19,14 @@ class Route
      */
     public $route;
 
+    /**
+     * @var int
+     */
+    public $length = 0;
+
     public function __construct($route)
     {
         $this->route = $route;
+        $this->length = count($this->route);
     }
 }

@@ -35,7 +35,7 @@ RegistrationAsset::register($this);
                                                     <label><?= \app\models\Scope::SCOPE_TITLE[$scope]; ?></label>
                                                 </div>
                                             </div>
-                                            <i class="fas fa-question-circle scope-info" data-toggle="popover" data-content="<?= \app\models\Scope::getScopeTitle($scope); ?>"></i>
+                                            <i class="fas fa-question-circle scope-info" data-toggle="popover" data-placement="bottom" data-content="<?= \app\models\Scope::getScopeTitle($scope); ?>"></i>
                                         </div>
                                     </div>
                                 </div>
