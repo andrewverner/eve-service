@@ -8,7 +8,10 @@
 
 namespace app\components\esi\mail;
 
+use app\components\esi\alliance\Alliance;
+use app\components\esi\character\Character;
 use app\components\esi\components\EVEObject;
+use app\components\esi\corporation\Corporation;
 use app\components\esi\EVE;
 
 class MailRecipient extends EVEObject
@@ -28,20 +31,29 @@ class MailRecipient extends EVEObject
      */
     public $recipientType;
 
+    /**
+     * @var Character|Corporation|Alliance
+     */
+    private $recipient;
+
     public function recipient()
     {
-        switch ($this->recipientType) {
-            case self::TYPE_CHARACTER:
-                return EVE::character($this->recipientId);
-                break;
-            case self::TYPE_CORPORATION:
-                return false;
-                break;
-            case self::TYPE_ALLIANCE:
-                return false;
-                break;
-            default:
-                return false;
+        if (!$this->recipient) {
+            switch ($this->recipientType) {
+                case self::TYPE_CHARACTER:
+                    $this->recipient = EVE::character($this->recipientId);
+                    break;
+                case self::TYPE_CORPORATION:
+                    $this->recipient = EVE::corporation($this->recipientId);
+                    break;
+                case self::TYPE_ALLIANCE:
+                    $this->recipient = EVE::alliance($this->recipientId);
+                    break;
+                default:
+                    $this->recipient = false;
+            }
         }
+
+        return $this->recipient;
     }
 }

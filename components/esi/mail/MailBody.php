@@ -37,7 +37,7 @@ class MailBody extends EVEObject
     /**
      * @var MailRecipient[]
      */
-    public $recipient = [];
+    public $recipients = [];
 
     /**
      * @var string
@@ -53,7 +53,7 @@ class MailBody extends EVEObject
     {
         parent::__construct($data);
         $this->timestamp = new \DateTime($this->timestamp);
-        foreach ($this->recipient as &$recipient) {
+        foreach ($this->recipients as &$recipient) {
             $recipient = new MailRecipient($recipient);
         }
         $this->from = EVE::character($this->from);
