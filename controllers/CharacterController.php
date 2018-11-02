@@ -11,9 +11,11 @@ namespace app\controllers;
 use app\components\esi\assets\CharacterAssetsList;
 use app\components\esi\bookmarks\CharacterBookmarkFolder;
 use app\components\esi\EVE;
+use app\components\esi\location\CharacterLocation;
 use app\models\Scope;
 use app\models\Token;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -187,6 +189,38 @@ class CharacterController extends Controller
             'events' => $character->calendarEvents(),
             'character' => $character,
         ]);
+    }
+
+    public function actionBuildMap()
+    {
+        /*if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException('Page not found');
+        }*/
+
+        $id = \Yii::$app->request->getQueryParam('id');
+        $token = $this->getToken($id);
+        if (!$token->can(Scope::SCOPE_ONLINE_READ) || !$token->can(Scope::SCOPE_LOCATION_READ)) {
+            throw new BadRequestHttpException('Can\'t access character online status or location');
+        }
+
+        $character = $token->character();
+        $online = $character->online();
+        if (!$online->online) {
+            //throw new BadRequestHttpException('Character is offline');
+        }
+
+        $location = $character->location();
+        /**
+         * @var CharacterLocation $previousLocation
+         */
+        $previousLocation = \Yii::$app->cache->get("character-map:{$character->characterId}:last-location", null);
+        \Yii::$app->cache->set("character-map:{$character->characterId}:last-location", serialize($location));
+        if ($previousLocation) {
+            $previousLocation = unserialize($previousLocation);
+            if ($previousLocation->solarSystemId != $location->solarSystemId) {
+                //save to map
+            }
+        }
     }
 
     private function getToken($id)
