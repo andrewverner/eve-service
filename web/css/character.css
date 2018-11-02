@@ -1,6 +1,8 @@
 html, body {
-    background-image: none;
-    background-color: #eee;
+    background-image: url(https://cdn.oboi7.com/content/images/87/d2/87d2b3721ca890d716e7457f81cd7d92b0898b09.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-color: #333;
 }
 
 .character-menu-container {
@@ -68,18 +70,22 @@ ul.character-menu a:hover {
 }
 
 .character-panel {
-    border: 1px solid #2c55a9;
+    border: 1px solid rgba(100,100,100,0.5);
 }
 
 .character-panel-title {
     padding: 5px 10px;
-    border-bottom: 1px solid #2c55a9;
-    background-color: #428bca;
+    background-color: #222;
     color: #eee;
 }
 
 .character-panel-body {
-    background-color: #fff;
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px;
+}
+
+.character-panel-content {
+    background-color: #222;
     padding: 10px;
 }
 

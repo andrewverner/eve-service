@@ -134,7 +134,7 @@ a.eve-btn {
 
 @media (max-width: 1499px) {
     .eve-columns-container {
-        column-count: 1;
+        column-count: 2;
     }
 }
 
@@ -142,4 +142,14 @@ a.eve-btn {
     .eve-columns-container {
         column-count: 2;
     }
+}
+
+.eve-table {
+    width: 100%;
+    color: #fff;
+    font-size: 12px;
+}
+
+.eve-table td {
+    padding: 5px 0;
 }
