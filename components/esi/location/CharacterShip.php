@@ -9,6 +9,7 @@
 namespace app\components\esi\location;
 
 use app\components\esi\components\EVEObject;
+use app\components\esi\EVE;
 
 class CharacterShip extends EVEObject
 {
@@ -26,4 +27,17 @@ class CharacterShip extends EVEObject
      * @var int
      */
     public $shipTypeId;
+
+    public function image($size)
+    {
+        return "http://image.eveonline.com/Render/{$this->shipTypeId}_{$size}.png";
+    }
+
+    /**
+     * @return \app\components\esi\universe\Type
+     */
+    public function type()
+    {
+        return EVE::universe()->type($this->shipTypeId);
+    }
 }

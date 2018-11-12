@@ -15,16 +15,17 @@ $this->title = "{$character->name}: Assets";
 ?>
 <div class="site-index">
     <div class="body-content">
-        <?php $menu = \app\widgets\CharacterMenuWidget::begin(['character' => $character]); ?>
-        <?php \app\widgets\CharacterMenuWidget::end(); ?>
+        <?= \app\widgets\CharacterMenuWidget::widget(['characterId' => $character->characterId]); ?>
         <div class="character-content-container">
             <div class="row">
                 <div class="col-12">
-                    <?= \app\widgets\CharacterDataWidget::widget(['characterId' => $character->characterId]); ?>
+                    <?= \app\widgets\CharacterDataWidget::widget(['character' => $character]); ?>
                 </div>
-                <div class="col-12">
+            </div>
+            <div class="row">
+                <!--<div class="col-12">
                     <input type="text" id="asset-search" class="form-control" />
-                </div>
+                </div>-->
                 <div class="col-12 eve-columns-container">
                     <?php foreach ($assets->stations as $id => $assetsList): ?>
                         <?php
@@ -49,13 +50,14 @@ $this->title = "{$character->name}: Assets";
                                             <?php $route = \app\components\esi\EVE::universe()->route($location->solarSystemId, $station->systemId)->length ?>
                                         <?php endif; ?>
                                         <?= $station->name; ?><br />
+                                        <?= $station->getSolarSystem()->name; ?> <?= $station->getSolarSystem()->getFormattedSecurityStatus(true); ?> <?php if (isset($route)): ?>(<?= $route ?> jumps)<?php endif; ?><br />
                                         <?= count($assetsList); ?> items
-                                        <?php if (isset($route)): ?><br /><?= $route ?> jumps<?php endif; ?>
                                     </td>
                                 </tr>
                             </table>
                         </div>
                         <table class="eve-table">
+                            <?php $totalVolume = 0; ?>
                             <?php foreach ($assetsList as $item): ?>
                                 <tr class="asset-row" data-item="<?= $item->type->name; ?>">
                                     <td><?= number_format($item->quantity); ?></td>
@@ -63,7 +65,14 @@ $this->title = "{$character->name}: Assets";
                                     <td><?= $item->type->name; ?></td>
                                     <td><?= number_format($item->quantity * $item->type->volume, 2, '.', ','); ?> m<sup>3</sup></td>
                                 </tr>
+                                <?php $totalVolume += $item->quantity * $item->type->volume; ?>
                             <?php endforeach; ?>
+                            <tr>
+                                <td colspan="4" class="text-right">
+                                    Total volume:
+                                    <?= number_format($totalVolume, 2, '.', ','); ?> m<sup>3</sup>
+                                </td>
+                            </tr>
                         </table>
                         <?php \app\widgets\CharacterPanelWidget::end(); ?>
                     <?php endforeach; ?>

@@ -1,0 +1,18 @@
+.drop-route-row {
+    cursor: pointer;
+}
+
+.eve-table tr:hover {
+    background-color: transparent;
+    transition: background-color 250ms;
+}
+
+.eve-table tr:hover {
+    background-color: #444;
+    transition: background-color 250ms;
+}
+
+.recorder-options {
+    margin-top: 15px;
+    font-size: 13px;
+}

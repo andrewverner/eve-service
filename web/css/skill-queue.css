@@ -6,8 +6,10 @@
 }
 
 .queued-skill {
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
+    border-bottom: 1px solid #333;
+    background-color: transparent;
+    color: #fff;
+    font-size: 14px;
 }
 
 .queued-skill:last-child {

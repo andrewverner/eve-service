@@ -78,17 +78,33 @@ class Corporation extends EVEObject
     public $url;
 
     /**
+     * @var int
+     */
+    public $corporationId;
+
+    /**
      * @var \app\models\Token
      */
     private $token;
 
     public function __construct($corporationId, \app\models\Token $token = null)
     {
+        $this->corporationId = $corporationId;
+
         $cacheKey = "corporation:{$corporationId}";
         $request = \app\components\esi\EVE::request("/corporations/{corporation_id}/");
         $data = $request->send(['corporation_id' => $corporationId], $cacheKey);
 
         parent::__construct($data);
         $this->dateFounded = new \DateTime($this->dateFounded);
+    }
+
+    /**
+     * @param int $size 32, 64, 128, 256
+     * @return string
+     */
+    public function image($size)
+    {
+        return "https://image.eveonline.com/Corporation/{$this->corporationId}_{$size}.png";
     }
 }

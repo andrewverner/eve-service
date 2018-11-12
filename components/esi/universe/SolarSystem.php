@@ -9,6 +9,7 @@
 namespace app\components\esi\universe;
 
 use app\components\esi\components\EVEObject;
+use yii\helpers\Html;
 
 class SolarSystem extends EVEObject
 {
@@ -61,4 +62,42 @@ class SolarSystem extends EVEObject
      * @var int
      */
     public $systemId;
+
+    const COLOR_NULL = '#ff0000';
+    const COLOR_LOW = '#ff5e00';
+    const COLOR_MEDIUM = '#efff00';
+    const COLOR_ABOVE_MEDIUM = '#00ff37';
+    const COLOR_HIGH = '#00ffe7';
+
+    public function getFormattedSecurityStatus($withColor = false)
+    {
+        $ss = number_format(round($this->securityStatus, 1), 1, '.', ' ');
+        if (!$withColor) {
+            return $ss;
+        }
+
+        switch ($ss) {
+            case 1:
+            case 0.9:
+                $color = self::COLOR_HIGH;
+                break;
+            case 0.8:
+            case 0.7:
+                $color = self::COLOR_ABOVE_MEDIUM;
+                break;
+            case 0.6:
+            case 0.5:
+                $color = self::COLOR_MEDIUM;
+                break;
+            case 0.4:
+            case 0.3:
+            case 0.2:
+                $color = self::COLOR_LOW;
+                break;
+            default:
+                $color = self::COLOR_NULL;
+        }
+
+        return Html::tag('span', $ss, ['style' => "color:{$color}"]);
+    }
 }

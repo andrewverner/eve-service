@@ -12,21 +12,20 @@ $this->title = "{$character->name}: Bookmarks";
 ?>
 <div class="site-index">
     <div class="body-content">
-        <?php $menu = \app\widgets\CharacterMenuWidget::begin(['characterId' => $character->characterId]); ?>
-        <?php \app\widgets\CharacterMenuWidget::end(); ?>
+        <?= \app\widgets\CharacterMenuWidget::widget(['characterId' => $character->characterId]); ?>
         <div class="character-content-container">
+            <div class="row">
+                <div class="col-12">
+                    <?= \app\widgets\CharacterDataWidget::widget(['character' => $character]); ?>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12 eve-columns-container">
                     <?php if ($bookmarks): ?>
                         <?php foreach ($bookmarks as $folderId => $bookmarksList): ?>
-                            <div class="character-panel">
-                                <div class="character-panel-title">
-                                    <?= $folderId ? $folders[$folderId]->name : 'Bookmarks' ?>
-                                </div>
-                                <div class="character-panel-body">
-                                    <?php var_dump($bookmarksList) ?>
-                                </div>
-                            </div>
+                            <?php \app\widgets\CharacterPanelWidget::begin(['title' => $folderId ? $folders[$folderId]->name : 'Bookmarks']); ?>
+                            <?php var_dump($bookmarksList); ?>
+                            <?php \app\widgets\CharacterPanelWidget::end(); ?>
                         <?php endforeach; ?>
                     <?php else: ?>
                     <div class="note note-info">Character doesn't have any bookmarks</div>

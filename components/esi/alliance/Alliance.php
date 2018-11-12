@@ -43,13 +43,29 @@ class Alliance extends EVEObject
      */
     public $ticker;
 
+    /**
+     * @var int
+     */
+    public $allianceId;
+
     public function __construct($allianceId)
     {
+        $this->allianceId = $allianceId;
+
         $cacheKey = "alliance:{$allianceId}";
         $request = EVE::request("/alliances/{alliance_id}/");
         $data = $request->send(['alliance_id' => $allianceId], $cacheKey);
 
         parent::__construct($data);
         $this->dateFounded = new \DateTime($this->dateFounded);
+    }
+
+    /**
+     * @param $size int 32, 64, 128
+     * @return string
+     */
+    public function image($size)
+    {
+        return "https://image.eveonline.com/Alliance/{$this->allianceId}_{$size}.png";
     }
 }

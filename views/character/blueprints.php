@@ -17,6 +17,12 @@ $this->title = "{$character->name}: Blueprints";
         <div class="character-content-container">
             <div class="row">
                 <div class="col-12">
+                    <?= \app\widgets\CharacterDataWidget::widget(['character' => $character]); ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <?php \app\widgets\CharacterPanelWidget::begin(['title' => 'Blueprints']); ?>
                     <div class="note note-info">
                         <i class="fas fa-clock"></i> Cached for 1 hour <i class="fas fa-question-circle cache-info" data-toggle="modal" data-target="#cache-modal"></i>
                     </div>
@@ -42,31 +48,9 @@ $this->title = "{$character->name}: Blueprints";
                             <?= $character->name ?> doesn't have any blueprints
                         </div>
                     <?php endif; ?>
+                    <?php \app\widgets\CharacterPanelWidget::end(); ?>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div class="bp-modal">
-    <div class="bp-data">
-        <table class="eve-table">
-            <tr>
-                <td>1</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>4</td>
-            </tr>
-        </table>
     </div>
 </div>

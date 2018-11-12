@@ -9,6 +9,7 @@
 namespace app\components\esi\universe;
 
 use app\components\esi\components\EVEObject;
+use app\components\esi\EVE;
 
 class Station extends EVEObject
 {
@@ -71,4 +72,30 @@ class Station extends EVEObject
      * @var int
      */
     public $typeId;
+
+    /**
+     * @var SolarSystem
+     */
+    private $solarSystem;
+
+    /**
+     * @param $size int
+     * @return string
+     */
+    public function image($size)
+    {
+        return "http://image.eveonline.com/Render/3867_{$size}.png";
+    }
+
+    /**
+     * @return SolarSystem
+     */
+    public function getSolarSystem()
+    {
+        if (!$this->solarSystem) {
+            $this->solarSystem = EVE::universe()->solarSystem($this->systemId);
+        }
+
+        return $this->solarSystem;
+    }
 }

@@ -21,6 +21,8 @@ class CharacterDataWidget extends Widget
 
     public function run()
     {
+        $this->character->allianceId = 1900696668;
+
         return $this->render('character-data', [
             'character' => $this->character,
             'corporation' => EVE::corporation($this->character->corporationId),

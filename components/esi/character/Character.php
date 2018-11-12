@@ -13,6 +13,7 @@ use app\components\esi\bookmarks\CharacterBookmark;
 use app\components\esi\bookmarks\CharacterBookmarkFolder;
 use app\components\esi\calendar\CharacterCalendarEvent;
 use app\components\esi\components\EVEObject;
+use app\components\esi\components\Request;
 use app\components\esi\EVE;
 use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
@@ -366,6 +367,17 @@ class Character extends EVEObject
         }
 
         return $events;
+    }
+
+    public function addWayPoint($destinationId, $addToBeginning = false, $clearOtherWaypoints = false)
+    {
+        $request = EVE::secureRequest("/ui/autopilot/waypoint/", $this->token, Request::TYPE_POST);
+        $request->query([
+            'add_to_beginning' => $addToBeginning ? 'true' : 'false',
+            'clear_other_waypoints' => $clearOtherWaypoints ? 'true' : 'false',
+            'destination_id' => $destinationId,
+        ]);
+        $request->send();
     }
 
     /**

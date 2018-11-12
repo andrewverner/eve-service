@@ -66,11 +66,13 @@ ul.character-menu a:hover {
 
 .character-content-container {
     margin-left: 250px;
-    padding: 10px 15px;
+    padding: 110px 15px 10px;
 }
 
 .character-panel {
     border: 1px solid rgba(100,100,100,0.5);
+    color: #fff;
+    margin-bottom: 15px;
 }
 
 .character-panel-title {
@@ -93,4 +95,14 @@ ul.character-menu a:hover {
     display: inline-block;
     width: 100%;
     margin-bottom: 15px;
+}
+
+.character-data-panel {
+    position: fixed;
+    left: 250px;
+    top: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.9);
+    z-index: 50;
+    padding: 10px;
 }

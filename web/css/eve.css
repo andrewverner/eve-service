@@ -153,3 +153,49 @@ a.eve-btn {
 .eve-table td {
     padding: 5px 0;
 }
+
+.hidden {
+    display: none;
+}
+
+.form-control {
+    color: #eee;
+    border-radius: 0;
+    background-color: transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid #666;
+    outline: none;
+    box-shadow: none!important;
+    padding: 6px 0;
+}
+
+.form-control[readonly] {
+    background-color: transparent;
+}
+
+.form-control:hover, .form-control:active, .form-control:focus {
+    background-color: transparent;
+    color: #eee;
+}
+
+.eve-modal {
+    color: #fff;
+}
+
+.eve-modal .modal-content {
+    border-radius: 0;
+    border: 1px solid #333;
+    background-color: #222;
+}
+
+.eve-modal .modal-header {
+    padding: 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #333;
+}
+
+.eve-modal .modal-footer {
+    border-top: 1px solid #333;
+}
