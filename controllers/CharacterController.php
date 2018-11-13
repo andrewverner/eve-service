@@ -461,6 +461,17 @@ class CharacterController extends Controller
         $route->save();
     }
 
+    public function actionWallet($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('wallet', [
+            'character' => $character,
+            'wallet' => $character->wallet()
+        ]);
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([

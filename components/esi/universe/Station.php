@@ -84,7 +84,7 @@ class Station extends EVEObject
      */
     public function image($size)
     {
-        return "http://image.eveonline.com/Render/3867_{$size}.png";
+        return "http://image.eveonline.com/Render/{$this->typeId}_{$size}.png";
     }
 
     /**

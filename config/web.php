@@ -63,6 +63,7 @@ $config = [
                 'character/<id:\d+>/share-route' => 'character/share-route',
                 'character/<id:\d+>/routes/<route:\d+>' => 'character/route',
                 'character/<id:\d+>/set-route' => 'character/set-route',
+                'character/<id:\d+>/wallet' => 'character/wallet',
             ],
         ],
         'i18n' => [

@@ -32,6 +32,9 @@ class SecureRequest extends Request
         '/characters/{character_id}/bookmarks/' => Scope::SCOPE_BOOKMARKS_READ,
         '/characters/{character_id}/bookmarks/folders/' => Scope::SCOPE_BOOKMARKS_READ,
         '/characters/{character_id}/calendar/' => Scope::SCOPE_CALENDAR_READ,
+        '/characters/{character_id}/wallet/' => Scope::SCOPE_WALLET_READ,
+        '/characters/{character_id}/wallet/journal/' => Scope::SCOPE_WALLET_READ,
+        '/characters/{character_id}/wallet/transactions/' => Scope::SCOPE_WALLET_READ,
     ];
 
     public function __construct($uri, Token $token, string $type = null)

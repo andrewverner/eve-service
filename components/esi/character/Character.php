@@ -19,6 +19,7 @@ use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
 use app\components\esi\mail\MailBody;
 use app\components\esi\skills\QueuedSkill;
+use app\components\esi\wallet\CharacterWallet;
 use app\models\Token;
 use app\components\esi\location\CharacterLocation;
 use app\components\esi\mail\CharacterMailListItem;
@@ -383,6 +384,14 @@ class Character extends EVEObject
             'destination_id' => $destinationId,
         ]);
         $request->send();
+    }
+
+    /**
+     * @return CharacterWallet
+     */
+    public function wallet()
+    {
+        return new CharacterWallet($this->token);
     }
 
     /**
