@@ -22,6 +22,7 @@ use app\components\esi\skills\QueuedSkill;
 use app\models\Token;
 use app\components\esi\location\CharacterLocation;
 use app\components\esi\mail\CharacterMailListItem;
+use yii\web\NotFoundHttpException;
 
 class Character extends EVEObject
 {
@@ -104,6 +105,10 @@ class Character extends EVEObject
         $request = EVE::request("/characters/{character_id}/");
         $request->cacheDuration = 3600;
         $data = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        if (!$data) {
+            throw new NotFoundHttpException('Character not found');
+        }
 
         parent::__construct($data);
         $this->birthday = new \DateTime($this->birthday);

@@ -10,6 +10,7 @@ namespace app\components\esi\location;
 
 use \app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
+use app\components\esi\universe\SolarSystem;
 
 class CharacterLocation extends EVEObject
 {
@@ -29,6 +30,11 @@ class CharacterLocation extends EVEObject
     public $structureId;
 
     /**
+     * @var SolarSystem
+     */
+    private $solarSystem;
+
+    /**
      * @return \app\components\esi\universe\SolarSystem|bool
      */
     public function solarSystem()
@@ -37,7 +43,11 @@ class CharacterLocation extends EVEObject
             return false;
         }
 
-        return EVE::universe()->solarSystem($this->solarSystemId);
+        if (!$this->solarSystem) {
+            $this->solarSystem = EVE::universe()->solarSystem($this->solarSystemId);
+        }
+
+        return $this->solarSystem;
     }
 
     /**

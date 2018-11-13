@@ -8,6 +8,7 @@
 
 namespace app\controllers;
 
+use app\components\esi\EVE;
 use app\models\CharacterRoute;
 use yii\web\Controller;
 
@@ -22,5 +23,10 @@ class TestController extends Controller
                 $model->save();
             }
         }
+    }
+
+    public function actionMarket()
+    {
+        EVE::market()->prices();
     }
 }

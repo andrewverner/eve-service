@@ -40,7 +40,7 @@ CharacterDataAsset::register($this);
             </td>
             <td>
                 <?php if ($location): ?>
-                    <?= $location->solarSystem()->name; ?>
+                    <?= $location->solarSystem()->name; ?> <?= $location->solarSystem()->getFormattedSecurityStatus(true); ?>
                     <?php if ($station = $location->station()): ?>
                     <br /><?= $station->name; ?>
                     <?php endif; ?>

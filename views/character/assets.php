@@ -57,20 +57,24 @@ $this->title = "{$character->name}: Assets";
                             </table>
                         </div>
                         <table class="eve-table">
-                            <?php $totalVolume = 0; ?>
+                            <?php $totalVolume = $totalCost = 0; ?>
                             <?php foreach ($assetsList as $item): ?>
+                                <?php $cost = $item->quantity * \app\components\esi\EVE::market()->getPrice($item->typeId); ?>
+                                <?php $totalCost += $cost; ?>
                                 <tr class="asset-row" data-item="<?= $item->type->name; ?>">
                                     <td><?= number_format($item->quantity); ?></td>
                                     <td><?= \yii\helpers\Html::img("http://image.eveonline.com/Type/{$item->typeId}_32.png"); ?></td>
                                     <td><?= $item->type->name; ?></td>
                                     <td><?= number_format($item->quantity * $item->type->volume, 2, '.', ','); ?> m<sup>3</sup></td>
+                                    <td class="text-right"><?= number_format($cost, 2, ',', ' '); ?> ISK</td>
                                 </tr>
                                 <?php $totalVolume += $item->quantity * $item->type->volume; ?>
                             <?php endforeach; ?>
                             <tr>
-                                <td colspan="4" class="text-right">
-                                    Total volume:
-                                    <?= number_format($totalVolume, 2, '.', ','); ?> m<sup>3</sup>
+                                <td colspan="5" class="text-right">
+                                    Total:
+                                    <?= number_format($totalVolume, 2, '.', ','); ?> m<sup>3</sup> /
+                                    <?= number_format($totalCost, 2, ',', ' '); ?> ISK
                                 </td>
                             </tr>
                         </table>

@@ -13,6 +13,7 @@ use app\components\esi\character\Character;
 use app\components\esi\components\Request;
 use app\components\esi\components\SecureRequest;
 use app\components\esi\corporation\Corporation;
+use app\components\esi\market\Market;
 use app\components\esi\sso\SSO;
 use app\components\esi\universe\Universe;
 use app\models\Token;
@@ -88,5 +89,13 @@ class EVE
     public static function alliance($allianceId)
     {
         return new Alliance($allianceId);
+    }
+
+    /**
+     * @return Market
+     */
+    public static function market()
+    {
+        return new Market();
     }
 }
