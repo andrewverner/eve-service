@@ -5,6 +5,7 @@
  * Date: 02.11.2018
  * Time: 15:21
  *
+ * @var \app\components\esi\character\Character $character
  * @var \app\components\esi\corporation\Corporation $corporation
  * @var \app\components\esi\alliance\Alliance $alliance
  * @var \app\components\esi\location\CharacterLocation $location
@@ -48,6 +49,11 @@ CharacterDataAsset::register($this);
                 <?php if ($ship): ?>
                     <br /><?= $ship->shipName; ?> (<?= $ship->type()->name; ?>)
                 <?php endif; ?>
+            </td>
+            <?php endif; ?>
+            <?php if ($character->wallet()->balance()): ?>
+            <td>
+                <a href="<?= Yii::$app->urlManager->createUrl("/character/{$character->characterId}/wallet") ?>">Balance: <?= \app\components\esi\helpers\EVEFormatter::isk($character->wallet()->balance()); ?> ISK</a>
             </td>
             <?php endif; ?>
         </tr>

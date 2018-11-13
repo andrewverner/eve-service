@@ -58,7 +58,8 @@ $this->title = "{$character->name}: Wallet";
                                             <?= number_format($transaction->quantity * $transaction->unitPrice, 2, '.', ' '); ?>
                                         </span>
                                     </td>
-                                    <td><?= $transaction->type()->name ?></td>
+                                    <td><?= $transaction->type()->name; ?></td>
+                                    <td><?= $transaction->location()->name; ?></td>
                                     <td><?= $transaction->date->format('Y-m-d H:i:s'); ?></td>
                                 </tr>
                             <?php endforeach; ?>

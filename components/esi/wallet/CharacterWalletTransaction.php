@@ -10,6 +10,7 @@ namespace app\components\esi\wallet;
 
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
+use app\components\esi\universe\Station;
 use app\components\esi\universe\Type;
 
 class CharacterWalletTransaction extends EVEObject
@@ -69,12 +70,20 @@ class CharacterWalletTransaction extends EVEObject
      */
     private $type;
 
+    /**
+     * @var Station
+     */
+    private $location;
+
     public function __construct(array $data)
     {
         parent::__construct($data);
         $this->date = new \DateTime($this->date);
     }
 
+    /**
+     * @return Type
+     */
     public function type()
     {
         if (!$this->type) {
@@ -82,5 +91,17 @@ class CharacterWalletTransaction extends EVEObject
         }
 
         return $this->type;
+    }
+
+    /**
+     * @return Station
+     */
+    public function location()
+    {
+        if (!$this->location) {
+            $this->location = EVE::universe()->station($this->locationId);
+        }
+
+        return $this->location;
     }
 }
