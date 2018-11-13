@@ -44,8 +44,10 @@ class CharacterWallet
     public function balance()
     {
         if (is_null($this->balance)) {
+            $cacheKey = "character:{$this->token->character_id}:balance";
             $request = EVE::secureRequest('/characters/{character_id}/wallet/', $this->token);
-            $this->balance = $request->send(['character_id' => $this->token->character_id]) ?: 0;
+            $request->cacheDuration = 1200;
+            $this->balance = $request->send(['character_id' => $this->token->character_id], $cacheKey) ?: 0;
         }
 
         return $this->balance;
@@ -57,8 +59,10 @@ class CharacterWallet
     public function journal()
     {
         if (is_null($this->journal)) {
+            $cacheKey = "character:{$this->token->character_id}:wallet:journal";
             $request = EVE::secureRequest('/characters/{character_id}/wallet/journal/', $this->token);
-            $data = $request->send(['character_id' => $this->token->character_id]);
+            $request->cacheDuration = 1800;
+            $data = $request->send(['character_id' => $this->token->character_id], $cacheKey);
             if ($data && is_array($data)) {
                 foreach ($data as &$row) {
                     $row = new CharacterWalletJournalRecord($row);
@@ -77,8 +81,10 @@ class CharacterWallet
     public function transactions()
     {
         if (!$this->transactions) {
+            $cacheKey = "character:{$this->token->character_id}:wallet:transactions";
             $request = EVE::secureRequest('/characters/{character_id}/wallet/transactions/', $this->token);
-            $data = $request->send(['character_id' => $this->token->character_id]);
+            $request->cacheDuration = 1800;
+            $data = $request->send(['character_id' => $this->token->character_id], $cacheKey);
             if ($data && is_array($data)) {
                 foreach ($data as &$transaction) {
                     $transaction = new CharacterWalletTransaction($transaction);
