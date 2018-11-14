@@ -42,7 +42,7 @@ class CharacterMenuWidget extends Widget
         $this->addMenuItem(Scope::SCOPE_FLEET_READ, "character/{$this->characterId}/fleet", 'Fleet');
         $this->addMenuItem(Scope::SCOPE_FW_STATS_READ, "character/{$this->characterId}/fw", 'Faction warfare');
         $this->addMenuItem(Scope::SCOPE_INDUSTRY_JOBS_READ, "character/{$this->characterId}/industry", 'Industry jobs');
-        $this->addMenuItem(Scope::SCOPE_KILL_MAILS_READ, "character/{$this->characterId}/killmails", 'Kill mails');
+        $this->addMenuItem(Scope::SCOPE_KILL_MAILS_READ, "character/{$this->characterId}/kill-mails", 'Kill mails');
         $this->addMenuItem(Scope::SCOPE_LP_READ, "character/{$this->characterId}/lp", 'Loyalty points');
         $this->addMenuItem(Scope::SCOPE_MAIL_READ, "character/{$this->characterId}/mail-list", 'Mail');
         $this->addMenuItem(Scope::SCOPE_MARKET_ORDERS_READ, "character/{$this->characterId}/market-orders", 'Market orders');

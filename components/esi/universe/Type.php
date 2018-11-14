@@ -91,4 +91,13 @@ class Type extends EVEObject
      * @var float
      */
     public $volume;
+
+    /**
+     * @param $size int
+     * @return string
+     */
+    public function image($size)
+    {
+        return "http://image.eveonline.com/Render/{$this->typeId}_{$size}.png";
+    }
 }

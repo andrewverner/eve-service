@@ -472,6 +472,17 @@ class CharacterController extends Controller
         ]);
     }
 
+    public function actionKillMails($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('kill-mails', [
+            'character' => $character,
+            'killMails' => $character->killMails()
+        ]);
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([

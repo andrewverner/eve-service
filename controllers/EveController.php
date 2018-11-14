@@ -9,6 +9,7 @@
 namespace app\controllers;
 
 use app\components\esi\EVE;
+use app\components\esi\killmails\KillMail;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -28,5 +29,13 @@ class EveController extends Controller
 
         $type = EVE::universe()->type($typeId);
         return $this->asJson($type);
+    }
+
+    public function actionKillMail($id, $hash)
+    {
+        return $this->render('kill-mail', ['killMail' => new KillMail([
+            'killmail_id' => $id,
+            'killmail_hash' => $hash,
+        ])]);
     }
 }

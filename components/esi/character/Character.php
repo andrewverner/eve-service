@@ -15,6 +15,7 @@ use app\components\esi\calendar\CharacterCalendarEvent;
 use app\components\esi\components\EVEObject;
 use app\components\esi\components\Request;
 use app\components\esi\EVE;
+use app\components\esi\killmails\KillMail;
 use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
 use app\components\esi\mail\MailBody;
@@ -392,6 +393,25 @@ class Character extends EVEObject
     public function wallet()
     {
         return new CharacterWallet($this->token);
+    }
+
+    /**
+     * @return KillMail[]|bool
+     */
+    public function killMails()
+    {
+        $request = EVE::secureRequest('/characters/{character_id}/killmails/recent/', $this->token);
+        $request->cacheDuration = 300;
+        $killMails = $request->send(['character_id' => $this->characterId]);
+        if (!$killMails) {
+            return false;
+        }
+
+        foreach ($killMails as &$killMail) {
+            $killMail = new KillMail($killMail);
+        }
+
+        return $killMails;
     }
 
     /**
