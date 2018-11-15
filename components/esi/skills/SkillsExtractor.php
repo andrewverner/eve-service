@@ -92,10 +92,10 @@ class SkillsExtractor
         for ($i = 0; $i <= count($list) - 1; $i++) {
             $skill = $list[$i];
             if (!isset($data[$skill->typeId])) {
-                $data[$skill->typeId] = $skill->level;
+                $data[$skill->typeId] = $skill;
             } else {
-                if ($skill->level > $data[$skill->typeId]) {
-                    $data[$skill->typeId] = $skill->level;
+                if ($skill->level > $data[$skill->typeId]->level) {
+                    $data[$skill->typeId] = $skill;
                 }
             }
             if ($skill->requiredSkills) {
@@ -103,14 +103,8 @@ class SkillsExtractor
             }
         }
 
-        foreach ($data as $id => &$level) {
-            $skillModel = new RequiredSkill();
-            $skillModel->typeId = $id;
-            $skillModel->level = $level;
-            $skill = EVE::universe()->type($skillModel->typeId);
-            $skillModel->description = $skill->description;
-            $skillModel->name = $skill->name;
-            $level = $skillModel;
+        foreach ($data as &$skill) {
+            $skill->requiredSkills = null;
         }
 
         return $data;
