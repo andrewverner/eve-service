@@ -15,33 +15,117 @@ KillMailAsset::register($this);
                     <div class="col-6">
                         <?= \yii\helpers\Html::img($killMail->victim->ship()->render(256)); ?>
                     </div>
-                    <div class="col-12">
-                        <pre style="background-color: #aaa">
-                            <?php print_r(\app\components\esi\skills\SkillsExtractor::extract($killMail->victim->ship())); ?>
-                            <?php /*print_r($killMail->victim->ship()->dogmaEffects()); */?><!--
-                            --><?php /*print_r($killMail->victim->ship()->dogmaAttributes()); */?>
-                        </pre>
+                    <div class="col-6">
+                        <?php if ($killMail->fitting()->highSlots): ?>
+                            <div>
+                                <?php foreach ($killMail->fitting()->highSlots as $item): ?>
+                                    <?= \yii\helpers\Html::img($item->type()->image(32), ['title' => $item->type()->name]); ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($killMail->fitting()->medSlots): ?>
+                            <div>
+                                <?php foreach ($killMail->fitting()->medSlots as $item): ?>
+                                    <?= \yii\helpers\Html::img($item->type()->image(32), ['title' => $item->type()->name]); ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($killMail->fitting()->lowSlots): ?>
+                            <div>
+                                <?php foreach ($killMail->fitting()->lowSlots as $item): ?>
+                                    <?= \yii\helpers\Html::img($item->type()->image(32), ['title' => $item->type()->name]); ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($killMail->fitting()->rigSlots): ?>
+                            <div>
+                                <?php foreach ($killMail->fitting()->rigSlots as $item): ?>
+                                    <?= \yii\helpers\Html::img($item->type()->image(32), ['title' => $item->type()->name]); ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($killMail->fitting()->subsystemSlots): ?>
+                            <div>
+                                <?php foreach ($killMail->fitting()->subsystemSlots as $item): ?>
+                                    <?= \yii\helpers\Html::img($item->type()->image(32), ['title' => $item->type()->name]); ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($killMail->fitting()->droneBay): ?>
+                            <div>
+                                <?php foreach ($killMail->fitting()->droneBay as $item): ?>
+                                    <?= \yii\helpers\Html::img($item->type()->image(32), ['title' => $item->type()->name]); ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
-                <div>
-                    <?php foreach ($killMail->fitting()->highSlots as $item): ?>
-                    <?= \yii\helpers\Html::img($item->type()->image(64), ['title' => $item->type()->name]); ?>
-                    <?php endforeach; ?>
-                </div>
-                <div>
-                    <?php foreach ($killMail->fitting()->medSlots as $item): ?>
-                        <?= \yii\helpers\Html::img($item->type()->image(64), ['title' => $item->type()->name]); ?>
-                    <?php endforeach; ?>
-                </div>
-                <div>
-                    <?php foreach ($killMail->fitting()->lowSlots as $item): ?>
-                        <?= \yii\helpers\Html::img($item->type()->image(64), ['title' => $item->type()->name]); ?>
-                    <?php endforeach; ?>
-                </div>
-                <pre id="debug">
-                    <?php print_r($killMail->fitting()); ?>
-                </pre>
                 <?php \app\widgets\EvePanelWidget::end(); ?>
+                <?php if ($killMail->victim->items): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <?php \app\widgets\EvePanelWidget::begin(['title' => 'Dropped/destroyed items']); ?>
+                            <table class="eve-table">
+                                <?php foreach ($killMail->victim->items as $item): ?>
+                                    <?php $quantity = ($item->quantityDropped + $item->quantityDestroyed); ?>
+                                    <tr>
+                                        <td><?= \app\components\Html::img($item->type()->image(32)); ?></td>
+                                        <td><?= $item->type()->name; ?></td>
+                                        <td><?= $quantity; ?></td>
+                                        <td><?= \app\components\esi\helpers\EVEFormatter::isk($item->type()->price() * $quantity); ?> ISK</td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr>
+                                    <td class="text-right" colspan="4">Total loss cost: <?= \app\components\esi\helpers\EVEFormatter::isk($killMail->totalCost()); ?> ISK</td>
+                                </tr>
+                            </table>
+                            <?php \app\widgets\EvePanelWidget::end(); ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php if ($killMail->attackers): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <?php \app\widgets\EvePanelWidget::begin(['title' => 'Attackers']); ?>
+                            <table class="eve-table">
+                                <?php foreach ($killMail->attackers as $attacker): ?>
+                                    <tr>
+                                        <td>
+                                            <?= \app\components\Html::img($attacker->character()->portrait()->px64x64); ?>
+                                            <?= \app\components\Html::img($attacker->corporation()->image(64)); ?>
+                                            <?php if ($attacker->alliance()): ?>
+                                                <?= \app\components\Html::img($attacker->alliance()->image(64)); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?= $attacker->character()->name; ?><br />
+                                            <?= $attacker->corporation()->name; ?> [<?= $attacker->corporation()->ticker; ?>]
+                                            <?php if ($attacker->alliance()): ?>
+                                                <br /><?= $attacker->alliance()->name; ?> [<?= $attacker->alliance()->ticker; ?>]
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php if ($attacker->ship()): ?>
+                                                <?= \app\components\Html::img($attacker->ship()->render(64)); ?>
+                                            <?php endif; ?>
+                                            <?php if ($attacker->weapon()): ?>
+                                                <?= \app\components\Html::img($attacker->weapon()->image(64)); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?= $attacker->damageDone ?>
+                                            <?php if ($attacker->finalBlow): ?>(Final blow)<?php endif; ?>
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                            <?php \app\widgets\EvePanelWidget::end(); ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

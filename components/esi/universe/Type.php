@@ -106,6 +106,11 @@ class Type extends EVEObject
     private $dogmaEffectsData;
 
     /**
+     * @var float
+     */
+    private $price;
+
+    /**
      * @param int $size
      * @return string
      */
@@ -151,5 +156,17 @@ class Type extends EVEObject
         }
 
         return $this->dogmaEffectsData;
+    }
+
+    /**
+     * @return float
+     */
+    public function price()
+    {
+        if (is_null($this->price)) {
+            $this->price = EVE::market()->getPrice($this->typeId);
+        }
+
+        return $this->price;
     }
 }

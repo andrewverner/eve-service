@@ -104,6 +104,10 @@ class KillMailAttacker extends EVEObject
      */
     public function ship()
     {
+        if (!$this->shipTypeId) {
+            return null;
+        }
+
         if (!$this->ship) {
             $this->ship = EVE::universe()->type($this->shipTypeId);
         }
@@ -116,6 +120,10 @@ class KillMailAttacker extends EVEObject
      */
     public function weapon()
     {
+        if (!$this->weaponTypeId) {
+            return null;
+        }
+
         if (!$this->weapon) {
             $this->weapon = EVE::universe()->type($this->weaponTypeId);
         }
@@ -140,6 +148,10 @@ class KillMailAttacker extends EVEObject
      */
     public function alliance()
     {
+        if (!$this->allianceId) {
+            return null;
+        }
+
         if (!$this->alliance) {
             $this->alliance = EVE::alliance($this->allianceId);
         }

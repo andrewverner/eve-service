@@ -71,6 +71,11 @@ class KillMail extends EVEObject
     private $fitting;
 
     /**
+     * @var float
+     */
+    private $cost;
+
+    /**
      * KillMail constructor.
      * @param array $data
      * @throws NotFoundHttpException
@@ -138,5 +143,23 @@ class KillMail extends EVEObject
         }
 
         return $this->fitting;
+    }
+
+    /**
+     * @return float
+     */
+    public function totalCost()
+    {
+        if (!$this->cost) {
+            $this->cost = 0;
+            if ($this->victim->items) {
+                foreach ($this->victim->items as $item) {
+                    $this->cost += $item->type()->price();
+                }
+            }
+            $this->cost += EVE::market()->getPrice($this->victim->shipTypeId);
+        }
+
+        return $this->cost;
     }
 }
