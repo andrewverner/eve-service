@@ -66,6 +66,11 @@ class KillMail extends EVEObject
     private $lostCost;
 
     /**
+     * @var KillMailFitting
+     */
+    private $fitting;
+
+    /**
      * KillMail constructor.
      * @param array $data
      * @throws NotFoundHttpException
@@ -121,5 +126,17 @@ class KillMail extends EVEObject
         }
 
         return $this->lostCost;
+    }
+
+    /**
+     * @return KillMailFitting
+     */
+    public function fitting()
+    {
+        if (!$this->fitting) {
+            $this->fitting = new KillMailFitting($this->victim->items);
+        }
+
+        return $this->fitting;
     }
 }

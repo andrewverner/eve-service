@@ -9,7 +9,7 @@ body, html {
     background-attachment: fixed;
 }
 
-.eve-panel {
+/*.eve-panel {
     background-color: rgba(0,0,0,0.7);
     padding: 25px;
     border: 1px solid rgba(100,100,100,0.6);
@@ -19,7 +19,7 @@ body, html {
     background-color: #222222;
     padding: 15px;
     color: #eeeeee;
-}
+}*/
 
 .eve-btn {
     border: none;
@@ -198,4 +198,36 @@ a.eve-btn {
 
 .eve-modal .modal-footer {
     border-top: 1px solid #333;
+}
+
+#debug {
+    background-color: #666666;
+}
+
+.eve-panel {
+    border: 1px solid rgba(100,100,100,0.5);
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.eve-panel-title {
+    padding: 5px 10px;
+    background-color: #222;
+    color: #eee;
+}
+
+.eve-panel-body {
+    background-color: rgba(0,0,0,0.7);
+    padding: 20px;
+}
+
+.eve-panel-content {
+    background-color: #222;
+    padding: 10px;
+}
+
+.eve-columns-container .eve-panel {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
 }

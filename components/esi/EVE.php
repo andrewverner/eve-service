@@ -13,6 +13,7 @@ use app\components\esi\character\Character;
 use app\components\esi\components\Request;
 use app\components\esi\components\SecureRequest;
 use app\components\esi\corporation\Corporation;
+use app\components\esi\dogma\Dogma;
 use app\components\esi\market\Market;
 use app\components\esi\sso\SSO;
 use app\components\esi\universe\Universe;
@@ -97,5 +98,13 @@ class EVE
     public static function market()
     {
         return new Market();
+    }
+
+    /**
+     * @return Dogma
+     */
+    public static function dogma()
+    {
+        return new Dogma();
     }
 }
