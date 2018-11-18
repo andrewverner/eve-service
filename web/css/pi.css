@@ -1,0 +1,17 @@
+html, body {
+    background-image: url("https://webimg.ccpgamescdn.com/kvd74o0q2fjg/2WAA8yABaMyKAccWq2OUum/fa12e6461a6a0d00e13083c04ff8ee63/PLANET.jpg");
+}
+
+.pi-planet-container {
+    background-color: #111;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.pi-planet-title {
+    margin-bottom: 10px;
+}
+
+.pi-planet-image img {
+    width: 100%;
+}

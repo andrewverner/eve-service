@@ -10,6 +10,14 @@ namespace app\controllers;
 
 use app\components\esi\EVE;
 use app\components\esi\skills\SkillsExtractor;
+use app\components\pi\BarrenPlanet;
+use app\components\pi\GasPlanet;
+use app\components\pi\IcePlanet;
+use app\components\pi\LavaPlanet;
+use app\components\pi\OceanicPlanet;
+use app\components\pi\Planetary;
+use app\components\pi\StormPlanet;
+use app\components\pi\TemperatePlanet;
 use app\models\CharacterRoute;
 use yii\web\Controller;
 
@@ -52,6 +60,23 @@ class TestController extends Controller
         //echo SkillsExtractor::buildList($skills, $callback);
         echo '<pre>';
         print_r(SkillsExtractor::unique($skills));
+        echo '</pre>';
+    }
+
+    public function actionPi()
+    {
+        echo '<pre>';
+        $planetary = new Planetary();
+        $planetary->addPlanet(
+            new LavaPlanet(),
+            new BarrenPlanet(),
+            new TemperatePlanet(),
+            new OceanicPlanet(),
+            new StormPlanet(),
+            new GasPlanet(),
+            new IcePlanet()
+        );
+        $planetary->explore();
         echo '</pre>';
     }
 }
