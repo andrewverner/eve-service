@@ -11,7 +11,7 @@ namespace app\components\pi\schematics\tier2;
 use app\components\pi\Material;
 use app\components\pi\schematics\Schematic;
 
-class BroadcastNode extends Schematic
+class DataChips extends Schematic
 {
     const OUTPUT = [Material::TIER2_DATA_CHIPS => 3];
     

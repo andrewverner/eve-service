@@ -8,6 +8,8 @@
 
 namespace app\components\pi;
 
+use app\components\pi\schematics\Schematic;
+use yii\helpers\FileHelper;
 use yii\web\BadRequestHttpException;
 
 class Planetary
@@ -28,124 +30,14 @@ class Planetary
     private $dump = [];
 
     /**
-     * @var array
+     * @var Schematic[]
      */
-    private $base = [
-        Material::MATERIAL_BACTERIA => [Material::RAW_MATERIAL_MICROORGANISMS],
-        Material::MATERIAL_BIOFUELS => [Material::RAW_MATERIAL_CARBON_COMPOUNDS],
-        Material::MATERIAL_BIOMASS => [Material::RAW_MATERIAL_PLANKTIC_COLONIES],
-        Material::MATERIAL_CHIRAL_STRUCTURES => [Material::RAW_MATERIAL_NON_CS_CRYSTALS],
-        Material::MATERIAL_ELECTROLYTES => [Material::RAW_MATERIAL_IONIC_SOLUTIONS],
-        Material::MATERIAL_INDUSTRIAL_FIBERS => [Material::RAW_MATERIAL_AUTOTROPHS],
-        Material::MATERIAL_OXIDIZING_COMPOUND => [Material::RAW_MATERIAL_REACTIVE_GAS],
-        Material::MATERIAL_OXYGEN => [Material::RAW_MATERIAL_NOBLE_GAS],
-        Material::MATERIAL_PLASMOIDS => [Material::RAW_MATERIAL_SUSPENDED_PLASMA],
-        Material::MATERIAL_PRECIOUS_METALS => [Material::RAW_MATERIAL_NOBLE_METALS],
-        Material::MATERIAL_PROTEINS => [Material::RAW_MATERIAL_COMPLEX_ORGANISMS],
-        Material::MATERIAL_REACTIVE_METALS => [Material::RAW_MATERIAL_BASE_METALS],
-        Material::MATERIAL_SILICON => [Material::RAW_MATERIAL_FELSIC_MAGMA],
-        Material::MATERIAL_TOXIC_METALS => [Material::RAW_MATERIAL_HEAVY_METALS],
-        Material::MATERIAL_WATER => [Material::RAW_MATERIAL_AQUEOUS_LIQUIDS],
-    ];
+    private $base;
 
-    private $tier1 = [
-        Material::TIER1_BIOCELLS => [
-            Material::MATERIAL_BIOFUELS,
-            Material::MATERIAL_PRECIOUS_METALS,
-        ],
-        Material::TIER1_CONSTRUCTION_BLOCKS => [
-            Material::MATERIAL_REACTIVE_METALS,
-            Material::MATERIAL_TOXIC_METALS,
-        ],
-        Material::TIER1_CONSUMER_ELECTRONICS => [
-            Material::MATERIAL_TOXIC_METALS,
-            Material::MATERIAL_CHIRAL_STRUCTURES,
-        ],
-        Material::TIER1_COOLANT => [
-            Material::MATERIAL_ELECTROLYTES,
-            Material::MATERIAL_WATER,
-        ],
-        Material::TIER1_ENRICHED_URANIUM => [
-            Material::MATERIAL_PRECIOUS_METALS,
-            Material::MATERIAL_TOXIC_METALS,
-        ],
-        Material::TIER1_FERTILIZER => [
-            Material::MATERIAL_BACTERIA,
-            Material::MATERIAL_PROTEINS,
-        ],
-        Material::TIER1_GENETICALLY_ENHANCED_LIVESTOCK => [
-            Material::MATERIAL_PROTEINS,
-            Material::MATERIAL_BIOMASS,
-        ],
-        Material::TIER1_LIVESTOCK => [
-            Material::MATERIAL_PROTEINS,
-            Material::MATERIAL_BIOFUELS,
-        ],
-        Material::TIER1_MECHANICAL_PARTS => [
-            Material::MATERIAL_REACTIVE_METALS,
-            Material::MATERIAL_PRECIOUS_METALS,
-        ],
-        Material::TIER1_MICROFIBER_SHIELDING => [
-            Material::MATERIAL_INDUSTRIAL_FIBERS,
-            Material::MATERIAL_SILICON,
-        ],
-        Material::TIER1_MINIATURE_ELECTRONICS => [
-            Material::MATERIAL_CHIRAL_STRUCTURES,
-            Material::MATERIAL_SILICON,
-        ],
-        Material::TIER1_NANITES => [
-            Material::MATERIAL_BACTERIA,
-            Material::MATERIAL_REACTIVE_METALS,
-        ],
-        Material::TIER1_OXIDES => [
-            Material::MATERIAL_OXIDIZING_COMPOUND,
-            Material::MATERIAL_OXYGEN,
-        ],
-        Material::TIER1_POLYARAMIDS => [
-            Material::MATERIAL_OXIDIZING_COMPOUND,
-            Material::MATERIAL_INDUSTRIAL_FIBERS,
-        ],
-        Material::TIER1_POLYTEXTILES => [
-            Material::MATERIAL_BIOFUELS,
-            Material::MATERIAL_INDUSTRIAL_FIBERS,
-        ],
-        Material::TIER1_ROCKET_FUEL => [
-            Material::MATERIAL_PLASMOIDS,
-            Material::MATERIAL_ELECTROLYTES,
-        ],
-        Material::TIER1_SILICATE_GLASS => [
-            Material::MATERIAL_OXIDIZING_COMPOUND,
-            Material::MATERIAL_SILICON,
-        ],
-        Material::TIER1_SUPERCONDUCTORS => [
-            Material::MATERIAL_PLASMOIDS,
-            Material::MATERIAL_WATER,
-        ],
-        Material::TIER1_SUPERTENSILE_PLASTICS => [
-            Material::MATERIAL_OXYGEN,
-            Material::MATERIAL_BIOMASS,
-        ],
-        Material::TIER1_SYNTHETIC_OIL => [
-            Material::MATERIAL_ELECTROLYTES,
-            Material::MATERIAL_OXYGEN,
-        ],
-        Material::TIER1_TEST_CULTURES => [
-            Material::MATERIAL_BACTERIA,
-            Material::MATERIAL_WATER,
-        ],
-        Material::TIER1_TRANSMITTER => [
-            Material::MATERIAL_PLASMOIDS,
-            Material::MATERIAL_CHIRAL_STRUCTURES,
-        ],
-        Material::TIER1_VIRAL_AGENT => [
-            Material::MATERIAL_BACTERIA,
-            Material::MATERIAL_BIOMASS,
-        ],
-        Material::TIER1_WATER_COOLED_CPU => [
-            Material::MATERIAL_REACTIVE_METALS,
-            Material::MATERIAL_WATER,
-        ],
-    ];
+    /**
+     * @var Schematic[]
+     */
+    private $tier1;
 
     private $tier2 = [
         Material::TIER2_BIOTECH_RESEARCH_REPORTS => [
@@ -306,8 +198,8 @@ class Planetary
         $this->rawMaterials = $this->dump = array_unique($this->rawMaterials);
         $this->exploreBaseReactions();
         $this->exploreTier1Reactions();
-        $this->exploreTier2Reactions();
-        $this->exploreTier3Reactions();
+        /*$this->exploreTier2Reactions();
+        $this->exploreTier3Reactions();*/
     }
 
     private function exploreBaseReactions()
@@ -315,6 +207,36 @@ class Planetary
         if (!$this->rawMaterials) {
             $this->base = [];
             return;
+        }
+
+        /**
+         * @var Schematic[]
+         */
+        $this->base = $this->importSchematics(
+            '@app/components/pi/schematics/base',
+            'app\components\pi\schematics\base'
+        );
+
+        $this->base = array_filter($this->base, function ($schematic) {
+            /**
+             * @var Schematic $schematic
+             */
+            foreach ($schematic::input() as $materialId => $quantity) {
+                if (!in_array($materialId, $this->rawMaterials)) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        /*foreach ($schematics as $key => $schematic) {
+            foreach ($schematic::input() as $materialId => $quantity) {
+                if (!in_array($materialId, $this->rawMaterials)) {
+                    unset($schematics[$output]);
+                    continue 2;
+                }
+            }
         }
 
         foreach ($this->base as $output => $input) {
@@ -326,9 +248,12 @@ class Planetary
             }
         }
 
-        $this->dump = array_merge($this->dump, array_keys($this->base));
+        $this->dump = array_merge($this->dump, array_keys($this->base));*/
     }
 
+    /**
+     * @return Schematic[]
+     */
     private function exploreTier1Reactions()
     {
         if (!$this->base) {
@@ -336,16 +261,25 @@ class Planetary
             return;
         }
 
-        foreach ($this->tier1 as $output => $input) {
-            foreach ($input as $material) {
-                if (!isset($this->base[$material])) {
-                    unset($this->tier1[$output]);
-                    continue 2;
+        $this->tier1 = $this->importSchematics(
+            '@app/components/pi/schematics/tier1',
+            'app\components\pi\schematics\tier1'
+        );
+
+        $this->tier1 = array_filter($this->tier1, function ($schematic) {
+            /**
+             * @var Schematic $schematic
+             */
+            foreach ($schematic::input() as $materialId => $quantity) {
+                if (!in_array($materialId, $this->base)) {
+                    return false;
                 }
             }
-        }
 
-        $this->dump = array_merge($this->dump, array_keys($this->tier1));
+            return true;
+        });
+
+        return $this->tier1;
     }
 
     private function exploreTier2Reactions()
@@ -404,5 +338,18 @@ class Planetary
     public function getTier3Reactions()
     {
         return $this->tier3;
+    }
+
+    private function importSchematics($pathAlias, $namespace)
+    {
+        $data = [];
+        $schematics = FileHelper::findFiles(\Yii::getAlias($pathAlias), ['only'=>['*.php']]);
+        foreach ($schematics as $schematic) {
+            $schematicName = basename(str_replace('.php', '', $schematic));
+            $r = new \ReflectionClass($namespace . '\\' . $schematicName);
+            $data[] = $r->newInstance();
+        }
+
+        return $data;
     }
 }

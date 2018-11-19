@@ -153,24 +153,23 @@ $this->title = 'Planetary Interaction';
                         <?php if ($planetary->getBaseReactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Base Reactions']); ?>
                             <table class="eve-table colored">
-                                <?php foreach ($planetary->getBaseReactions() as $output => $input): ?>
-                                <?php $inputType = \app\components\pi\Material::type($input[0]); ?>
-                                <?php $outputType = \app\components\pi\Material::type($output); ?>
+                                <?php foreach ($planetary->getBaseReactions() as $schematic): ?>
+                                <?php $inputType = $schematic::inputTypes()[0]; ?>
                                 <tr>
                                     <td>
-                                        <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                        <?= \yii\helpers\Html::img($inputType->type->image(32)); ?>
                                     </td>
                                     <td>
-                                        3000 x <?= $input[0]; ?>
+                                        <?= $inputType->quantity ?> x <?= $inputType->type->name; ?>
                                     </td>
                                     <td>
-                                        <?= \yii\helpers\Html::img($outputType->image(32)); ?>
+                                        <?= \yii\helpers\Html::img($schematic::type()->image(32)); ?>
                                     </td>
                                     <td>
-                                        20 x <?= $output; ?>
+                                        <?= $schematic::quantity(); ?> x <?= $schematic::type()->name; ?>
                                     </td>
                                     <td>
-                                        <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
+                                        <?= \app\components\esi\helpers\EVEFormatter::isk($schematic::type()->price()) ?> ISK
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -180,34 +179,30 @@ $this->title = 'Planetary Interaction';
                         <?php if ($planetary->getTier1Reactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Tear 1 Reactions']); ?>
                             <table class="eve-table colored">
-                                <?php foreach ($planetary->getTier1Reactions() as $output => $input): ?>
-                                    <?php $outputType = \app\components\pi\Material::type($output); ?>
+                                <?php foreach ($planetary->getTier1Reactions() as $schematic): ?>
                                     <tr>
                                         <td>
                                             <table class="non-colored">
-                                                <?php foreach ($input as $row): ?>
-                                                <?php $inputType = \app\components\pi\Material::type($row); ?>
+                                                <?php foreach ($schematic::inputTypes() as $inputType): ?>
                                                 <tr>
                                                     <td>
-                                                        <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                                        <?= \yii\helpers\Html::img($inputType->type->image(32)); ?>
                                                     </td>
-                                                    <td>40 x</td>
-                                                    <td><?= $row; ?></td>
+                                                    <td>
+                                                        <?= $inputType->quantity; ?> x <?= $inputType->type->name; ?>
+                                                    </td>
                                                 </tr>
-                                                <?php endforeach; ?>
+                                                <?php endforeach;; ?>
                                             </table>
                                         </td>
                                         <td>
-                                            <?= \yii\helpers\Html::img($outputType->image(32)); ?>
+                                            <?= \yii\helpers\Html::img($schematic::type()->image(32)); ?>
                                         </td>
                                         <td>
-                                            5 x
+                                            <?= $schematic::quantity(); ?> x <?= $schematic::type()->name; ?>
                                         </td>
                                         <td>
-                                            <?= $output; ?>
-                                        </td>
-                                        <td>
-                                            <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
+                                            <?= \app\components\esi\helpers\EVEFormatter::isk($schematic::type()->price()) ?> ISK
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

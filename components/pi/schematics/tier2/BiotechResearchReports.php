@@ -11,7 +11,7 @@ namespace app\components\pi\schematics\tier2;
 use app\components\pi\Material;
 use app\components\pi\schematics\Schematic;
 
-class BroadcastNode extends Schematic
+class BiotechResearchReports extends Schematic
 {
     const OUTPUT = [Material::TIER2_BIOTECH_RESEARCH_REPORTS => 3];
     

@@ -17,10 +17,12 @@ use app\components\pi\LavaPlanet;
 use app\components\pi\Material;
 use app\components\pi\OceanicPlanet;
 use app\components\pi\Planetary;
+use app\components\pi\schematics\base\Bacteria;
 use app\components\pi\schematics\tier3\WetwareMainframe;
 use app\components\pi\StormPlanet;
 use app\components\pi\TemperatePlanet;
 use app\models\CharacterRoute;
+use yii\helpers\FileHelper;
 use yii\web\Controller;
 
 class TestController extends Controller
@@ -68,109 +70,35 @@ class TestController extends Controller
     public function actionPi()
     {
         echo '<pre>';
-        $tier2 = [
-            Material::TIER2_BIOTECH_RESEARCH_REPORTS => [
-                Material::TIER1_NANITES,
-                Material::TIER1_LIVESTOCK,
-                Material::TIER1_CONSTRUCTION_BLOCKS,
-            ],
-            Material::TIER2_CAMERA_DRONES => [
-                Material::TIER1_SILICATE_GLASS,
-                Material::TIER1_ROCKET_FUEL,
-            ],
-            Material::TIER2_CONDENSATES => [
-                Material::TIER1_OXIDES,
-                Material::TIER1_COOLANT,
-            ],
-            Material::TIER2_CRYOPROTECTANT_SOLUTION => [
-                Material::TIER1_TEST_CULTURES,
-                Material::TIER1_SYNTHETIC_OIL,
-                Material::TIER1_FERTILIZER,
-            ],
-            Material::TIER2_DATA_CHIPS => [
-                Material::TIER1_SUPERTENSILE_PLASTICS,
-                Material::TIER1_MICROFIBER_SHIELDING,
-            ],
-            Material::TIER2_GEL_MATRIX_BIOPASTE => [
-                Material::TIER1_OXIDES,
-                Material::TIER1_BIOCELLS,
-                Material::TIER1_SUPERCONDUCTORS,
-            ],
-            Material::TIER2_GUIDANCE_SYSTEMS => [
-                Material::TIER1_WATER_COOLED_CPU,
-                Material::TIER1_TRANSMITTER,
-            ],
-            Material::TIER2_HAZMAT_DETECTION_SYSTEMS => [
-                Material::TIER1_POLYTEXTILES,
-                Material::TIER1_VIRAL_AGENT,
-                Material::TIER1_TRANSMITTER,
-            ],
-            Material::TIER2_HERMETIC_MEMBRANES => [
-                Material::TIER1_POLYARAMIDS,
-                Material::TIER1_GENETICALLY_ENHANCED_LIVESTOCK,
-            ],
-            Material::TIER2_HIGH_TECH_TRANSMITTERS => [
-                Material::TIER1_POLYARAMIDS,
-                Material::TIER1_TRANSMITTER,
-            ],
-            Material::TIER2_INDUSTRIAL_EXPLOSIVES => [
-                Material::TIER1_FERTILIZER,
-                Material::TIER1_POLYTEXTILES,
-            ],
-            Material::TIER2_NEOCOMS => [
-                Material::TIER1_BIOCELLS,
-                Material::TIER1_SILICATE_GLASS,
-            ],
-            Material::TIER2_NUCLEAR_REACTORS => [
-                Material::TIER1_ENRICHED_URANIUM,
-                Material::TIER1_MICROFIBER_SHIELDING,
-            ],
-            Material::TIER2_PLANETARY_VEHICLES => [
-                Material::TIER1_SUPERTENSILE_PLASTICS,
-                Material::TIER1_MECHANICAL_PARTS,
-                Material::TIER1_MINIATURE_ELECTRONICS,
-            ],
-            Material::TIER2_ROBOTICS => [
-                Material::TIER1_MECHANICAL_PARTS,
-                Material::TIER1_CONSUMER_ELECTRONICS,
-            ],
-            Material::TIER2_SMARTFAB_UNITS => [
-                Material::TIER1_CONSTRUCTION_BLOCKS,
-                Material::TIER1_MINIATURE_ELECTRONICS,
-            ],
-            Material::TIER2_SUPERCOMPUTERS => [
-                Material::TIER1_WATER_COOLED_CPU,
-                Material::TIER1_COOLANT,
-                Material::TIER1_CONSUMER_ELECTRONICS,
-            ],
-            Material::TIER2_SYNTHETIC_SYNAPSES => [
-                Material::TIER1_SUPERTENSILE_PLASTICS,
-                Material::TIER1_TEST_CULTURES,
-            ],
-            Material::TIER2_TRANSCRANIAL_MICROCONTROLLERS => [
-                Material::TIER1_BIOCELLS,
-                Material::TIER1_NANITES,
-            ],
-            Material::TIER2_UKOMI_SUPERCONDUCTORS => [
-                Material::TIER1_SYNTHETIC_OIL,
-                Material::TIER1_SUPERCONDUCTORS,
-            ],
-            Material::TIER2_VACCINES => [
-                Material::TIER1_LIVESTOCK,
-                Material::TIER1_VIRAL_AGENT,
-            ],
+        $tier = [
+            Material::MATERIAL_BACTERIA => [Material::RAW_MATERIAL_MICROORGANISMS],
+            Material::MATERIAL_BIOFUELS => [Material::RAW_MATERIAL_CARBON_COMPOUNDS],
+            Material::MATERIAL_BIOMASS => [Material::RAW_MATERIAL_PLANKTIC_COLONIES],
+            Material::MATERIAL_CHIRAL_STRUCTURES => [Material::RAW_MATERIAL_NON_CS_CRYSTALS],
+            Material::MATERIAL_ELECTROLYTES => [Material::RAW_MATERIAL_IONIC_SOLUTIONS],
+            Material::MATERIAL_INDUSTRIAL_FIBERS => [Material::RAW_MATERIAL_AUTOTROPHS],
+            Material::MATERIAL_OXIDIZING_COMPOUND => [Material::RAW_MATERIAL_REACTIVE_GAS],
+            Material::MATERIAL_OXYGEN => [Material::RAW_MATERIAL_NOBLE_GAS],
+            Material::MATERIAL_PLASMOIDS => [Material::RAW_MATERIAL_SUSPENDED_PLASMA],
+            Material::MATERIAL_PRECIOUS_METALS => [Material::RAW_MATERIAL_NOBLE_METALS],
+            Material::MATERIAL_PROTEINS => [Material::RAW_MATERIAL_COMPLEX_ORGANISMS],
+            Material::MATERIAL_REACTIVE_METALS => [Material::RAW_MATERIAL_BASE_METALS],
+            Material::MATERIAL_SILICON => [Material::RAW_MATERIAL_FELSIC_MAGMA],
+            Material::MATERIAL_TOXIC_METALS => [Material::RAW_MATERIAL_HEAVY_METALS],
+            Material::MATERIAL_WATER => [Material::RAW_MATERIAL_AQUEOUS_LIQUIDS],
         ];
 
-        foreach ($tier2 as $output => $input) {
+        foreach ($tier as $output => $input) {
             $output = EVE::universe()->type($output);
             $outputConstName = mb_strtoupper(str_replace([' ', '-'], '_', trim($output->name)));
             $inputArr = [];
             foreach ($input as $id) {
                 $type = EVE::universe()->type($id);
                 $constName = mb_strtoupper(str_replace([' ', '-'], '_', trim($type->name)));
-                $inputArr[] = "Material::TIER1_{$constName} => 10,";
+                $inputArr[] = "        Material::RAW_MATERIAL_{$constName} => 3000,";
             }
             $inputStr = implode(PHP_EOL, $inputArr);
+            $fileName = str_replace(' ', '', ucwords(str_replace('-', ' ', $output->name)));
             $class = <<<CLASS
 <?php
 /**
@@ -180,25 +108,32 @@ class TestController extends Controller
  * Time: 17:39
  */
 
-namespace app\components\pi\schematics\\tier2;
+namespace app\components\pi\schematics\\base;
 
 use app\components\pi\Material;
 use app\components\pi\schematics\Schematic;
 
-class BroadcastNode extends Schematic
+class {$fileName} extends Schematic
 {
-    const OUTPUT = [Material::TIER2_{$outputConstName} => 3];
+    const OUTPUT = [Material::MATERIAL_{$outputConstName} => 40];
     
     const INPUT = [
-        {$inputStr}
+{$inputStr}
     ];
 }
 
 CLASS;
 
-            $fileName = str_replace(' ', '', ucwords(str_replace('-', ' ', $output->name)));
-            var_dump(file_put_contents('/var/www/html/eve/components/pi/schematics/tier2/' . $fileName . '.php', $class));
+            var_dump(file_put_contents('/var/www/html/eve/components/pi/schematics/base/' . $fileName . '.php', $class));
         }
     }
 
+    public function actionAlias()
+    {
+        $schematics = FileHelper::findFiles(\Yii::getAlias('@app/components/pi/schematics/base'), ['only'=>['*.php']]);
+        $className = str_replace('.php', '', $schematics[5]);
+        $r = new \ReflectionClass('app\components\pi\schematics\base\\' . basename($className));
+        var_dump($r->newInstance());
+
+    }
 }
