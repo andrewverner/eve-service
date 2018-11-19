@@ -8,6 +8,7 @@
 
 namespace app\components\esi\universe;
 
+use app\components\esi\components\Request;
 use app\components\esi\EVE;
 
 class Universe
@@ -84,5 +85,20 @@ class Universe
         $request = EVE::request("/universe/types/");
         $request->query(['page' => $page]);
         return $request->send();
+    }
+
+    /**
+     * @param array $names
+     * @return IdsFactory
+     */
+    public function ids(array $names)
+    {
+        $cacheKey = "universe:ids:" . md5(implode($names));
+        $request = EVE::request('/universe/ids/', null, Request::TYPE_POST);
+        $request->cacheDuration = 3600 * 24 * 14;
+        $request->body(json_encode($names));
+        $data = $request->send(null, $cacheKey);
+
+        return new IdsFactory($data);
     }
 }

@@ -101,7 +101,7 @@ class Planetary
             Material::MATERIAL_OXIDIZING_COMPOUND,
             Material::MATERIAL_OXYGEN,
         ],
-        Material::TIER1_POLYRAMIDS => [
+        Material::TIER1_POLYARAMIDS => [
             Material::MATERIAL_OXIDIZING_COMPOUND,
             Material::MATERIAL_INDUSTRIAL_FIBERS,
         ],
@@ -185,11 +185,11 @@ class Planetary
             Material::TIER1_TRANSMITTER,
         ],
         Material::TIER2_HERMETIC_MEMBRANES => [
-            Material::TIER1_POLYRAMIDS,
+            Material::TIER1_POLYARAMIDS,
             Material::TIER1_GENETICALLY_ENHANCED_LIVESTOCK,
         ],
         Material::TIER2_HIGH_TECH_TRANSMITTERS => [
-            Material::TIER1_POLYRAMIDS,
+            Material::TIER1_POLYARAMIDS,
             Material::TIER1_TRANSMITTER,
         ],
         Material::TIER2_INDUSTRIAL_EXPLOSIVES => [
@@ -204,7 +204,7 @@ class Planetary
             Material::TIER1_ENRICHED_URANIUM,
             Material::TIER1_MICROFIBER_SHIELDING,
         ],
-        Material::TIER2_PLANETARY_VEHICLE => [
+        Material::TIER2_PLANETARY_VEHICLES => [
             Material::TIER1_SUPERTENSILE_PLASTICS,
             Material::TIER1_MECHANICAL_PARTS,
             Material::TIER1_MINIATURE_ELECTRONICS,
@@ -249,7 +249,7 @@ class Planetary
         Material::TIER3_INTEGRITY_RESPONSE_DRONES => [
             Material::TIER2_GEL_MATRIX_BIOPASTE,
             Material::TIER2_HAZMAT_DETECTION_SYSTEMS,
-            Material::TIER2_PLANETARY_VEHICLE,
+            Material::TIER2_PLANETARY_VEHICLES,
         ],
         Material::TIER3_NANO_FACTORY => [
             Material::TIER2_INDUSTRIAL_EXPLOSIVES,

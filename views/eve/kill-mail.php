@@ -87,8 +87,10 @@ KillMailAsset::register($this);
                     <div class="row">
                         <div class="col-12">
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Attackers']); ?>
-                            <table class="eve-table">
-                                <?php foreach ($killMail->attackers as $attacker): ?>
+                            <table class="eve-table" id="debug">
+                                <?php $characters = array_filter($killMail->attackers, function ($attacker) { return $attacker->characterId; }); ?>
+                                <?php $npcs = array_filter($killMail->attackers, function ($attacker) { return !$attacker->characterId; }); ?>
+                                <?php foreach ($characters as $attacker): ?>
                                     <tr>
                                         <td>
                                             <?= \app\components\Html::img($attacker->character()->portrait()->px64x64); ?>
@@ -116,8 +118,19 @@ KillMailAsset::register($this);
                                             <?= $attacker->damageDone ?>
                                             <?php if ($attacker->finalBlow): ?>(Final blow)<?php endif; ?>
                                         </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <?php foreach ($npcs as $attacker): ?>
+                                    <tr>
+                                        <td colspan="2">NPC attacker</td>
                                         <td>
-
+                                            <?php if ($attacker->ship()): ?>
+                                                <?= \app\components\Html::img($attacker->ship()->render(64)); ?>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?= $attacker->damageDone ?>
+                                            <?php if ($attacker->finalBlow): ?>(Final blow)<?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

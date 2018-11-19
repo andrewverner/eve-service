@@ -11,6 +11,8 @@
 use app\assets\PIAsset;
 
 PIAsset::register($this);
+
+$this->title = 'Planetary Interaction';
 ?>
 <div class="site-index">
     <div class="body-content">
@@ -150,14 +152,25 @@ PIAsset::register($this);
                     <div class="col-12">
                         <?php if ($planetary->getBaseReactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Base Reactions']); ?>
-                            <table class="eve-table">
+                            <table class="eve-table colored">
                                 <?php foreach ($planetary->getBaseReactions() as $output => $input): ?>
+                                <?php $inputType = \app\components\pi\Material::type($input[0]); ?>
+                                <?php $outputType = \app\components\pi\Material::type($output); ?>
                                 <tr>
+                                    <td>
+                                        <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                    </td>
                                     <td>
                                         3000 x <?= $input[0]; ?>
                                     </td>
                                     <td>
+                                        <?= \yii\helpers\Html::img($outputType->image(32)); ?>
+                                    </td>
+                                    <td>
                                         20 x <?= $output; ?>
+                                    </td>
+                                    <td>
+                                        <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -166,20 +179,35 @@ PIAsset::register($this);
                         <?php endif; ?>
                         <?php if ($planetary->getTier1Reactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Tear 1 Reactions']); ?>
-                            <table class="eve-table">
+                            <table class="eve-table colored">
                                 <?php foreach ($planetary->getTier1Reactions() as $output => $input): ?>
+                                    <?php $outputType = \app\components\pi\Material::type($output); ?>
                                     <tr>
                                         <td>
-                                            40 x
+                                            <table class="non-colored">
+                                                <?php foreach ($input as $row): ?>
+                                                <?php $inputType = \app\components\pi\Material::type($row); ?>
+                                                <tr>
+                                                    <td>
+                                                        <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                                    </td>
+                                                    <td>40 x</td>
+                                                    <td><?= $row; ?></td>
+                                                </tr>
+                                                <?php endforeach; ?>
+                                            </table>
                                         </td>
                                         <td>
-                                            <?= \app\components\Html::ul($input); ?>
+                                            <?= \yii\helpers\Html::img($outputType->image(32)); ?>
                                         </td>
                                         <td>
                                             5 x
                                         </td>
                                         <td>
                                             <?= $output; ?>
+                                        </td>
+                                        <td>
+                                            <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -188,20 +216,35 @@ PIAsset::register($this);
                         <?php endif; ?>
                         <?php if ($planetary->getTier2Reactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Tear 2 Reactions']); ?>
-                            <table class="eve-table">
+                            <table class="eve-table colored">
                                 <?php foreach ($planetary->getTier2Reactions() as $output => $input): ?>
+                                    <?php $outputType = \app\components\pi\Material::type($output); ?>
                                     <tr>
                                         <td>
-                                            10 x
+                                            <table class="non-colored">
+                                                <?php foreach ($input as $row): ?>
+                                                    <?php $inputType = \app\components\pi\Material::type($row); ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                                        </td>
+                                                        <td>10 x</td>
+                                                        <td><?= $row; ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </table>
                                         </td>
                                         <td>
-                                            <?= \app\components\Html::ul($input); ?>
+                                            <?= \yii\helpers\Html::img($outputType->image(32)); ?>
                                         </td>
                                         <td>
                                             3 x
                                         </td>
                                         <td>
-                                            <?= $output; ?>
+                                            <a name="pi-<?= $outputType->typeId ?>"><?= \app\components\pi\Material::type($output)->name; ?></a>
+                                        </td>
+                                        <td>
+                                            <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -210,20 +253,35 @@ PIAsset::register($this);
                         <?php endif; ?>
                         <?php if ($planetary->getTier3Reactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'High-Tech Reactions']); ?>
-                            <table class="eve-table">
+                            <table class="eve-table colored">
                                 <?php foreach ($planetary->getTier3Reactions() as $output => $input): ?>
+                                    <?php $outputType = \app\components\pi\Material::type($output); ?>
                                     <tr>
                                         <td>
-                                            6 x
+                                            <table class="non-colored">
+                                                <?php foreach ($input as $row): ?>
+                                                    <?php $inputType = \app\components\pi\Material::type($row); ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                                        </td>
+                                                        <td>6 x</td>
+                                                        <td><a href="#pi-<?= $inputType->typeId; ?>"><?= $row; ?></a></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </table>
                                         </td>
                                         <td>
-                                            <?= \app\components\Html::ul($input); ?>
+                                            <?= \yii\helpers\Html::img($outputType->image(32)); ?>
                                         </td>
                                         <td>
                                             1 x
                                         </td>
                                         <td>
-                                            <?= $output; ?>
+                                            <a name="pi-<?= $outputType->typeId ?>"><?= \app\components\pi\Material::type($output)->name; ?></a>
+                                        </td>
+                                        <td>
+                                            <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
