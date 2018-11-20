@@ -6,7 +6,10 @@
  * Time: 12:05
  */
 
-namespace app\components\pi;
+namespace app\components\pi\planets;
+
+use app\components\pi\Material;
+use app\components\pi\Planet;
 
 class IcePlanet extends Planet
 {

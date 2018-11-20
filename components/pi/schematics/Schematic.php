@@ -59,4 +59,12 @@ class Schematic
         $output = static::OUTPUT;
         return reset($output);
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return strval(1);
+    }
 }

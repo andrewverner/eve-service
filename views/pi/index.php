@@ -6,6 +6,7 @@
  * Time: 14:45
  *
  * @var \app\components\pi\Planetary $planetary
+ * @var \app\components\pi\Planet[] $planets
  */
 
 use app\assets\PIAsset;
@@ -16,10 +17,42 @@ $this->title = 'Planetary Interaction';
 ?>
 <div class="site-index">
     <div class="body-content">
+        <?php if ($planets && count($planets) > 1): ?>
+            <div id="mini-planets-container">
+                <div class="container">
+                    <div class="text-center">
+                        <?php foreach ($planets as $planet): ?>
+                            <?php $planetType = mb_strtolower(str_replace('Planet', '', $planet->getClass())); ?>
+                            <div class="planet-cell" data-type="<?= $planetType; ?>">
+                                <?= \app\components\Html::img("http://www.eveplanets.com/m/eve/img/planet_{$planetType}.jpg"); ?>
+                                <div><?= ucfirst($planetType); ?></div>
+                                <div class="commodities">
+                                    <?php foreach ($planet->getMaterials() as $id): ?>
+                                        <?php $type = \app\components\esi\EVE::universe()->type($id); ?>
+                                        <?= \yii\helpers\Html::img($type->image(32), [
+                                            'data-type' => $id,
+                                            'data-toggle' => 'popover',
+                                            'data-placement' => 'bottom',
+                                            'data-content' => $type->name,
+                                        ]); ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="text-center" id="output-type">
+                        <img src="" /> <span></span>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
         <div class="row">
             <div class="col-12">
                 <form method="get">
-                    <?php \app\widgets\EvePanelWidget::begin(['title' => 'What types of planets do you want to explore?']); ?>
+                    <?php \app\widgets\EvePanelWidget::begin([
+                        'title' => 'What types of planets do you want to explore?',
+                        'options' => ['id' => 'big-planets-container']
+                    ]); ?>
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3">
                             <div class="pi-planet-container">
@@ -141,11 +174,17 @@ $this->title = 'Planetary Interaction';
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-left">
                             <input type="submit" value="Explore" class="eve-btn eve-btn-primary"/>
                         </div>
-                        <?php \app\widgets\EvePanelWidget::end(); ?>
+                        <div class="col-6 text-right">
+                            <button class="eve-btn eve-btn-default select-all">Select all</button>
+                            <button class="eve-btn eve-btn-default select-none">Select none</button>
+                        </div>
                     </div>
+                    <?php \app\widgets\EvePanelWidget::end(); ?>
                 </form>
                 <?php if ($planetary): ?>
                 <div class="row">
@@ -155,7 +194,7 @@ $this->title = 'Planetary Interaction';
                             <table class="eve-table colored">
                                 <?php foreach ($planetary->getBaseReactions() as $schematic): ?>
                                 <?php $inputType = $schematic::inputTypes()[0]; ?>
-                                <tr>
+                                <tr class="base-schema schema-row" data-schema="basic" data-input="<?= $inputType->type->typeId; ?>" data-output="<?= $schematic::typeId(); ?>" data-name="<?= $schematic::type()->name; ?>">
                                     <td>
                                         <?= \yii\helpers\Html::img($inputType->type->image(32)); ?>
                                     </td>
@@ -166,7 +205,10 @@ $this->title = 'Planetary Interaction';
                                         <?= \yii\helpers\Html::img($schematic::type()->image(32)); ?>
                                     </td>
                                     <td>
-                                        <?= $schematic::quantity(); ?> x <?= $schematic::type()->name; ?>
+                                        <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
+                                            $schematic::type()->name,
+                                            Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                        ); ?>
                                     </td>
                                     <td>
                                         <?= \app\components\esi\helpers\EVEFormatter::isk($schematic::type()->price()) ?> ISK
@@ -180,7 +222,7 @@ $this->title = 'Planetary Interaction';
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Tear 1 Reactions']); ?>
                             <table class="eve-table colored">
                                 <?php foreach ($planetary->getTier1Reactions() as $schematic): ?>
-                                    <tr>
+                                    <tr class="tier1-schema schema-row" data-schema="tier1" data-input="<?= implode(',', array_keys($schematic::input())); ?>" data-output="<?= $schematic::typeId(); ?>" data-name="<?= $schematic::type()->name; ?>">
                                         <td>
                                             <table class="non-colored">
                                                 <?php foreach ($schematic::inputTypes() as $inputType): ?>
@@ -199,7 +241,10 @@ $this->title = 'Planetary Interaction';
                                             <?= \yii\helpers\Html::img($schematic::type()->image(32)); ?>
                                         </td>
                                         <td>
-                                            <?= $schematic::quantity(); ?> x <?= $schematic::type()->name; ?>
+                                            <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
+                                                $schematic::type()->name,
+                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                            ); ?>
                                         </td>
                                         <td>
                                             <?= \app\components\esi\helpers\EVEFormatter::isk($schematic::type()->price()) ?> ISK
@@ -212,34 +257,33 @@ $this->title = 'Planetary Interaction';
                         <?php if ($planetary->getTier2Reactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'Tear 2 Reactions']); ?>
                             <table class="eve-table colored">
-                                <?php foreach ($planetary->getTier2Reactions() as $output => $input): ?>
-                                    <?php $outputType = \app\components\pi\Material::type($output); ?>
-                                    <tr>
+                                <?php foreach ($planetary->getTier2Reactions() as $schematic): ?>
+                                    <tr class="tier2-schema schema-row" data-schema="tier2" data-input="<?= implode(',', array_keys($schematic::input())); ?>" data-output="<?= $schematic::typeId(); ?>" data-name="<?= $schematic::type()->name; ?>">
                                         <td>
                                             <table class="non-colored">
-                                                <?php foreach ($input as $row): ?>
-                                                    <?php $inputType = \app\components\pi\Material::type($row); ?>
+                                                <?php foreach ($schematic::inputTypes() as $inputType): ?>
                                                     <tr>
                                                         <td>
-                                                            <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                                            <?= \yii\helpers\Html::img($inputType->type->image(32)); ?>
                                                         </td>
-                                                        <td>10 x</td>
-                                                        <td><?= $row; ?></td>
+                                                        <td>
+                                                            <?= $inputType->quantity; ?> x <?= $inputType->type->name; ?>
+                                                        </td>
                                                     </tr>
-                                                <?php endforeach; ?>
+                                                <?php endforeach;; ?>
                                             </table>
                                         </td>
                                         <td>
-                                            <?= \yii\helpers\Html::img($outputType->image(32)); ?>
+                                            <?= \yii\helpers\Html::img($schematic::type()->image(32)); ?>
                                         </td>
                                         <td>
-                                            3 x
+                                            <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
+                                                $schematic::type()->name,
+                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                            ); ?>
                                         </td>
                                         <td>
-                                            <a name="pi-<?= $outputType->typeId ?>"><?= \app\components\pi\Material::type($output)->name; ?></a>
-                                        </td>
-                                        <td>
-                                            <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
+                                            <?= \app\components\esi\helpers\EVEFormatter::isk($schematic::type()->price()) ?> ISK
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -249,51 +293,52 @@ $this->title = 'Planetary Interaction';
                         <?php if ($planetary->getTier3Reactions()): ?>
                             <?php \app\widgets\EvePanelWidget::begin(['title' => 'High-Tech Reactions']); ?>
                             <table class="eve-table colored">
-                                <?php foreach ($planetary->getTier3Reactions() as $output => $input): ?>
-                                    <?php $outputType = \app\components\pi\Material::type($output); ?>
-                                    <tr>
+                                <?php foreach ($planetary->getTier3Reactions() as $schematic): ?>
+                                    <tr class="tier3-schema schema-row" data-schema="tier3" data-input="<?= implode(',', array_keys($schematic::input())); ?>" data-output="<?= $schematic::typeId(); ?>" data-name="<?= $schematic::type()->name; ?>">
                                         <td>
                                             <table class="non-colored">
-                                                <?php foreach ($input as $row): ?>
-                                                    <?php $inputType = \app\components\pi\Material::type($row); ?>
+                                                <?php foreach ($schematic::inputTypes() as $inputType): ?>
                                                     <tr>
                                                         <td>
-                                                            <?= \yii\helpers\Html::img($inputType->image(32)); ?>
+                                                            <?= \yii\helpers\Html::img($inputType->type->image(32)); ?>
                                                         </td>
-                                                        <td>6 x</td>
-                                                        <td><a href="#pi-<?= $inputType->typeId; ?>"><?= $row; ?></a></td>
+                                                        <td>
+                                                            <?= $inputType->quantity; ?> x <?= $inputType->type->name; ?>
+                                                        </td>
                                                     </tr>
-                                                <?php endforeach; ?>
+                                                <?php endforeach;; ?>
                                             </table>
                                         </td>
                                         <td>
-                                            <?= \yii\helpers\Html::img($outputType->image(32)); ?>
+                                            <?= \yii\helpers\Html::img($schematic::type()->image(32)); ?>
                                         </td>
                                         <td>
-                                            1 x
+                                            <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
+                                                $schematic::type()->name,
+                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                            ); ?>
                                         </td>
                                         <td>
-                                            <a name="pi-<?= $outputType->typeId ?>"><?= \app\components\pi\Material::type($output)->name; ?></a>
-                                        </td>
-                                        <td>
-                                            <?= \app\components\esi\helpers\EVEFormatter::isk($outputType->price()) ?> ISK
+                                            <?= \app\components\esi\helpers\EVEFormatter::isk($schematic::type()->price()) ?> ISK
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </table>
                             <?php \app\widgets\EvePanelWidget::end(); ?>
                         <?php endif; ?>
-                        <?php /*\app\widgets\EvePanelWidget::begin(['title' => 'Reactions']); */?><!--
-                        <div id="debug">
-                            <?php /*var_dump($planetary->getBaseReactions()); */?>
-                            <?php /*var_dump($planetary->getTier1Reactions()); */?>
-                            <?php /*var_dump($planetary->getTier2Reactions()); */?>
-                            <?php /*var_dump($planetary->getTier3Reactions()); */?>
-                        </div>
-                        --><?php /*\app\widgets\EvePanelWidget::end(); */?>
                     </div>
                 </div>
                 <?php endif; ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <?php \app\widgets\EvePanelWidget::begin([
+                    'title' => 'Planetary Interaction Commodities',
+                    'options' => ['id' => 'pi-chart-widget'],
+                ]); ?>
+                <?= \app\widgets\PlanetaryChartWidget::widget(); ?>
+                <?php \app\widgets\EvePanelWidget::end(); ?>
             </div>
         </div>
     </div>

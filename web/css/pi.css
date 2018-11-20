@@ -1,4 +1,5 @@
 html, body {
+    /*background-image: url("https://webimg.ccpgamescdn.com/kvd74o0q2fjg/2WAA8yABaMyKAccWq2OUum/fa12e6461a6a0d00e13083c04ff8ee63/PLANET.jpg");*/
     background-image: url("https://webimg.ccpgamescdn.com/kvd74o0q2fjg/2WAA8yABaMyKAccWq2OUum/fa12e6461a6a0d00e13083c04ff8ee63/PLANET.jpg");
 }
 
@@ -14,4 +15,101 @@ html, body {
 
 .pi-planet-image img {
     width: 100%;
+}
+
+#mini-planets-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    background-color: #111;
+    border-bottom: 1px solid #444;
+    display: none;
+}
+
+.planet-cell {
+    display: inline-block;
+    width: 11%;
+    margin: 10px 5px;
+    color: #999;
+    opacity: 0.3;
+    transition: opacity 250ms;
+}
+
+.planet-cell.active {
+    opacity: 1;
+    transition: opacity 250ms;
+}
+
+.planet-cell .commodities img {
+    opacity: 0.3;
+    transition: opacity 250ms;
+}
+
+.planet-cell .commodities img.active {
+    background-color: #393939;
+    border-radius: 4px;
+}
+
+.planet-cell .commodities img.active {
+    opacity: 1;
+    transition: opacity 250ms;
+}
+
+.planet-cell img {
+    width: 100%;
+}
+
+#output-type {
+    color: #999;
+}
+
+.commodities {
+    display: block;
+}
+
+.commodities img {
+    width: 28px;
+}
+
+.schema-row {
+    cursor: pointer;
+}
+
+.schema-row.active td, .schema-row:hover td, .pi-chart .planet-row.active td {
+    background-color: #502525;
+}
+
+.pi-chart td.planet img {
+    width: 100%;
+}
+
+.pi-chart td.planet-type {
+    cursor: pointer;
+}
+
+.pi-chart img.active {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.pi-chart .commodities-row img {
+    cursor: pointer;
+}
+
+.commodity-name {
+    writing-mode: vertical-rl;
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+    transform: rotate(-180deg);
+    height: 150px;
+    margin: auto;
+}
+
+.pi-chart-container {
+    overflow-x: auto;
+    overflow-y: hidden;
 }

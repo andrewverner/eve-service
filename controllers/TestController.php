@@ -10,17 +10,7 @@ namespace app\controllers;
 
 use app\components\esi\EVE;
 use app\components\esi\skills\SkillsExtractor;
-use app\components\pi\BarrenPlanet;
-use app\components\pi\GasPlanet;
-use app\components\pi\IcePlanet;
-use app\components\pi\LavaPlanet;
 use app\components\pi\Material;
-use app\components\pi\OceanicPlanet;
-use app\components\pi\Planetary;
-use app\components\pi\schematics\base\Bacteria;
-use app\components\pi\schematics\tier3\WetwareMainframe;
-use app\components\pi\StormPlanet;
-use app\components\pi\TemperatePlanet;
 use app\models\CharacterRoute;
 use yii\helpers\FileHelper;
 use yii\web\Controller;

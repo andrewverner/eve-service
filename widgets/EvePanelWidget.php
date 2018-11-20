@@ -14,6 +14,8 @@ class EvePanelWidget extends Widget
 {
     public $title;
 
+    public $options;
+
     public function init()
     {
         parent::init();
@@ -27,6 +29,7 @@ class EvePanelWidget extends Widget
         return $this->render('eve-panel', [
             'title' => $this->title,
             'content' => $content,
+            'options' => $this->options,
         ]);
     }
 }

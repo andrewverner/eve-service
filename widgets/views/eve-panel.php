@@ -7,10 +7,11 @@
  *
  * @var string $title
  * @var string $content
+ * @var array $options
  * @var \yii\base\Widget $this
  */
 ?>
-<div class="eve-panel">
+<div class="eve-panel"<?php if ($options): ?><?php foreach ($options as $key => $value) { echo " {$key}=\"{$value}\""; } ?><?php endif; ?>>
     <div class="eve-panel-title">
         <?= $title; ?>
     </div>

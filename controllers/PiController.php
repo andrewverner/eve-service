@@ -8,16 +8,17 @@
 
 namespace app\controllers;
 
-use app\components\pi\BarrenPlanet;
-use app\components\pi\GasPlanet;
-use app\components\pi\IcePlanet;
-use app\components\pi\LavaPlanet;
-use app\components\pi\OceanicPlanet;
+use app\components\esi\EVE;
 use app\components\pi\Planet;
 use app\components\pi\Planetary;
-use app\components\pi\PlasmaPlanet;
-use app\components\pi\StormPlanet;
-use app\components\pi\TemperatePlanet;
+use app\components\pi\planets\BarrenPlanet;
+use app\components\pi\planets\GasPlanet;
+use app\components\pi\planets\IcePlanet;
+use app\components\pi\planets\LavaPlanet;
+use app\components\pi\planets\OceanicPlanet;
+use app\components\pi\planets\PlasmaPlanet;
+use app\components\pi\planets\StormPlanet;
+use app\components\pi\planets\TemperatePlanet;
 use yii\web\Controller;
 
 class PiController extends Controller
@@ -47,6 +48,31 @@ class PiController extends Controller
             $planetary->explore();
         }
 
-        return $this->render('index', ['planetary' => $planetary ?? null]);
+        $this->view->registerJsVar('schemas', Planetary::getSchemas());
+
+        return $this->render('index', [
+            'planetary' => $planetary ?? null,
+            'planets' => $planets ?? null,
+        ]);
+    }
+
+    public function actionSchematic($id)
+    {
+        $config = [
+            'chart' => [
+                'container' => '#schematic',
+                'connectors' => [
+                    'type' => 'step',
+                    'style' => [
+                        'stroke' => '#aaa'
+                    ]
+                ]
+            ],
+            'nodeStructure' => Planetary::nodeTree($id)
+        ];
+
+        \Yii::$app->view->registerJsVar('chartConfig', $config);
+
+        return $this->render('schematic', ['type' => EVE::universe()->type($id)]);
     }
 }

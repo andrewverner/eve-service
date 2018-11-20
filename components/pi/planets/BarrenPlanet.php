@@ -3,18 +3,21 @@
  * Created by PhpStorm.
  * User: Denis Khodakovskiy
  * Date: 18.11.2018
- * Time: 12:07
+ * Time: 11:48
  */
 
-namespace app\components\pi;
+namespace app\components\pi\planets;
 
-class OceanicPlanet extends Planet
+use app\components\pi\Material;
+use app\components\pi\Planet;
+
+class BarrenPlanet extends Planet
 {
     public $materials = [
         Material::RAW_MATERIAL_AQUEOUS_LIQUIDS,
+        Material::RAW_MATERIAL_BASE_METALS,
         Material::RAW_MATERIAL_CARBON_COMPOUNDS,
-        Material::RAW_MATERIAL_COMPLEX_ORGANISMS,
         Material::RAW_MATERIAL_MICROORGANISMS,
-        Material::RAW_MATERIAL_PLANKTIC_COLONIES,
+        Material::RAW_MATERIAL_NOBLE_METALS,
     ];
 }

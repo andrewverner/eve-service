@@ -239,3 +239,7 @@ a.eve-btn {
     width: 100%;
     margin-bottom: 15px;
 }
+
+.margin-auto {
+    margin: auto;
+}

@@ -16,4 +16,9 @@ class Planet
     public function getMaterials() {
         return $this->materials;
     }
+
+    public function getClass()
+    {
+        return (new \ReflectionClass(get_called_class()))->getShortName();
+    }
 }
