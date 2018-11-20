@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class LavaPlanet extends Planet
 {
+    public $mask = 8;
+
     public $materials = [
         Material::RAW_MATERIAL_BASE_METALS,
         Material::RAW_MATERIAL_FELSIC_MAGMA,

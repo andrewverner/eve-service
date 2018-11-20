@@ -10,6 +10,7 @@ namespace app\components\esi\universe;
 
 use app\components\esi\components\Request;
 use app\components\esi\EVE;
+use app\components\esi\SearchFactory;
 
 class Universe
 {
@@ -37,6 +38,10 @@ class Universe
         $request = EVE::request('/universe/systems/{system_id}/');
         $request->cacheDuration = 3600 * 24 * 14;
         $system = $request->send(['system_id' => $solarSystemId], $cacheKey);
+
+        if (!$system) {
+            return null;
+        }
 
         return new SolarSystem($system);
     }
@@ -100,5 +105,28 @@ class Universe
         $data = $request->send(null, $cacheKey);
 
         return new IdsFactory($data);
+    }
+
+    /**
+     * @param $query
+     * @param array $categories
+     * @param bool $strict
+     * @return SearchFactory
+     */
+    public function search($query, array $categories, $strict = false)
+    {
+        $hash = md5(implode('', $categories));
+        $cacheKey = "universe:search:{$hash}:{$query}";
+        $request = EVE::request('/search/');
+        $request->cacheDuration = 3600 * 24;
+        $query = [
+            'categories' => implode(',', $categories),
+            'search' => $query,
+            'strict' => $strict,
+        ];
+        $request->query($query);
+        $data = $request->send(null, $cacheKey);
+
+        return new SearchFactory($data);
     }
 }

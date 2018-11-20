@@ -90,7 +90,7 @@ html, body {
     cursor: pointer;
 }
 
-.pi-chart img.active {
+.pi-chart img.active, img.planetary-commodity.active {
     background-color: #888;
     border-radius: 4px;
 }
@@ -112,4 +112,19 @@ html, body {
 .pi-chart-container {
     overflow-x: auto;
     overflow-y: hidden;
+}
+
+#solar-system-search-results ul {
+    list-style: none inside;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+#solar-system-search-results ul a {
+    color: #eee;
+    text-decoration: none;
+}
+
+#solar-system-search-results ul a:hover {
+    text-decoration: underline;
 }

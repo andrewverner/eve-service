@@ -126,4 +126,12 @@ CLASS;
         var_dump($r->newInstance());
 
     }
+
+    public function actionPlanets()
+    {
+        echo '<pre>';
+        $system = EVE::universe()->ids(['Raussinen'])->systems[0];
+        $planet = $system->planets[0];
+        print_r($planet->type());
+    }
 }

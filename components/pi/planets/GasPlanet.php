@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class GasPlanet extends Planet
 {
+    public $mask = 2;
+
     public $materials = [
         Material::RAW_MATERIAL_AQUEOUS_LIQUIDS,
         Material::RAW_MATERIAL_BASE_METALS,

@@ -105,37 +105,19 @@ $(function () {
         trigger: 'click hover'
     });
 
-    $('.pi-chart td.planet-type').click(function () {
-        if ($(this).parent('tr').is('.active')) {
-            $('.pi-chart img.active').toggleClass('active');
-            $('.pi-chart tr.active').toggleClass('active');
-            return false;
+    $('.search-system').click(function () {
+        var systemName = $('input[name=solarSystem]').val().trim();
+        if (systemName) {
+            $.ajax({
+                url: '/pi/search-system',
+                type: 'get',
+                data: {
+                    name: systemName
+                },
+                success: function (data) {
+                    $('#solar-system-search-results').html(data);
+                }
+            });
         }
-
-        $('.pi-chart img.active').toggleClass('active');
-        $('.pi-chart tr.active').toggleClass('active');
-        $(this).parent('tr').addClass('active');
-        var $commodities = $(this).data('commodities').split(',');
-        for (var i=0; i<=$commodities.length-1; i++) {
-            $('.pi-chart img[data-type=' + $commodities[i] + ']').addClass('active');
-        }
-    });
-
-    $('.commodities-row img').click(function () {
-        if ($(this).is('.active')) {
-            $('.pi-chart img.active').toggleClass('active');
-            $('.pi-chart tr.active').toggleClass('active');
-            return false;
-        }
-
-        $('.pi-chart img.active').toggleClass('active');
-        $('.pi-chart tr.active').toggleClass('active');
-        $(this).addClass('active');
-        var $commodity = $(this);
-        $('.pi-chart .planet-row').each(function (index, row) {
-            if ($(row).data('commodities').indexOf($commodity.data('type')) !== -1) {
-                $(row).addClass('active');
-            }
-        });
     });
 });

@@ -3,6 +3,9 @@
  * @var \app\components\pi\Planet[] $planets
  * @var int[] $materials
  */
+
+use app\assets\PIChartAsset;
+PIChartAsset::register($this);
 ?>
 <div class="pi-chart-container">
     <table class="eve-table colored pi-chart">

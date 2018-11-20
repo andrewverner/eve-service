@@ -21,4 +21,14 @@ class Planet
     {
         return (new \ReflectionClass(get_called_class()))->getShortName();
     }
+
+    public function getMask()
+    {
+        return $this->mask;
+    }
+
+    public function getType()
+    {
+        return str_replace('Planet', '', $this->getClass());
+    }
 }

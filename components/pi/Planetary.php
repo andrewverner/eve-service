@@ -9,6 +9,7 @@
 namespace app\components\pi;
 
 use app\components\esi\EVE;
+use app\components\esi\universe\SolarSystem;
 use app\components\Html;
 use app\components\pi\planets\BarrenPlanet;
 use app\components\pi\planets\GasPlanet;
@@ -246,6 +247,27 @@ class Planetary
         return $data;
     }
 
+    /**
+     * @return Planet[]
+     * @throws \ReflectionException
+     */
+    public static function getPlanets()
+    {
+        $data = [];
+        $planets = FileHelper::findFiles(\Yii::getAlias('@app/components/pi/planets'), ['only'=>['*.php']]);
+        foreach ($planets as $planet) {
+            $planetName = basename(str_replace('.php', '', $planet));
+            $r = new \ReflectionClass('app\components\pi\planets\\' . $planetName);
+            /**
+             * @var Planet $planetClass
+             */
+            $planetClass = $r->newInstance();
+            $data[] = $planetClass;
+        }
+
+        return $data;
+    }
+
     public static function getSchemas()
     {
         $planets = [
@@ -337,6 +359,8 @@ class Planetary
                     'data-toggle' => 'popover',
                     'data-placement' => 'bottom',
                     'data-content' => $type->name,
+                    'data-type' => $type->typeId,
+                    'class' => 'planetary-commodity',
                 ]
             )
         ];
@@ -350,5 +374,33 @@ class Planetary
         }
 
         return $node;
+    }
+
+    /**
+     * @param SolarSystem $solarSystem
+     * @return null|int
+     * @throws \ReflectionException
+     */
+    public static function getSolarSystemPlanetsMask(SolarSystem $solarSystem)
+    {
+        $planetsTypes = [];
+        foreach ($solarSystem->planets() as $planet) {
+            $planetType = trim(str_replace('Planet', '', $planet->type()->name), '() ');
+            if (!in_array($planetType, $planetsTypes)) {
+                $planetsTypes[] = $planetType;
+            }
+        }
+
+        if ($planetsTypes) {
+            $planets = self::getPlanets();
+            $mask = 0;
+            foreach ($planets as $planet) {
+                if (in_array($planet->getType(), $planetsTypes)) {
+                    $mask += $planet->getMask();
+                }
+            }
+        }
+
+        return $mask ?: null;
     }
 }

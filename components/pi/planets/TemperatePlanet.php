@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class TemperatePlanet extends Planet
 {
+    public $mask = 128;
+
     public $materials = [
         Material::RAW_MATERIAL_AQUEOUS_LIQUIDS,
         Material::RAW_MATERIAL_AUTOTROPHS,

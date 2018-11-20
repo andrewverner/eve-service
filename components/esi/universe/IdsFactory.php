@@ -26,6 +26,10 @@ class IdsFactory extends EVEObject
     public $inventoryTypes;
     public $regions;
     public $stations;
+
+    /**
+     * @var SolarSystem[]
+     */
     public $systems;
 
     public function __construct(array $data)
@@ -34,6 +38,12 @@ class IdsFactory extends EVEObject
         if ($this->inventoryTypes) {
             foreach ($this->inventoryTypes as &$type) {
                 $type = EVE::universe()->type($type['id']);
+            }
+        }
+
+        if ($this->systems) {
+            foreach ($this->systems as &$system) {
+                $system = EVE::universe()->solarSystem($system['id']);
             }
         }
     }

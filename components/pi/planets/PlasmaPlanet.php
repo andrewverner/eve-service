@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class PlasmaPlanet extends Planet
 {
+    public $mask = 32;
+
     public $materials = [
         Material::RAW_MATERIAL_BASE_METALS,
         Material::RAW_MATERIAL_HEAVY_METALS,

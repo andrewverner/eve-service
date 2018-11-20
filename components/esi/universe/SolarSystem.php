@@ -9,6 +9,7 @@
 namespace app\components\esi\universe;
 
 use app\components\esi\components\EVEObject;
+use app\components\pi\Planetary;
 use yii\helpers\Html;
 
 class SolarSystem extends EVEObject
@@ -63,11 +64,35 @@ class SolarSystem extends EVEObject
      */
     public $systemId;
 
+    /**
+     * @var Planet[]
+     */
+    public $planetsList;
+
     const COLOR_NULL = '#ff0000';
     const COLOR_LOW = '#ff5e00';
     const COLOR_MEDIUM = '#efff00';
     const COLOR_ABOVE_MEDIUM = '#00ff37';
     const COLOR_HIGH = '#00ffe7';
+
+    public function __construct(array $data)
+    {
+        parent::__construct($data);
+    }
+
+    /**
+     * @return Planet[]
+     */
+    public function planets()
+    {
+        if (!$this->planetsList) {
+            foreach ($this->planets as $planet) {
+                $this->planetsList[] = new Planet($planet);
+            }
+        }
+
+        return $this->planetsList;
+    }
 
     public function getFormattedSecurityStatus($withColor = false)
     {

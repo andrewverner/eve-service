@@ -7,6 +7,8 @@
  *
  * @var \app\components\pi\Planetary $planetary
  * @var \app\components\pi\Planet[] $planets
+ * @var int|null $mask
+ * @var \app\components\esi\universe\SolarSystem|null $solarSystem
  */
 
 use app\assets\PIAsset;
@@ -14,6 +16,9 @@ use app\assets\PIAsset;
 PIAsset::register($this);
 
 $this->title = 'Planetary Interaction';
+if ($solarSystem) {
+    $this->title .= ": {$solarSystem->name}";
+}
 ?>
 <div class="site-index">
     <div class="body-content">
@@ -48,132 +53,46 @@ $this->title = 'Planetary Interaction';
         <?php endif; ?>
         <div class="row">
             <div class="col-12">
-                <form method="get">
+                <?php \app\widgets\EvePanelWidget::begin([
+                    'title' => 'Search solar systems',
+                    'options' => ['id' => 'solar-system-search']
+                ]); ?>
+                <div class="row">
+                    <div class="col-3">
+                        <input type="text" name="solarSystem" placeholder="Solar system name" class="form-control" />
+                    </div>
+                    <div class="col-9 text-left">
+                        <input type="submit" class="eve-btn eve-btn-primary search-system" value="Search" />
+                    </div>
+                    <div class="col-12" id="solar-system-search-results"></div>
+                </div>
+                <?php \app\widgets\EvePanelWidget::end(); ?>
+            </div>
+            <div class="col-12">
+                <form method="get" action="<?= Yii::$app->urlManager->createUrl('/pi/short'); ?>">
                     <?php \app\widgets\EvePanelWidget::begin([
                         'title' => 'What types of planets do you want to explore?',
                         'options' => ['id' => 'big-planets-container']
                     ]); ?>
                     <div class="row">
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Barren',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'barren-planet', 'value' => 'BarrenPlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('BarrenPlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://www.eveplanets.com/m/eve/img/planet_barren.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Gas',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'gas-planet', 'value' => 'GasPlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('GasPlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://www.eveplanets.com/m/eve/img/planet_gas.jpg'); ?>
+                        <?php foreach (\app\components\pi\Planetary::getPlanets() as $planet): ?>
+                            <?php $planetType = mb_strtolower(str_replace('Planet', '', $planet->getClass())); ?>
+                            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                <div class="pi-planet-container">
+                                    <div class="pi-planet-title">
+                                        <?= \app\widgets\PrettySliderWidget::widget([
+                                            'title' => ucfirst($planetType),
+                                            'name' => 'planets[]',
+                                            'options' => ['id' => "{$planetType}-planet", 'value' => $planet->getClass()],
+                                            'checked' => $mask && ($mask & $planet->getMask()),
+                                        ]); ?>
+                                    </div>
+                                    <div class="pi-planet-image">
+                                        <?= \app\components\Html::img("http://www.eveplanets.com/m/eve/img/planet_{$planetType}.jpg"); ?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Ice',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'ice-planet', 'value' => 'IcePlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('IcePlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://eveplanets.com/m/eve/img/planet_ice.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Lava',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'lava-planet', 'value' => 'LavaPlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('LavaPlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://www.eveplanets.com/m/eve/img/planet_lava.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Oceanic',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'oceanic-planet', 'value' => 'OceanicPlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('OceanicPlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://www.eveplanets.com/m/eve/img/planet_oceanic.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Plasma',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'plasma-planet', 'value' => 'PlasmaPlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('PlasmaPlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://www.eveplanets.com/m/eve/img/planet_plasma.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Storm',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'storm-planet', 'value' => 'StormPlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('StormPlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://eveplanets.com/m/eve/img/planet_storm.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                            <div class="pi-planet-container">
-                                <div class="pi-planet-title">
-                                    <?= \app\widgets\PrettySliderWidget::widget([
-                                        'title' => 'Temperate',
-                                        'name' => 'planets[]',
-                                        'options' => ['id' => 'temperate-planet', 'value' => 'TemperatePlanet'],
-                                        'checked' => isset($_GET['planets']) && in_array('TemperatePlanet', $_GET['planets']),
-                                    ]); ?>
-                                </div>
-                                <div class="pi-planet-image">
-                                    <?= \app\components\Html::img('http://www.eveplanets.com/m/eve/img/planet_temperate.jpg'); ?>
-                                </div>
-                            </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                     <div class="row">
                         <div class="col-6 text-left">
@@ -207,7 +126,8 @@ $this->title = 'Planetary Interaction';
                                     <td>
                                         <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
                                             $schematic::type()->name,
-                                            Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                            Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}"),
+                                            ['target' => '_blank']
                                         ); ?>
                                     </td>
                                     <td>
@@ -243,7 +163,8 @@ $this->title = 'Planetary Interaction';
                                         <td>
                                             <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
                                                 $schematic::type()->name,
-                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}"),
+                                                ['target' => '_blank']
                                             ); ?>
                                         </td>
                                         <td>
@@ -279,7 +200,8 @@ $this->title = 'Planetary Interaction';
                                         <td>
                                             <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
                                                 $schematic::type()->name,
-                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}"),
+                                                ['target' => '_blank']
                                             ); ?>
                                         </td>
                                         <td>
@@ -315,7 +237,8 @@ $this->title = 'Planetary Interaction';
                                         <td>
                                             <?= $schematic::quantity(); ?> x <?= \app\components\Html::a(
                                                 $schematic::type()->name,
-                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}")
+                                                Yii::$app->urlManager->createUrl("/pi/schematic/{$schematic::type()->typeId}"),
+                                                ['target' => '_blank']
                                             ); ?>
                                         </td>
                                         <td>

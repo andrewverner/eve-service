@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class OceanicPlanet extends Planet
 {
+    public $mask = 16;
+
     public $materials = [
         Material::RAW_MATERIAL_AQUEOUS_LIQUIDS,
         Material::RAW_MATERIAL_CARBON_COMPOUNDS,

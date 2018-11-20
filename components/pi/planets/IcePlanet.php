@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class IcePlanet extends Planet
 {
+    public $mask = 4;
+
     public $materials = [
         Material::RAW_MATERIAL_AQUEOUS_LIQUIDS,
         Material::RAW_MATERIAL_HEAVY_METALS,

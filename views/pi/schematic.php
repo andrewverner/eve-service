@@ -24,5 +24,15 @@ TreansJSAsset::register($this);
                 <?php \app\widgets\EvePanelWidget::end() ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-12">
+                <?php \app\widgets\EvePanelWidget::begin([
+                    'title' => 'Planetary Interaction Commodities',
+                    'options' => ['id' => 'pi-chart-widget'],
+                ]); ?>
+                <?= \app\widgets\PlanetaryChartWidget::widget(); ?>
+                <?php \app\widgets\EvePanelWidget::end(); ?>
+            </div>
+        </div>
     </div>
 </div>

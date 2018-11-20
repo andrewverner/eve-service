@@ -9,6 +9,8 @@
 namespace app\controllers;
 
 use app\components\esi\EVE;
+use app\components\esi\SearchFactory;
+use app\components\Html;
 use app\components\pi\Planet;
 use app\components\pi\Planetary;
 use app\components\pi\planets\BarrenPlanet;
@@ -20,13 +22,55 @@ use app\components\pi\planets\PlasmaPlanet;
 use app\components\pi\planets\StormPlanet;
 use app\components\pi\planets\TemperatePlanet;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class PiController extends Controller
 {
-    public function actionIndex()
+    public function actionShort()
     {
+        $mask = null;
         $data = \Yii::$app->request->getQueryParam('planets');
         if ($data) {
+            $mask = 0;
+            foreach ($data as $planetType) {
+                $planet = (new \ReflectionClass('app\components\pi\planets\\' . $planetType))->newInstance();
+                $mask += $planet->getMask();
+            }
+        }
+
+        return $this->redirect(\Yii::$app->urlManager->createUrl("/pi/{$mask}"));
+    }
+
+    public function actionSearchSystem()
+    {
+        if (!\Yii::$app->request->isAjax) {
+            throw new NotFoundHttpException('Page not found');
+        }
+
+        $solarSystemName = \Yii::$app->request->getQueryParam('name');
+        $mask = null;
+        if ($solarSystemName && strlen($solarSystemName) >= 3) {
+            $solarSystems = EVE::universe()->search(
+                $solarSystemName, [SearchFactory::CATEGORY_SOLAR_SYSTEM]
+            )->solarSystem;
+            if ($solarSystems) {
+                return $this->renderPartial('solar-systems-list', [
+                    'solarSystems' => $solarSystems
+                ]);
+            } else {
+                return Html::tag('p', 'Result list is empty');
+            }
+        }
+    }
+
+    public function actionIndex($mask = null)
+    {
+        if ($mask) {
+            if ($mask > 255) {
+                $solarSystem = EVE::universe()->solarSystem($mask);
+                $mask = $solarSystem ? Planetary::getSolarSystemPlanetsMask($solarSystem) : 0;
+            }
+
             $planets = [
                 new BarrenPlanet(),
                 new GasPlanet(),
@@ -37,11 +81,11 @@ class PiController extends Controller
                 new StormPlanet(),
                 new TemperatePlanet()
             ];
-            $planets = array_filter($planets, function ($planet) use ($data) {
+            $planets = array_filter($planets, function ($planet) use ($mask) {
                 /**
                  * @var Planet $planet
                  */
-                return in_array((new \ReflectionClass($planet))->getShortName(), $data);
+                return $mask & $planet->getMask();
             });
             $planetary = new Planetary();
             $planetary->addPlanet($planets);
@@ -53,6 +97,8 @@ class PiController extends Controller
         return $this->render('index', [
             'planetary' => $planetary ?? null,
             'planets' => $planets ?? null,
+            'mask' => $mask,
+            'solarSystem' => $solarSystem ?? null
         ]);
     }
 

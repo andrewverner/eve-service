@@ -13,6 +13,8 @@ use app\components\pi\Planet;
 
 class BarrenPlanet extends Planet
 {
+    public $mask = 1;
+
     public $materials = [
         Material::RAW_MATERIAL_AQUEOUS_LIQUIDS,
         Material::RAW_MATERIAL_BASE_METALS,
