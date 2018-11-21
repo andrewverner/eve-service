@@ -15,6 +15,11 @@ use yii\helpers\FileHelper;
 
 class PlanetaryChartWidget extends Widget
 {
+    /**
+     * @var array
+     */
+    public $commodities;
+
     public function run()
     {
         $data = FileHelper::findFiles(\Yii::getAlias('@app/components/pi/planets'), ['only'=>['*.php']]);

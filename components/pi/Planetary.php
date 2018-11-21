@@ -403,4 +403,18 @@ class Planetary
 
         return $mask ?: null;
     }
+
+    public static function getSchematicRawMaterials($schematicId)
+    {
+        $data = self::getSchemas();
+        unset($data['planets']);
+
+        $schemas = [];
+        foreach ($data as $techLevel => $schemasList) {
+            $schemas = array_merge($schemas, $schemasList);
+        }
+
+        $schemaInput = $schemas[$schematicId];
+        print_r($schemaInput);
+    }
 }

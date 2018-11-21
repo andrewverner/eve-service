@@ -17,9 +17,6 @@ TreansJSAsset::register($this);
                     <div class="col-12">
                         <div id="schematic"></div>
                     </div>
-                    <div class="col-4">
-
-                    </div>
                 </div>
                 <?php \app\widgets\EvePanelWidget::end() ?>
             </div>
@@ -30,7 +27,7 @@ TreansJSAsset::register($this);
                     'title' => 'Planetary Interaction Commodities',
                     'options' => ['id' => 'pi-chart-widget'],
                 ]); ?>
-                <?= \app\widgets\PlanetaryChartWidget::widget(); ?>
+                <?= \app\widgets\PlanetaryChartWidget::widget(['commodities' => []]); ?>
                 <?php \app\widgets\EvePanelWidget::end(); ?>
             </div>
         </div>
