@@ -93,7 +93,7 @@ KillMailAsset::register($this);
                                 <?php foreach ($characters as $attacker): ?>
                                     <tr>
                                         <td>
-                                            <?= \app\components\Html::img($attacker->character()->portrait()->px64x64); ?>
+                                            <?= \app\components\Html::img($attacker->character()->image(64)); ?>
                                             <?= \app\components\Html::img($attacker->corporation()->image(64)); ?>
                                             <?php if ($attacker->alliance()): ?>
                                                 <?= \app\components\Html::img($attacker->alliance()->image(64)); ?>

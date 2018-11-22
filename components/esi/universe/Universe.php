@@ -129,4 +129,46 @@ class Universe
 
         return new SearchFactory($data);
     }
+
+    /**
+     * @return Faction[]|null
+     */
+    public function factions()
+    {
+        $cacheKey = "universe:factions";
+        $request = EVE::request('/universe/factions/');
+        $request->cacheDuration = 3600 * 7;
+        $factions = $request->send(null, $cacheKey);
+
+        if (!$factions) {
+            return null;
+        }
+
+        foreach ($factions as &$faction) {
+            $faction = new Faction($faction);
+        }
+
+        return $factions;
+    }
+
+    /**
+     * @param  int $factionId
+     * @return Faction|null
+     */
+    public function faction($factionId)
+    {
+        $factions = $this->factions();
+
+        if (!$factions) {
+            return null;
+        }
+
+        foreach ($factions as $faction) {
+            if ($faction->factionId == $factionId) {
+                return $faction;
+            }
+        }
+
+        return null;
+    }
 }

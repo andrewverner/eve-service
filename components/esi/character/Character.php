@@ -14,6 +14,7 @@ use app\components\esi\bookmarks\CharacterBookmarkFolder;
 use app\components\esi\calendar\CharacterCalendarEvent;
 use app\components\esi\components\EVEObject;
 use app\components\esi\components\Request;
+use app\components\esi\corporation\Corporation;
 use app\components\esi\EVE;
 use app\components\esi\killmails\KillMail;
 use app\components\esi\location\CharacterOnline;
@@ -97,6 +98,11 @@ class Character extends EVEObject
      * @var CharacterPortrait
      */
     private $portrait;
+
+    /**
+     * @var Corporation
+     */
+    private $corporation;
 
     public function __construct($characterId, Token $token = null)
     {
@@ -396,13 +402,15 @@ class Character extends EVEObject
     }
 
     /**
-     * @return KillMail[]|bool
+     * @return KillMail[]
+     * @throws NotFoundHttpException
      */
     public function killMails()
     {
+        $cacheKey = "character:killmails:{$this->characterId}";
         $request = EVE::secureRequest('/characters/{character_id}/killmails/recent/', $this->token);
         $request->cacheDuration = 300;
-        $killMails = $request->send(['character_id' => $this->characterId]);
+        $killMails = $request->send(['character_id' => $this->characterId], $cacheKey);
         if (!$killMails) {
             return false;
         }
@@ -415,10 +423,40 @@ class Character extends EVEObject
     }
 
     /**
+     * @return CharacterStanding
+     */
+    public function standing()
+    {
+        $cacheKey = "character:standings:{$this->characterId}";
+        $request = EVE::secureRequest('/characters/{character_id}/standings/', $this->token);
+        $request->cacheDuration = 3600;
+        $data = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        return new CharacterStanding($data);
+    }
+
+    /**
      * @return Token
      */
     public function getToken()
     {
         return $this->token;
+    }
+
+    /**
+     * @return Corporation
+     */
+    public function corporation()
+    {
+        if (!$this->corporation) {
+            $this->corporation = EVE::corporation($this->corporationId);
+        }
+
+        return $this->corporation;
+    }
+
+    public function image($size)
+    {
+        return "https://image.eveonline.com/Character/{$this->characterId}_{$size}.jpg";
     }
 }

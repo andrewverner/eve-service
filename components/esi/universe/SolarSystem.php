@@ -9,6 +9,7 @@
 namespace app\components\esi\universe;
 
 use app\components\esi\components\EVEObject;
+use app\components\esi\helpers\EVEFormatter;
 use app\components\pi\Planetary;
 use yii\helpers\Html;
 
@@ -96,7 +97,7 @@ class SolarSystem extends EVEObject
 
     public function getFormattedSecurityStatus($withColor = false)
     {
-        $ss = number_format(round($this->securityStatus, 1), 1, '.', ' ');
+        $ss = EVEFormatter::securityStatus($this->securityStatus);
         if (!$withColor) {
             return $ss;
         }

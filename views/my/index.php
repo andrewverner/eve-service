@@ -23,7 +23,7 @@ MyAsset::register($this);
                     <div class="character-select-container">
                         <a href="<?= Yii::$app->urlManager->createUrl("/character/{$token->character_id}") ?>">
                             <div class="character-select-portrait">
-                                <?= \yii\helpers\Html::img($token->character()->portrait()->px256x256); ?>
+                                <?= \yii\helpers\Html::img($token->character()->image(256)); ?>
                             </div>
                             <div class="character-select-name">
                                 <?= $token->character_name; ?>

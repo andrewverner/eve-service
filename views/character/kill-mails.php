@@ -33,7 +33,7 @@ $this->title = "{$character->name}: Wallet";
                                         ); ?></td>
                                     <td><?= $killMail->victim->ship()->name; ?></td>
                                     <td><?= $killMail->solarSystem()->name; ?> <?= $killMail->solarSystem()->getFormattedSecurityStatus(true); ?></td>
-                                    <td><?= \yii\helpers\Html::img($killMail->victim->character()->portrait()->px64x64); ?></td>
+                                    <td><?= \yii\helpers\Html::img($killMail->victim->character()->image(64)); ?></td>
                                     <td><?= $killMail->victim->character()->name; ?></td>
                                     <td><?= \yii\helpers\Html::img($killMail->victim->corporation()->image(64)); ?></td>
                                     <td><?= $killMail->victim->corporation()->name; ?></td>

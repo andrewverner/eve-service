@@ -65,6 +65,7 @@ $config = [
                 'character/<id:\d+>/set-route' => 'character/set-route',
                 'character/<id:\d+>/wallet' => 'character/wallet',
                 'character/<id:\d+>/kill-mails' => 'character/kill-mails',
+                'character/<id:\d+>/standings' => 'character/standings',
                 'kill-mail/<id:\d+>/<hash:\w+>' => 'eve/kill-mail',
                 'pi/<mask:\d+>' => 'pi/index',
                 'pi/schematic/<id:\d+>' => 'pi/schematic',

@@ -14,4 +14,14 @@ class EVEFormatter
     {
         return number_format($amount, 2, '.', ' ');
     }
+
+    public static function securityStatus($ss)
+    {
+        return number_format(round($ss, 1), 1, '.', ' ');
+    }
+
+    public static function standing($standing)
+    {
+        return number_format(round($standing, 2), 2, '.', ' ');
+    }
 }

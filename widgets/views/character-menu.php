@@ -9,7 +9,7 @@
         <a class="go-back-link eve-btn eve-btn-primary" href="<?= Yii::$app->urlManager->createUrl('/my'); ?>"><i class="fas fa-chevron-circle-left"></i> Go back</a>
         <div class="character-menu-portrait text-center">
             <a href="<?= Yii::$app->urlManager->createUrl("/character/{$character->characterId}"); ?>">
-                <?= \yii\helpers\Html::img($character->portrait()->px256x256); ?>
+                <?= \yii\helpers\Html::img($character->image(256)); ?>
             </a>
         </div>
         <div class="character-menu-name text-center">

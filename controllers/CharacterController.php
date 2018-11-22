@@ -483,6 +483,17 @@ class CharacterController extends Controller
         ]);
     }
 
+    public function actionStandings($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('standings', [
+            'character' => $character,
+            'standings' => $character->standing()
+        ]);
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([

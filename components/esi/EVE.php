@@ -56,9 +56,10 @@ class EVE
     }
 
     /**
-     * @param int $characterId
+     * @param $characterId
      * @param Token|null $token
      * @return Character
+     * @throws \yii\web\NotFoundHttpException
      */
     public static function character($characterId, Token $token = null)
     {
