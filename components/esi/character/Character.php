@@ -20,6 +20,7 @@ use app\components\esi\killmails\KillMail;
 use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
 use app\components\esi\mail\MailBody;
+use app\components\esi\skills\CharacterSkills;
 use app\components\esi\skills\QueuedSkill;
 use app\components\esi\wallet\CharacterWallet;
 use app\models\Token;
@@ -458,5 +459,22 @@ class Character extends EVEObject
     public function image($size)
     {
         return "https://image.eveonline.com/Character/{$this->characterId}_{$size}.jpg";
+    }
+
+    /**
+     * @return CharacterSkills|null
+     */
+    public function skills()
+    {
+        $cacheKey = "character:{$this->characterId}:skills";
+        $request = EVE::secureRequest('/characters/{character_id}/skills/', $this->token);
+        $request->cacheDuration = 1800;
+        $skills = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        if (!$skills) {
+            return null;
+        }
+
+        return new CharacterSkills($skills);
     }
 }

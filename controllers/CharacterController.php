@@ -494,6 +494,25 @@ class CharacterController extends Controller
         ]);
     }
 
+    public function actionSkills($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+        $queuedSkills = $character->skillQueue();
+        $queue = [];
+        if ($queuedSkills) {
+            foreach ($queuedSkills as $skill) {
+                $queue[] = $skill->skillId;
+            }
+        }
+
+        return $this->render('skills', [
+            'character' => $character,
+            'skills' => $character->skills(),
+            'queue' => $queue,
+        ]);
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([

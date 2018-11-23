@@ -24,4 +24,9 @@ class EVEFormatter
     {
         return number_format(round($standing, 2), 2, '.', ' ');
     }
+
+    public static function sp($sp)
+    {
+        return number_format($sp, 0, '.', ' ');
+    }
 }

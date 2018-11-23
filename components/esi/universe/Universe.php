@@ -171,4 +171,22 @@ class Universe
 
         return null;
     }
+
+    /**
+     * @param int $id
+     * @return Group|null
+     */
+    public function group($id)
+    {
+        $cacheKey = "universe:group:{$id}";
+        $request = EVE::request('/universe/groups/{group_id}/');
+        $request->cacheDuration = 3600 * 24 * 7;
+        $data = $request->send(['group_id' => $id], $cacheKey);
+
+        if (!$data) {
+            return null;
+        }
+
+        return new Group($data);
+    }
 }
