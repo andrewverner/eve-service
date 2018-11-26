@@ -477,4 +477,22 @@ class Character extends EVEObject
 
         return new CharacterSkills($skills);
     }
+
+    public function notifications()
+    {
+        $cacheKey = "character:{$this->characterId}:notifications";
+        $request = EVE::secureRequest('/characters/{character_id}/notifications/', $this->token);
+        $request->cacheDuration = 600;
+        $notifications = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        if (!$notifications) {
+            return null;
+        }
+
+        foreach ($notifications as &$notification) {
+            $notification = new Notification($notification);
+        }
+
+        return $notifications;
+    }
 }

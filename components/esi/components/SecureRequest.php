@@ -38,6 +38,7 @@ class SecureRequest extends Request
         '/characters/{character_id}/killmails/recent/' => Scope::SCOPE_KILL_MAILS_READ,
         '/characters/{character_id}/standings/' => Scope::SCOPE_STANDINGS_READ,
         '/characters/{character_id}/skills/' => Scope::SCOPE_SKILLS_READ,
+        '/characters/{character_id}/notifications/' => Scope::SCOPE_NOTIFICATIONS_READ,
     ];
 
     public function __construct($uri, Token $token, string $type = null)

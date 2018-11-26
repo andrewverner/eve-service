@@ -513,6 +513,17 @@ class CharacterController extends Controller
         ]);
     }
 
+    public function actionNotifications($id)
+    {
+        $token = $this->getToken($id);
+        $character = $token->character();
+
+        return $this->render('notifications', [
+            'character' => $character,
+            'notifications' => $character->notifications(),
+        ]);
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([

@@ -189,4 +189,25 @@ class Universe
 
         return new Group($data);
     }
+
+    /**
+     * @param array $ids
+     * @return UniverseName[]|null
+     */
+    public function names(array $ids)
+    {
+        $request = EVE::request('/universe/names/', null, Request::TYPE_POST);
+        $request->body(json_encode($ids));
+        $names = $request->send();
+
+        if (!$names) {
+            return null;
+        }
+
+        foreach ($names as &$name) {
+            $name = new UniverseName($name);
+        }
+
+        return $names;
+    }
 }
