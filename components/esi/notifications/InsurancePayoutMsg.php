@@ -9,7 +9,6 @@
 namespace app\components\esi\notifications;
 
 use app\components\esi\components\EVEObject;
-use app\components\esi\EVE;
 use app\components\esi\helpers\EVEFormatter;
 
 class InsurancePayoutMsg extends EVEObject

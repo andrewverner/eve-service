@@ -68,6 +68,7 @@ $config = [
                 'character/<id:\d+>/standings' => 'character/standings',
                 'character/<id:\d+>/skills' => 'character/skills',
                 'character/<id:\d+>/notifications' => 'character/notifications',
+                'character/<id:\d+>/mining' => 'character/mining',
                 'kill-mail/<id:\d+>/<hash:\w+>' => 'eve/kill-mail',
                 'pi/<mask:\d+>' => 'pi/index',
                 'pi/schematic/<id:\d+>' => 'pi/schematic',
