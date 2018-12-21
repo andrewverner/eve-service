@@ -70,7 +70,9 @@ class Request
             }
         }
 
-        file_put_contents('/var/www/html/eve/request.log', (new \DateTime())->format('Y-m-d H:i:s') . ": Sending request: {$this->uri}" . PHP_EOL, FILE_APPEND);
+        if (YII_DEBUG) {
+            file_put_contents('/var/www/html/eve/request.log', (new \DateTime())->format('Y-m-d H:i:s') . ": Sending request: {$this->uri}" . PHP_EOL, FILE_APPEND);
+        }
 
         $ch = curl_init($this->uri);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
