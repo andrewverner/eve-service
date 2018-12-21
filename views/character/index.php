@@ -12,8 +12,7 @@ $this->title = $character->name;
 ?>
 <div class="site-index">
     <div class="body-content">
-        <?php $menu = \app\widgets\CharacterMenuWidget::begin(['characterId' => $character->characterId]); ?>
-        <?php \app\widgets\CharacterMenuWidget::end(); ?>
+        <?= \app\widgets\CharacterMenuWidget::widget(['characterId' => $character->characterId]); ?>
         <div class="character-content-container">
             <div class="row">
                 <div class="col-12">

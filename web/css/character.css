@@ -114,3 +114,15 @@ ul.character-menu a:hover {
 .win {
     background-color: rgba(0,255,0,0.2);
 }
+
+@media (max-width: 575px) {
+    .character-content-container {
+        margin-left: 0;
+        padding: 15px 10px;
+    }
+
+    .character-data-panel {
+        left: 0;
+        display: none;
+    }
+}

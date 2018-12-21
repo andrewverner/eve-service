@@ -144,6 +144,12 @@ a.eve-btn {
     }
 }
 
+@media (max-width: 575px) {
+    .eve-columns-container {
+        column-count: 1;
+    }
+}
+
 .eve-table {
     width: 100%;
     color: #fff;
