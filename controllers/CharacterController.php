@@ -14,6 +14,7 @@ use app\components\esi\EVE;
 use app\components\esi\location\CharacterLocation;
 use app\models\CharacterRoute;
 use app\models\Scope;
+use app\models\ServiceFacade;
 use app\models\Token;
 use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
@@ -510,6 +511,7 @@ class CharacterController extends Controller
             'character' => $character,
             'skills' => $character->skills(),
             'queue' => $queue,
+            'service' => ServiceFacade::getSkillQueueNotifier($character),
         ]);
     }
 

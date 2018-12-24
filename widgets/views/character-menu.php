@@ -4,7 +4,7 @@
  * @var array $menu
  */
 ?>
-<div class="character-menu-container d-none">
+<div class="character-menu-container">
     <div class="character-photo-container">
         <a class="go-back-link eve-btn eve-btn-primary" href="<?= Yii::$app->urlManager->createUrl('/my'); ?>"><i class="fas fa-chevron-circle-left"></i> Go back</a>
         <div class="character-menu-portrait text-center">

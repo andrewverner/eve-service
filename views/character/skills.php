@@ -4,6 +4,7 @@
  * @var \app\components\esi\skills\CharacterSkills $skills
  * @var \app\components\esi\character\Character $character
  * @var \app\components\esi\skills\Skill $skill
+ * @var \app\models\Service $service
  * @var int[] $queue
  */
 
@@ -28,6 +29,30 @@ $this->title = "{$character->name}: Skills";
                         <br />Unallocated SP: <?= \app\components\esi\helpers\EVEFormatter::sp($skills->unallocatedSp); ?>
                     <?php endif; ?>
                 </div>
+                <?php if ($character->getToken()->can(\app\models\Scope::SCOPE_SKILL_QUEUE_READ)): ?>
+                    <div class="row">
+                        <div class="col-12">
+                            <?php \app\widgets\CharacterPanelWidget::begin(['title' => 'Skill queue notificator']); ?>
+                            <?= \app\widgets\PrettySliderWidget::widget([
+                                'title' => 'Send me an email notification if characters\'s skill queue ends soon',
+                                'name' => 'skill-queue-notification',
+                                'options' => [
+                                    'id' => 'skill-queue-notification',
+                                    'checked' => ($service && !$service->isExpired()),
+                                ],
+                            ]) ?>
+                            <?php \app\widgets\CharacterPanelWidget::end(); ?>
+                        </div>
+                    </div>
+                    <?php if ($service):?>
+                        <?php if ($service->isExpired()): ?>
+                            <div class="note note-danger">
+                                Skill queue notification service is expired.
+                                <div class="eve-btn eve-btn-primary">Resubmit</div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
                 <div class="row">
                     <div class="col-12 eve-columns-container">
                         <?php foreach ($skills->skills() as $groupName => $skillsList): ?>
