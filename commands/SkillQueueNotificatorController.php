@@ -33,17 +33,6 @@ class SkillQueueNotificatorController extends ConsoleController
 
     public function actionCheck()
     {
-        $token = Token::findOne(6);
-        \Yii::$app->mailer->compose()
-            ->setTo('denis.khodakovskiy@gmail.com')
-            ->setSubject('Skill queue ends soon')
-            ->setHtmlBody($this->renderPartial('skill-queue', [
-                'queue' => $token->character()->skillQueue(),
-                'character' => $token->character(),
-            ]))
-            ->send();
-        die();
-
         $params = ['service_code' => Service::SERVICE_SKILL_QUEUE_NOTIFIER];
         if ($this->characterId) {
             $params['character_id'] = $this->characterId;
@@ -95,13 +84,21 @@ class SkillQueueNotificatorController extends ConsoleController
              */
             $serviceSettings = $service->settings();
             $this->logInfo("Settings: -period={$serviceSettings->period} -email={$serviceSettings->email}");
+            $this->logInfo("Skill queue for {$character->name} ends in {$diff->days} d");
 
-            \Yii::$app->mailer->compose('layouts/html')
-                ->setTo($serviceSettings->email)
-                ->setSubject('Skill queue ends soon')
-                ->send();
-
-            $this->logInfo("Skill queue for {$character->name} ends in {$diff->days}");
+            if ($diff->days <= $serviceSettings->period && $diff->days >= $serviceSettings->period - 2) {
+                $this->logInfo("Sending notification to {$serviceSettings->email}");
+                \Yii::$app->mailer->compose()
+                    ->setTo($serviceSettings->email)
+                    ->setSubject('Skill queue ends soon')
+                    ->setHtmlBody($this->renderPartial('skill-queue', [
+                        'queue' => $token->character()->skillQueue(),
+                        'character' => $token->character(),
+                        'lastSkill' => $lastSkill,
+                        'diff' => $diff,
+                    ]))
+                    ->send();
+            }
         }
 
         $this->logSuccess('Done');
