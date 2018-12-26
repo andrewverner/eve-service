@@ -23,7 +23,7 @@ class m181002_114839_create_token_table extends Migration
             'scopes' => $this->text()->notNull(),
             'created' => $this->dateTime()->notNull(),
             'updated' => $this->dateTime()
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

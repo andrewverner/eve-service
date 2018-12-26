@@ -14,12 +14,12 @@ class ServiceFacade
 {
     /**
      * @param Character $character
-     * @return Service|null
+     * @return CharacterService|null
      */
     public static function getSkillQueueNotifier(Character $character)
     {
-        return Service::find()->where([
-            'service_code' => Service::SERVICE_SKILL_QUEUE_NOTIFIER,
+        return CharacterService::find()->where([
+            'service_id' => 1,
             'character_id' => $character->characterId,
         ])->one();
     }

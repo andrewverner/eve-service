@@ -8,11 +8,11 @@
 
 namespace app\models\services;
 
-use app\models\Service;
+use app\models\CharacterService;
 
 class ServiceSetting
 {
-    public function __construct(Service $service)
+    public function __construct(CharacterService $service)
     {
         foreach (unserialize($service->settings) as $key => $value) {
             $this->{$key} = $value;

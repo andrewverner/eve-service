@@ -8,9 +8,11 @@
 
 namespace app\commands;
 
+use app\models\QueueTasks;
 use app\models\Scope;
-use app\models\Service;
+use app\models\CharacterService;
 use app\models\services\SkillQueueNotificator;
+use app\models\tasks\SkillQueueNotificatorEmail;
 use app\models\Token;
 
 class SkillQueueNotificatorController extends ConsoleController
@@ -33,15 +35,15 @@ class SkillQueueNotificatorController extends ConsoleController
 
     public function actionCheck()
     {
-        $params = ['service_code' => Service::SERVICE_SKILL_QUEUE_NOTIFIER];
+        $params = ['service_id' => 1];
         if ($this->characterId) {
             $params['character_id'] = $this->characterId;
         }
 
         /**
-         * @var Service[] $models
+         * @var CharacterService[] $models
          */
-        $models = Service::find()->where($params)->all();
+        $models = CharacterService::find()->where($params)->all();
         if (!$models) {
             $this->logInfo('Nothing to do');
         }
@@ -71,7 +73,7 @@ class SkillQueueNotificatorController extends ConsoleController
             $character = $token->character();
             $queue = $character->skillQueue();
 
-            if (!$queue) {
+            if (!$queue || empty($queue)) {
                 $this->logWarning("Skill queue for {$character->name} is empty");
                 continue;
             }
@@ -88,16 +90,16 @@ class SkillQueueNotificatorController extends ConsoleController
 
             if ($diff->days <= $serviceSettings->period && $diff->days >= $serviceSettings->period - 2) {
                 $this->logInfo("Sending notification to {$serviceSettings->email}");
-                \Yii::$app->mailer->compose()
-                    ->setTo($serviceSettings->email)
-                    ->setSubject('Skill queue ends soon')
-                    ->setHtmlBody($this->renderPartial('skill-queue', [
-                        'queue' => $token->character()->skillQueue(),
-                        'character' => $token->character(),
-                        'lastSkill' => $lastSkill,
-                        'diff' => $diff,
-                    ]))
-                    ->send();
+                $task = new SkillQueueNotificatorEmail();
+                $task->to = $serviceSettings->email;
+                $task->subject = 'EVE Services: Skill queue ends soon';
+                $task->body = $this->renderPartial('/email/skill-queue', [
+                    'queue' => $token->character()->skillQueue(),
+                    'character' => $token->character(),
+                    'lastSkill' => $lastSkill,
+                    'diff' => $diff,
+                ]);
+                QueueTasks::add($task);
             }
         }
 

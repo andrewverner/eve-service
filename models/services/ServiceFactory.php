@@ -8,25 +8,25 @@
 
 namespace app\models\services;
 
-use app\models\Service;
+use app\models\CharacterService;
 
 class ServiceFactory
 {
     /**
-     * @param Service $service
+     * @param CharacterService $service
      * @return ServiceSetting
      */
-    public static function initService(Service $service)
+    public static function initService(CharacterService $service)
     {
         $funcName = lcfirst(str_replace('-', '', ucwords($service->service_code, '-')));
         return self::$funcName($service);
     }
 
     /**
-     * @param Service $service
+     * @param CharacterService $service
      * @return SkillQueueNotificator|ServiceSetting
      */
-    public static function skillQueueNotifier(Service $service)
+    public static function skillQueueNotifier(CharacterService $service)
     {
         return new SkillQueueNotificator($service);
     }

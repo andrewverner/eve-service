@@ -18,7 +18,7 @@ class m181224_084208_create_service_table extends Migration
             'character_id' => $this->integer()->notNull(),
             'settings' => $this->string(2048),
             'expired' => $this->dateTime(),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

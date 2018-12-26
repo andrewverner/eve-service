@@ -8,41 +8,50 @@
 
 namespace app\models\tasks;
 
-class EmailTask
+class EmailTask extends Task
 {
     /**
      * @var array
      */
-    private $to;
+    public $to;
 
     /**
      * @var string
      */
-    private $from;
+    public $from;
 
     /**
      * @var string
      */
-    private $subject;
+    public $subject;
 
     /**
      * @var string
      */
-    private $body;
+    public $body;
 
-    /**
-     * EmailTask constructor.
-     * @param string|array $to
-     * @param string $subject
-     * @param string $body
-     * @param string $from
-     */
-    public function __construct($to, $subject, $body, $from = null)
+    public function to($to)
     {
         $this->to = !is_array($to) ? [$to] : $to;
+        return $this;
+    }
+
+    public function from($from)
+    {
+        $this->from = $from;
+        return $this;
+    }
+
+    public function subject($subject)
+    {
         $this->subject = $subject;
+        return $this;
+    }
+
+    public function body($body)
+    {
         $this->body = $body;
-        $this->from = $from ?? \Yii::$app->params['adminEmail'];
+        return $this;
     }
 
     public function getData()
@@ -53,5 +62,23 @@ class EmailTask
             'body' => $this->body,
             'subject' => $this->subject,
         ];
+    }
+
+    public function getQueueName()
+    {
+        return 'email';
+    }
+
+    public function process()
+    {
+        $this->from = $this->from ?? \Yii::$app->params['adminEmail'];
+        \Yii::$app->mailer->compose()
+            ->setTo($this->to)
+            ->setFrom($this->from)
+            ->setSubject($this->subject)
+            ->setHtmlBody($this->body)
+            ->send();
+
+        return true;
     }
 }

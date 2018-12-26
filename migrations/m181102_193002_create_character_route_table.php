@@ -18,7 +18,7 @@ class m181102_193002_create_character_route_table extends Migration
             'route' => $this->text(),
             'name' => $this->string(255),
             'created' => $this->dateTime()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

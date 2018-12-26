@@ -16,7 +16,7 @@ class m181123_060509_create_pi_planet_commodity_table extends Migration
             'id' => $this->primaryKey(),
             'planet_type_id' => $this->integer()->notNull(),
             'commodity_type_id' => $this->integer()->notNull(),
-        ]);
+        ], 'charset=utf8');
 
         /*
         Planet (Temperate): 11

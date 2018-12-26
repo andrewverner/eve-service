@@ -22,7 +22,7 @@ class m181225_115416_create_queue_table extends Migration
             'created' => $this->dateTime()->defaultExpression('NOW()'),
             'executed' => $this->dateTime(),
             'updated' => $this->dateTime(),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

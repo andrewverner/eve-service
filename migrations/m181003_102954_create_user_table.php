@@ -19,7 +19,7 @@ class m181003_102954_create_user_table extends Migration
             'email' => $this->string(64)->notNull(),
             'active' => $this->tinyInteger(1)->notNull()->defaultValue(0),
             'created' => $this->dateTime()->defaultExpression('NOW()'),
-        ]);
+        ], 'charset=utf8');
 
         $this->addColumn('token', 'user_id', $this->integer()->notNull());
     }

@@ -8,7 +8,8 @@
 
 namespace app\commands;
 
-use app\components\queue\Queue;
+use app\models\QueueTasks;
+use app\models\tasks\SkillQueueNotificatorEmail;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
 
@@ -40,5 +41,14 @@ class TestController extends ConsoleController
         while (count($channel->callbacks)) {
             $channel->wait();
         }
+    }
+
+    public function actionQueue()
+    {
+        $task = (new SkillQueueNotificatorEmail())
+            ->to('denis.khodakovskiy@gmail.com')
+            ->subject('Queue test')
+            ->body('Queue test body');
+        QueueTasks::add($task);
     }
 }

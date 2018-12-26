@@ -15,7 +15,7 @@ class m181004_111833_create_scope_group_table extends Migration
         $this->createTable('scope_group', [
             'id' => $this->primaryKey(),
             'title' => $this->string(45)->notNull(),
-        ]);
+        ], 'charset=utf8');
     }
 
     /**

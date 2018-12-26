@@ -526,6 +526,13 @@ class CharacterController extends Controller
         ]);
     }
 
+    public function actionServices($id)
+    {
+        $token = $this->getToken($id);
+
+        return $this->render('services');
+    }
+
     private function getToken($id)
     {
         $token = Token::findOne([

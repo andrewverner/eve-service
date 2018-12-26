@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\models\Hash;
+use app\models\QueueTasks;
 use app\models\RegForm;
+use app\models\tasks\EmailTask;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
@@ -141,7 +143,16 @@ class SiteController extends Controller
                 $user->password = md5($model->password1);
                 $user->email = $model->email;
                 if ($user->save()) {
-                    Hash::create($user->id);
+                    $hash = Hash::create($user->id);
+
+                    $task = new EmailTask();
+                    $task->to = $user->email;
+                    $task->subject = 'EVE Services: Registration';
+                    $task->body = $this->renderPartial('/email/reg-email', [
+                        'user' => $user,
+                        'hash' => $hash->value,
+                    ]);
+                    QueueTasks::add($task);
 
                     return $this->redirect(Yii::$app->urlManager->createUrl('site/reg-complete'));
                 }

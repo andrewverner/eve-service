@@ -16,7 +16,7 @@ class m181123_060523_create_pi_schematic_table extends Migration
             'id' => $this->primaryKey(),
             'output_type_id' => $this->integer()->notNull(),
             'quantity' => $this->integer()->notNull()->defaultValue(1),
-        ]);
+        ], 'charset=utf8');
 
         $data = [
             [

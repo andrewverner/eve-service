@@ -22,6 +22,8 @@ use yii\db\Expression;
  * @property int $user_id
  * @property string $refresh_token
  * @property string $access_token
+ *
+ * @property CharacterService[]|null $services
  */
 class Token extends \yii\db\ActiveRecord
 {
@@ -139,6 +141,7 @@ class Token extends \yii\db\ActiveRecord
 
     /**
      * @return \app\components\esi\character\Character
+     * @throws \yii\web\NotFoundHttpException
      */
     public function character()
     {
@@ -147,5 +150,13 @@ class Token extends \yii\db\ActiveRecord
         }
 
         return $this->character;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getServices()
+    {
+        return $this->hasMany(CharacterService::className(), ['id' => 'character_id']);
     }
 }

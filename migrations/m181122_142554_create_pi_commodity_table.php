@@ -16,7 +16,7 @@ class m181122_142554_create_pi_commodity_table extends Migration
             'id' => $this->primaryKey(),
             'type_id' => $this->integer()->notNull(),
             'level' => $this->integer(1)->notNull()->defaultValue(0),
-        ]);
+        ], 'charset=utf8');
 
         $data = [
             [

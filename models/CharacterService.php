@@ -9,12 +9,14 @@ use Yii;
  * This is the model class for table "service".
  *
  * @property integer $id
- * @property string $service_code
+ * @property string $service_id
  * @property integer $character_id
  * @property string $settings
  * @property string $expired
+ *
+ * @property Service $service
  */
-class Service extends \yii\db\ActiveRecord
+class CharacterService extends \yii\db\ActiveRecord
 {
     const SERVICE_SKILL_QUEUE_NOTIFIER = 'skill-queue-notifier';
 
@@ -23,7 +25,7 @@ class Service extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'service';
+        return 'character_service';
     }
 
     /**
@@ -32,10 +34,9 @@ class Service extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['service_code', 'character_id'], 'required'],
-            [['character_id'], 'integer'],
+            [['service_id', 'character_id'], 'required'],
+            [['character_id', 'service_id'], 'integer'],
             [['expired'], 'safe'],
-            [['service_code'], 'string', 'max' => 45],
             [['settings'], 'string', 'max' => 2048],
         ];
     }
@@ -47,7 +48,7 @@ class Service extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'service_code' => 'Service Code',
+            'service_id' => 'Service ID',
             'character_id' => 'Character ID',
             'settings' => 'Settings',
             'expired' => 'Expired',
@@ -73,5 +74,13 @@ class Service extends \yii\db\ActiveRecord
     public function settings()
     {
         return ServiceFactory::initService($this);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getService()
+    {
+        return $this->hasOne(Service::className(), ['id' => 'service_id']);
     }
 }

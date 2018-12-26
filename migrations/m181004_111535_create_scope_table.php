@@ -19,7 +19,7 @@ class m181004_111535_create_scope_table extends Migration
             'description' => $this->string(255),
             'active' => $this->tinyInteger(1)->notNull()->defaultValue(1),
             'group_id' => $this->integer()
-        ]);
+        ], 'charset=utf8');
         $this->addColumn(\app\models\Token::tableName(), 'scope_mask', $this->integer());
     }
 

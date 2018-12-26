@@ -17,7 +17,7 @@ class m181123_060447_create_pi_planet_table extends Migration
             'type_id' => $this->integer()->notNull(),
             'type_name' => $this->string()->notNull(),
             'mask' => $this->integer()->notNull(),
-        ]);
+        ], 'charset=utf8');
 
         /*
         Planet (Temperate): 11
