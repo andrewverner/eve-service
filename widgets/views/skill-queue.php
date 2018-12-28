@@ -20,7 +20,7 @@ $shift = 0;
     <div class="queued-skill">
         <div class="skill-data">
             Lvl <?= $skill->finishedLevel; ?> | <?= $skill->type()->name; ?>
-            <span class="queued-skill-end-date"><code>Ended at <?= $skill->finishDate->format('Y-m-d H:i:s') ?></code></span>
+            <span class="queued-skill-end-date"><code>Ends at <?= $skill->finishDate->format('Y-m-d H:i:s') ?></code></span>
         </div>
         <div class="skill-progress" style="left: <?= $shift ?>%; width: <?= $progressWidth ?>%"></div>
     </div>

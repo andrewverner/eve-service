@@ -18,8 +18,6 @@ use Yii;
  */
 class CharacterService extends \yii\db\ActiveRecord
 {
-    const SERVICE_SKILL_QUEUE_NOTIFIER = 'skill-queue-notifier';
-
     /**
      * @inheritdoc
      */

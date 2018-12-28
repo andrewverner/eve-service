@@ -229,6 +229,10 @@ class Character extends EVEObject
             return $first->queuePosition <=> $second->queuePosition;
         });
 
+        $queue = array_filter($queue, function (QueuedSkill $skill) {
+            return $skill->finishDate >= new \DateTime();
+        });
+
         return $queue;
     }
 
