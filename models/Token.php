@@ -157,6 +157,6 @@ class Token extends \yii\db\ActiveRecord
      */
     public function getServices()
     {
-        return $this->hasMany(CharacterService::className(), ['id' => 'character_id']);
+        return $this->hasMany(CharacterService::className(), ['character_id' => 'character_id']);
     }
 }

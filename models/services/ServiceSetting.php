@@ -14,8 +14,10 @@ class ServiceSetting
 {
     public function __construct(CharacterService $service)
     {
-        foreach (unserialize($service->settings) as $key => $value) {
-            $this->{$key} = $value;
+        if ($service->settings) {
+            foreach (unserialize($service->settings) as $key => $value) {
+                $this->{$key} = $value;
+            }
         }
     }
 }

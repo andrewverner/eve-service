@@ -9,6 +9,7 @@
 namespace app\controllers;
 
 use app\models\CharacterService;
+use app\models\services\ServiceFactory;
 use app\models\Token;
 use yii\web\Controller;
 
@@ -16,6 +17,8 @@ class TestController extends Controller
 {
     public function actionIndex()
     {
-        var_dump(Token::findOne(6)->services);
+        foreach (Token::findOne(1)->services as $service) {
+            var_dump(ServiceFactory::initService($service));
+        }
     }
 }

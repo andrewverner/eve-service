@@ -18,7 +18,7 @@ class ServiceFactory
      */
     public static function initService(CharacterService $service)
     {
-        $funcName = lcfirst(str_replace('-', '', ucwords($service->service_code, '-')));
+        $funcName = lcfirst(str_replace('-', '', ucwords($service->service->code, '-')));
         return self::$funcName($service);
     }
 
@@ -26,7 +26,7 @@ class ServiceFactory
      * @param CharacterService $service
      * @return SkillQueueNotificator|ServiceSetting
      */
-    public static function skillQueueNotifier(CharacterService $service)
+    public static function skillQueueNotificator(CharacterService $service)
     {
         return new SkillQueueNotificator($service);
     }

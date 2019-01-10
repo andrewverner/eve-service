@@ -530,7 +530,7 @@ class CharacterController extends Controller
     {
         $token = $this->getToken($id);
 
-        return $this->render('services');
+        return $this->render('services', ['services' => $token->services]);
     }
 
     private function getToken($id)
