@@ -8,6 +8,8 @@
 
 namespace app\components\esi\components;
 
+use app\components\logger\Logger;
+
 class Request
 {
     const TYPE_GET = 'GET';
@@ -71,7 +73,7 @@ class Request
         }
 
         if (YII_DEBUG) {
-            file_put_contents('/var/www/html/eve/request.log', (new \DateTime())->format('Y-m-d H:i:s') . ": Sending request: {$this->uri}" . PHP_EOL, FILE_APPEND);
+            Logger::log("Sending request: {$this->uri}", 'request');
         }
 
         $ch = curl_init($this->uri);
@@ -94,7 +96,7 @@ class Request
             $errno = curl_errno($ch);
             $error = curl_error($ch);
             $this->$error = "cURL error #{$errno}: {$error}";
-            file_put_contents('/var/www/html/eve/request.log', "Error: {$this->error}" . PHP_EOL, FILE_APPEND);
+            Logger::log("Error: {$this->error}", 'request');
 
             return false;
         }
@@ -104,7 +106,7 @@ class Request
         $data = json_decode($result, true);
         if (isset($data['error'])) {
             $this->error = $data['error'];
-            file_put_contents('/var/www/html/eve/request.log', "Error: {$this->error}" . PHP_EOL, FILE_APPEND);
+            Logger::log("Error: {$this->error}", 'request');
 
             return false;
         }

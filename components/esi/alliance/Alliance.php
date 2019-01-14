@@ -54,6 +54,7 @@ class Alliance extends EVEObject
 
         $cacheKey = "alliance:{$allianceId}";
         $request = EVE::request("/alliances/{alliance_id}/");
+        $request->cacheDuration = 3600 * 24;
         $data = $request->send(['alliance_id' => $allianceId], $cacheKey);
 
         parent::__construct($data);

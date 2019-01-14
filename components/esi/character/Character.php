@@ -141,6 +141,7 @@ class Character extends EVEObject
         $cacheKey = "character:{$this->characterId}:assets:{$page}";
 
         $request = EVE::secureRequest("/characters/{character_id}/assets/", $this->token);
+        $request->cacheDuration = 1800;
         $request->query(['page' => $page]);
         $assets = $request->send(['character_id' => $this->characterId], $cacheKey);
         if (!$assets) {

@@ -34,7 +34,7 @@ class TestController extends ConsoleController
         $channel->queue_declare('hello', false, false, false, false);
 
         $callback = function ($msg) {
-            file_put_contents('/var/www/html/eve/request.log', $msg->body, FILE_APPEND);
+            Logger::log($msg->body, 'rabbit');
         };
         $channel->basic_consume('hello', '', false, true, false, false, $callback);
 

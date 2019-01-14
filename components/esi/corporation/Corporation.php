@@ -93,6 +93,7 @@ class Corporation extends EVEObject
 
         $cacheKey = "corporation:{$corporationId}";
         $request = \app\components\esi\EVE::request("/corporations/{corporation_id}/");
+        $request->cacheDuration = 3600 * 24;
         $data = $request->send(['corporation_id' => $corporationId], $cacheKey);
 
         parent::__construct($data);

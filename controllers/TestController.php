@@ -8,17 +8,13 @@
 
 namespace app\controllers;
 
-use app\models\CharacterService;
-use app\models\services\ServiceFactory;
-use app\models\Token;
+use app\components\esi\EVE;
 use yii\web\Controller;
 
 class TestController extends Controller
 {
     public function actionIndex()
     {
-        foreach (Token::findOne(1)->services as $service) {
-            var_dump(ServiceFactory::initService($service));
-        }
+        var_dump(EVE::corporation(1000134));
     }
 }
