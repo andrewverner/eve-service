@@ -15,6 +15,36 @@ use yii\helpers\Html;
 
 class SkillsExtractor
 {
+    const PRIMARY_SKILL_DOGMA_ATTRIBUTE_ID = 182;
+    const SECONDARY_SKILL_DOGMA_ATTRIBUTE_ID = 183;
+    const TERTIARY_SKILL_DOGMA_ATTRIBUTE_ID = 184;
+    const QUATERNARY_SKILL_DOGMA_ATTRIBUTE_ID = 1285;
+    const QUINARY_SKILL_DOGMA_ATTRIBUTE_ID = 1289;
+    const SENARY_SKILL_DOGMA_ATTRIBUTE_ID = 1290;
+    const SKILLS_DOGMA_ATTRIBUTES = [
+        self::PRIMARY_SKILL_DOGMA_ATTRIBUTE_ID,
+        self::SECONDARY_SKILL_DOGMA_ATTRIBUTE_ID,
+        self::TERTIARY_SKILL_DOGMA_ATTRIBUTE_ID,
+        self::QUATERNARY_SKILL_DOGMA_ATTRIBUTE_ID,
+        self::QUINARY_SKILL_DOGMA_ATTRIBUTE_ID,
+        self::SENARY_SKILL_DOGMA_ATTRIBUTE_ID,
+    ];
+
+    const SKILL1_REQUIRED_DOGMA_ATTRIBUTE_ID = 277;
+    const SKILL2_REQUIRED_DOGMA_ATTRIBUTE_ID = 278;
+    const SKILL3_REQUIRED_DOGMA_ATTRIBUTE_ID = 279;
+    const SKILL4_REQUIRED_DOGMA_ATTRIBUTE_ID = 1286;
+    const SKILL5_REQUIRED_DOGMA_ATTRIBUTE_ID = 1287;
+    const SKILL6_REQUIRED_DOGMA_ATTRIBUTE_ID = 1288;
+    const SKILL_REQUIRED_DOGMA_ATTRIBUTES = [
+        self::SKILL1_REQUIRED_DOGMA_ATTRIBUTE_ID,
+        self::SKILL2_REQUIRED_DOGMA_ATTRIBUTE_ID,
+        self::SKILL3_REQUIRED_DOGMA_ATTRIBUTE_ID,
+        self::SKILL4_REQUIRED_DOGMA_ATTRIBUTE_ID,
+        self::SKILL5_REQUIRED_DOGMA_ATTRIBUTE_ID,
+        self::SKILL6_REQUIRED_DOGMA_ATTRIBUTE_ID,
+    ];
+
     public static function extract(Type $type)
     {
         $skillsList = [];
@@ -26,7 +56,7 @@ class SkillsExtractor
             /**
              * @var DogmaAttribute $attribute
              */
-            return in_array($attribute->attributeId, [182, 183, 184, 1285, 1289, 1290]);
+            return in_array($attribute->attributeId, self::SKILLS_DOGMA_ATTRIBUTES);
         });
 
         if (!$skillsAttributes) {
@@ -40,7 +70,7 @@ class SkillsExtractor
             /**
              * @var DogmaAttribute $attribute
              */
-            return in_array($attribute->attributeId, [277, 278, 279, 1286, 1287, 1288]);
+            return in_array($attribute->attributeId, self::SKILL_REQUIRED_DOGMA_ATTRIBUTES);
         });
         $skillLevelMap = [];
         foreach ($levelsAttributes as $levelsAttribute) {
@@ -48,8 +78,8 @@ class SkillsExtractor
         }
 
         $skillLevelAttributeMap = array_combine(
-            [182, 183, 184, 1285, 1289, 1290],
-            [277, 278, 279, 1286, 1287, 1288]
+            self::SKILLS_DOGMA_ATTRIBUTES,
+            self::SKILL_REQUIRED_DOGMA_ATTRIBUTES
         );
         foreach ($skillsAttributes as $skillsAttribute) {
             $skillModel = new RequiredSkill();
