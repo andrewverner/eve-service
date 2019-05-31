@@ -134,28 +134,26 @@ class SiteController extends Controller
     public function actionRegistration()
     {
         $model = new RegForm();
+        $model->load(Yii::$app->request->post());
 
-        if ($data = Yii::$app->request->post('RegForm')) {
-            $model->setAttributes($data);
-            if ($model->validate()) {
-                $user = new User();
-                $user->username = $model->username;
-                $user->password = md5($model->password1);
-                $user->email = $model->email;
-                if ($user->save()) {
-                    $hash = Hash::create($user->id);
+        if ($model->validate()) {
+            $user = new User();
+            $user->username = $model->username;
+            $user->password = md5($model->password1);
+            $user->email = $model->email;
+            if ($user->save()) {
+                $hash = Hash::create($user->id);
 
-                    $task = new EmailTask();
-                    $task->to = $user->email;
-                    $task->subject = 'EVE Services: Registration';
-                    $task->body = $this->renderPartial('/email/reg-email', [
-                        'user' => $user,
-                        'hash' => $hash->value,
-                    ]);
-                    QueueTasks::add($task);
+                $task = new EmailTask();
+                $task->to = $user->email;
+                $task->subject = 'EVE Services: Registration';
+                $task->body = $this->renderPartial('/email/reg-email', [
+                    'user' => $user,
+                    'hash' => $hash->value,
+                ]);
+                QueueTasks::add($task);
 
-                    return $this->redirect(Yii::$app->urlManager->createUrl('site/reg-complete'));
-                }
+                return $this->redirect(Yii::$app->urlManager->createUrl('site/reg-complete'));
             }
         }
 
