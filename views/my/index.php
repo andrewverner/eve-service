@@ -9,13 +9,6 @@ MyAsset::register($this);
 ?>
 <div class="site-index">
     <div class="body-content">
-        <!--<div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-right">
-                <span class="eve-btn eve-btn-primary">
-                    <i class="fas fa-plus"></i>
-                </span>
-            </div>
-        </div>-->
         <div class="row">
             <?php if ($tokens): ?>
                 <?php foreach ($tokens as $token): ?>
@@ -33,7 +26,7 @@ MyAsset::register($this);
                 </div>
                 <?php endforeach; ?>
             <?php else: ?>
-            <div class="col-lg-8 offset-lg-2 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-8 col-lg-offset-2 col-md-12 col-sm-12 col-xs-12">
                 <div class="eve-panel">
                     <div class="eve-panel-body">
                         <h3>Hello.</h3><br />
@@ -49,6 +42,13 @@ MyAsset::register($this);
                 </div>
             </div>
             <?php endif; ?>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <a href="<?= Yii::$app->urlManager->createUrl('/my/add') ?>" class="eve-btn btn-primary">
+                    <i class="fas fa-plus"></i> Add new character
+                </a>
+            </div>
         </div>
     </div>
 </div>

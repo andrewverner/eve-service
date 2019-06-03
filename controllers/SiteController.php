@@ -9,7 +9,9 @@ use app\models\tasks\EmailTask;
 use app\models\User;
 use Yii;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
@@ -74,7 +76,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionLogin()
+    public function actionSignIn()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
@@ -96,7 +98,7 @@ class SiteController extends Controller
      *
      * @return Response
      */
-    public function actionLogout()
+    public function actionSignOut()
     {
         Yii::$app->user->logout();
 
@@ -131,36 +133,39 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    public function actionRegistration()
+    public function actionSignUp()
     {
         $model = new RegForm();
-        $model->load(Yii::$app->request->post());
 
-        if ($model->validate()) {
-            $user = new User();
-            $user->username = $model->username;
-            $user->password = md5($model->password1);
-            $user->email = $model->email;
-            if ($user->save()) {
-                $hash = Hash::create($user->id);
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
 
-                $task = new EmailTask();
-                $task->to = $user->email;
-                $task->subject = 'EVE Services: Registration';
-                $task->body = $this->renderPartial('/email/reg-email', [
-                    'user' => $user,
-                    'hash' => $hash->value,
-                ]);
-                QueueTasks::add($task);
+            if ($model->validate()) {
+                $user = new User();
+                $user->username = $model->username;
+                $user->password = md5($model->password1);
+                $user->email = $model->email;
+                if ($user->save()) {
+                    $hash = Hash::create($user->id);
 
-                return $this->redirect(Yii::$app->urlManager->createUrl('site/reg-complete'));
+                    $task = new EmailTask();
+                    $task->to = $user->email;
+                    $task->subject = 'EVE Services: Registration';
+                    $task->body = $this->renderPartial('/email/reg-email', [
+                        'user' => $user,
+                        'hash' => $hash->value,
+                    ]);
+                    QueueTasks::add($task);
+
+                    return $this->redirect(Yii::$app->urlManager->createUrl('site/sign-up-complete'));
+                }
             }
         }
 
         return $this->render('registration', ['model' => $model]);
     }
 
-    public function actionRegComplete()
+    public function actionSignUpComplete()
     {
         return $this->render('reg-complete');
     }
@@ -177,13 +182,11 @@ class SiteController extends Controller
         ])->one();
 
         if (!$hash) {
-            echo 'Not found';
-            return;
+            throw new NotFoundHttpException('Activation code not found');
         }
 
         if (new \DateTime($hash->expired) <= new \DateTime()) {
-            echo 'Expired';
-            return;
+            throw new BadRequestHttpException('Activation code is expired');
         }
 
         $user = User::findOne($hash->user_id);
@@ -191,6 +194,10 @@ class SiteController extends Controller
         if ($user->save()) {
             $hash->is_used = 1;
             $hash->save();
+
+            Yii::$app->user->login($user);
+
+            return $this->redirect(Yii::$app->urlManager->createUrl('my'));
         }
     }
 }

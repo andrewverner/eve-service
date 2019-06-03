@@ -10,7 +10,7 @@ RegistrationAsset::register($this);
 <div class="site-index">
     <div class="body-content">
         <div class="row">
-            <div class="col-sm-12 col-md-6 offset-md-3 col-lg-6 offset-lg-3">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
                 <div class="eve-panel">
                     <?php $form = \yii\widgets\ActiveForm::begin([
                         'id' => 'login-form',
@@ -23,11 +23,12 @@ RegistrationAsset::register($this);
                             <?= $form->field($model, 'password', [
                                 'template' => '{label} {input} {error}'
                             ])->passwordInput(); ?>
+                        </div>
                         <div class="row">
-                            <div class="col-6 text-left">
+                            <div class="col-lg-6 text-left">
                                 <a class="eve-btn eve-btn-big eve-btn-default reg-btn" href="#">Cancel</a>
                             </div>
-                            <div class="col-6 text-right">
+                            <div class="col-lg-6 text-right">
                                 <input type="submit" class="eve-btn eve-btn-big eve-btn-primary reg-btn" value="Login" />
                             </div>
                         </div>
