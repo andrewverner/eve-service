@@ -6,9 +6,8 @@
 }
 
 .queued-skill {
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #ddd;
     background-color: transparent;
-    color: #fff;
     font-size: 14px;
 }
 

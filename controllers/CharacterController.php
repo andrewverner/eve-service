@@ -21,6 +21,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\MethodNotAllowedHttpException;
 use yii\web\NotFoundHttpException;
+use Yii;
 
 class CharacterController extends Controller
 {
@@ -53,6 +54,8 @@ class CharacterController extends Controller
 
     public function actionIndex($id)
     {
+        Yii::$app->view->params['characterId'] = $id;
+
         $token = $this->getToken($id);
         $character = $token->character();
 

@@ -12,6 +12,9 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'character' => [
+            'class' => 'app\components\Character',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'IELLKJFHBkR_yta1LsGfIvb9MXi8sB89',
@@ -47,9 +50,19 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'sign-in' => 'site/sign-in',
+                'sign-up' => 'site/sign-up',
+                'sign-out' => 'site/sign-out',
                 'activate/<code:\w+>' => 'site/activate',
 
-                'character/<id:\d+>' => 'character/index',
+                'character/<characterId:\d+>' => 'character/character/index',
+                'character/<characterId:\d+>/agents' => 'character/character/agents',
+                'character/<characterId:\d+>/assets' => 'character/character/assets',
+                'character/<characterId:\d+>/bps' => 'character/character/bps',
+
+                'character/<characterId:\d+>/industry-jobs' => 'character/character/industry-jobs',
+
+                /*'character/<id:\d+>' => 'character/index',
                 'character/<id:\d+>/assets' => 'character/assets',
                 'character/<id:\d+>/bps' => 'character/bps',
                 'character/<id:\d+>/mail-list' => 'character/mail-list',
@@ -71,7 +84,7 @@ $config = [
                 'character/<id:\d+>/skills' => 'character/skills',
                 'character/<id:\d+>/notifications' => 'character/notifications',
                 'character/<id:\d+>/mining' => 'character/mining',
-                'character/<id:\d+>/services' => 'character/services',
+                'character/<id:\d+>/services' => 'character/services',*/
                 'kill-mail/<id:\d+>/<hash:\w+>' => 'eve/kill-mail',
                 'pi/<mask:\d+>' => 'pi/index',
                 'pi/schematic/<id:\d+>' => 'pi/schematic',
@@ -98,6 +111,12 @@ $config = [
         ],
     ],
     'params' => $params,
+    'modules' => [
+        'character' => [
+            'class' => 'app\modules\character\Character',
+            'defaultRoute' => 'CharacterController',
+        ],
+    ],
 ];
 
 if (YII_ENV_DEV) {

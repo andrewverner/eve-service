@@ -16,6 +16,7 @@ use app\components\esi\components\EVEObject;
 use app\components\esi\components\Request;
 use app\components\esi\corporation\Corporation;
 use app\components\esi\EVE;
+use app\components\esi\industry\CharacterIndustryJob;
 use app\components\esi\killmails\KillMail;
 use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
@@ -195,6 +196,7 @@ class Character extends EVEObject
 
         $request = EVE::secureRequest("/characters/{character_id}/blueprints/", $this->token);
         $request->cacheDuration = 3600;
+        $request->query(['page' => $page]);
         $blueprints = $request->send(['character_id' => $this->characterId], $cacheKey);
 
         if (!$blueprints) {
@@ -483,6 +485,9 @@ class Character extends EVEObject
         return new CharacterSkills($skills);
     }
 
+    /**
+     * @return Notification[]
+     */
     public function notifications()
     {
         $cacheKey = "character:{$this->characterId}:notifications";
@@ -499,5 +504,28 @@ class Character extends EVEObject
         }
 
         return $notifications;
+    }
+
+    /**
+     * @param bool $includeCompleted
+     * @return CharacterIndustryJob[]
+     */
+    public function industryJobs($includeCompleted = true)
+    {
+        $cacheKey = "character:{$this->characterId}:industry:jobs:{$includeCompleted}";
+        $request = EVE::secureRequest('/characters/{character_id}/industry/jobs/', $this->token);
+        $request->cacheDuration = 1800;
+        $request->query(['include_completed' => $includeCompleted]);
+        $jobs = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        if (!$jobs) {
+            return [];
+        }
+
+        foreach ($jobs as &$job) {
+            $job = new CharacterIndustryJob($job);
+        }
+
+        return $jobs;
     }
 }

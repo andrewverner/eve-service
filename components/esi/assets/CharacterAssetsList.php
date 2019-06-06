@@ -31,4 +31,12 @@ class CharacterAssetsList
             }
         }
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return empty(array_merge($this->stations, $this->solarSystems, $this->other));
+    }
 }

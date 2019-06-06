@@ -159,4 +159,12 @@ class Token extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CharacterService::className(), ['character_id' => 'character_id']);
     }
+
+    /**
+     * @return Token
+     */
+    public static function getSystemToken()
+    {
+        return self::find()->where(['system' => 1])->one();
+    }
 }

@@ -249,3 +249,7 @@ a.eve-btn {
 .margin-auto {
     margin: auto;
 }
+
+.grid-view table td {
+    vertical-align: middle!important;
+}

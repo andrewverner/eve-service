@@ -10,7 +10,10 @@ namespace app\components\esi\universe;
 
 use app\components\esi\components\Request;
 use app\components\esi\EVE;
+use app\components\esi\industry\Facility;
 use app\components\esi\SearchFactory;
+use app\models\Token;
+use yii\helpers\ArrayHelper;
 
 class Universe
 {
@@ -24,6 +27,10 @@ class Universe
         $request = EVE::request('/universe/stations/{station_id}/');
         $request->cacheDuration = 3600 * 24 * 14;
         $station = $request->send(['station_id' => $stationId], $cacheKey);
+
+        if (!$station) {
+            return null;
+        }
 
         return new Station($station);
     }
@@ -44,6 +51,24 @@ class Universe
         }
 
         return new SolarSystem($system);
+    }
+
+    /**
+     * @param $structureId
+     * @return Structure
+     */
+    public function structure($structureId)
+    {
+        $cacheKey = "structure:{$structureId}";
+        $request = EVE::secureRequest('/universe/structures/{structure_id}/', Token::getSystemToken());
+        $request->cacheDuration = 3600 * 24 * 7;
+        $structure = $request->send(['structure_id' => $structureId], $cacheKey);
+
+        if (!$structure) {
+            return null;
+        }
+
+        return new Structure($structure);
     }
 
     /**
@@ -209,5 +234,38 @@ class Universe
         }
 
         return $names;
+    }
+
+    /**
+     * @param int $facilityId
+     * @return Facility
+     */
+    public function facility($facilityId)
+    {
+        $facilityCacheKey = "facility:{$facilityId}";
+        if (\Yii::$app->cache->exists($facilityCacheKey)) {
+            $facility = unserialize(\Yii::$app->cache->get($facilityCacheKey));
+
+            return new Facility($facility);
+        }
+
+        $listCacheKey = 'facilities';
+        $request = EVE::request('/industry/facilities/');
+        $facilitiesList = $request->send(null, $listCacheKey);
+        $facilitiesList = ArrayHelper::index($facilitiesList, 'facility_id');
+        $facility = $facilitiesList[$facilityId];
+        \Yii::$app->cache->set($facilityCacheKey, serialize($facility), 3600 * 24);
+
+        return new Facility($facility);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function structures()
+    {
+        $cacheKey = 'structures';
+        $request = EVE::request('/universe/structures/');
+        return $request->send(null, $cacheKey);
     }
 }

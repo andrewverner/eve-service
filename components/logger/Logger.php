@@ -17,8 +17,10 @@ class Logger
 
     public static function log($message, $category, $level = self::LEVEL_NOTICE)
     {
-        $date = (new \DateTime())->format('Y-m-d H:i:s');
-        $message = "[$level] {$date}: {$message}" . PHP_EOL;
-        file_put_contents(\Yii::getAlias('@runtime') . "/logs/{$category}.log", $message, FILE_APPEND);
+        if (YII_DEBUG) {
+            $date = (new \DateTime())->format('Y-m-d H:i:s');
+            $message = "[$level] {$date}: {$message}" . PHP_EOL;
+            file_put_contents(\Yii::getAlias('@runtime') . "/logs/{$category}.log", $message, FILE_APPEND);
+        }
     }
 }

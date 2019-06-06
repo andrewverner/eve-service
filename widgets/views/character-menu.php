@@ -20,7 +20,8 @@
         <ul class="character-menu">
             <?php foreach ($menu as $title => $link): ?>
                 <li><?= \yii\helpers\Html::a($title, $link, [
-                    'class' => trim($link , '/') == Yii::$app->request->getPathInfo() ? 'active' : ''
+                    'class' => trim($link , '/') == Yii::$app->request->getPathInfo() ? 'active' : '',
+                    'data-preload-url' => $link . '?preload=1',
                 ]); ?></li>
             <?php endforeach; ?>
         </ul>

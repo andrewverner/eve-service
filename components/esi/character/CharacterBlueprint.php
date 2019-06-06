@@ -9,6 +9,8 @@
 namespace app\components\esi\character;
 
 use app\components\esi\components\EVEObject;
+use app\components\esi\EVE;
+use app\components\esi\universe\Type;
 
 class CharacterBlueprint extends EVEObject
 {
@@ -128,4 +130,21 @@ class CharacterBlueprint extends EVEObject
      * @var int
      */
     public $typeId;
+
+    /**
+     * @var Type
+     */
+    private $type;
+
+    /**
+     * @return Type
+     */
+    public function getType()
+    {
+        if (!$this->type) {
+            $this->type = EVE::universe()->type($this->typeId);
+        }
+
+        return $this->type;
+    }
 }

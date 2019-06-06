@@ -50,7 +50,7 @@ class Request
         return $this;
     }
 
-    public function send(array $params = null, string $cacheKey = null, bool $force = false)
+    public function send(array $params = null, string $cacheKey = null, bool $force = null)
     {
         if ($cacheKey && !$force) {
             if (\Yii::$app->cache->exists($cacheKey)) {
@@ -92,11 +92,11 @@ class Request
         $result = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            curl_close($ch);
             $errno = curl_errno($ch);
             $error = curl_error($ch);
-            $this->$error = "cURL error #{$errno}: {$error}";
+            $this->error = "cURL error #{$errno}: {$error}";
             Logger::log("Error: {$this->error}", 'request');
+            curl_close($ch);
 
             return false;
         }
@@ -110,7 +110,7 @@ class Request
 
             return false;
         }
-        if ($cacheKey) {
+        if ($cacheKey && $data) {
             \Yii::$app->cache->set($cacheKey, serialize($data), $this->cacheDuration);
         }
 
