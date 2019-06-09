@@ -37,4 +37,11 @@ class ConsoleController extends Controller
     {
         $this->stdout($string . PHP_EOL, Console::FG_RED);
     }
+
+    public function actionColors()
+    {
+        for ($i=1; $i<=50; $i++) {
+            $this->stdout($i . PHP_EOL, $i);
+        }
+    }
 }

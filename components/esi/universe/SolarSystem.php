@@ -9,6 +9,7 @@
 namespace app\components\esi\universe;
 
 use app\components\esi\components\EVEObject;
+use app\components\esi\EVE;
 use app\components\esi\helpers\EVEFormatter;
 use app\components\pi\Planetary;
 use yii\helpers\Html;
@@ -70,6 +71,11 @@ class SolarSystem extends EVEObject
      */
     public $planetsList;
 
+    /**
+     * @var Stargate[]
+     */
+    private $stargatesList = [];
+
     const COLOR_NULL = '#ff0000';
     const COLOR_LOW = '#ff5e00';
     const COLOR_MEDIUM = '#efff00';
@@ -125,5 +131,40 @@ class SolarSystem extends EVEObject
         }
 
         return Html::tag('span', $ss, ['style' => "color:{$color}"]);
+    }
+
+    public function isEmpireSpace()
+    {
+        return $this->systemId < 31000001;
+    }
+
+    public function isWSpace()
+    {
+        return $this->systemId >= 31000001 && $this->systemId < 32000001;
+    }
+
+    public function isASpace()
+    {
+        return $this->systemId >= 32000001 && $this->systemId < 33000001;
+    }
+
+    public function isPSpace()
+    {
+        return $this->systemId >= 33000001;
+    }
+
+    public function getStargates()
+    {
+        if (!$this->stargates) {
+            return [];
+        }
+
+        if (!$this->stargatesList) {
+            foreach ($this->stargates as $stargateId) {
+                $this->stargatesList[] = EVE::universe()->stargate($stargateId);
+            }
+        }
+
+        return $this->stargatesList;
     }
 }

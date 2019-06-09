@@ -50,7 +50,7 @@ class Request
         return $this;
     }
 
-    public function send(array $params = null, string $cacheKey = null, bool $force = null)
+    public function send(array $params = null, $cacheKey = null, $force = null)
     {
         if ($cacheKey && !$force) {
             if (\Yii::$app->cache->exists($cacheKey)) {

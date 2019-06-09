@@ -49,7 +49,7 @@ class SecureRequest extends Request
         $this->token = $token;
     }
 
-    public function send(array $params = null, string $cacheKey = null, bool $force = null)
+    public function send(array $params = null, $cacheKey = null, $force = null)
     {
         if ($this->token->isExpired()) {
             if (!$this->token->refresh()) {

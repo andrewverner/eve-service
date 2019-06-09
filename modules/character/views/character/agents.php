@@ -24,6 +24,7 @@ use yii\helpers\Html;
                 'label' => 'Agent',
                 'format' => 'raw',
                 'value' => function (CharacterAgentResearch $research) {
+                    var_dump($research->getAgent());
                     return sprintf('%s %s', Html::img($research->getAgent()->image(32)), $research->getAgent()->name);
                 }
             ],

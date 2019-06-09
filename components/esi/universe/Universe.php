@@ -268,4 +268,29 @@ class Universe
         $request = EVE::request('/universe/structures/');
         return $request->send(null, $cacheKey);
     }
+
+    /**
+     * @return int[]
+     */
+    public function solarSystems()
+    {
+        $cacheKey = 'systems';
+        $request = EVE::request('/universe/systems/');
+        $request->cacheDuration = 3600 * 24 * 14;
+        return $request->send(null, $cacheKey);
+    }
+
+
+    public function stargate($stargateId)
+    {
+        $cacheKey = "stargate:{$stargateId}";
+        $request = EVE::request('/universe/stargates/{stargate_id}/');
+        $request->cacheDuration = 3600 * 24 * 7;
+        $data = $request->send(['stargate_id' => $stargateId], $cacheKey);
+        if (!$data) {
+            return null;
+        }
+
+        return new Stargate($data);
+    }
 }
