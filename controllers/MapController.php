@@ -3,7 +3,9 @@
 namespace app\controllers;
 
 use app\components\esi\EVE;
+use app\components\esi\helpers\EVEFormatter;
 use app\components\esi\universe\SolarSystem;
+use app\components\esi\universe\SolarSystemRelation;
 use yii\web\Controller;
 
 class MapController extends Controller
@@ -14,20 +16,27 @@ class MapController extends Controller
         $solarSystemsIds = array_filter($solarSystemsIds, function ($solarSystemId) {
             return $solarSystemId < 32000001;
         });
-        //$solarSystemsIds = array_slice($solarSystemsIds, 0, 1500);
+        //$solarSystemsIds = array_slice($solarSystemsIds, 0, 2500);
 
         /**
          * @var SolarSystem[] $solarSystems
          */
         $solarSystems = [];
-        $x = $y = $z = [];
+        $x = $y = [];
         foreach ($solarSystemsIds as $solarSystemsId) {
             $solarSystem = EVE::universe()->solarSystem($solarSystemsId);
+            if (!$solarSystem->isEmpireSpace()) {
+                continue;
+            }
             $solarSystems[] = $solarSystem;
-            $x[] = $solarSystem->position['x'];
-            $y[] = $solarSystem->position['y'];
-            $z[] = $solarSystem->position['z'];
+            $x[] = $solarSystem->getX();
+            $y[] = $solarSystem->getY();
         }
+
+        $minX = min($x);
+        $minY = min($y);
+        $maxX = max($x);
+        $maxY = max($y);
 
         $relations = [];
         foreach ($solarSystems as $solarSystem) {
@@ -43,25 +52,18 @@ class MapController extends Controller
                     continue;
                 }
 
-                $relations["{$solarSystem->systemId}:{$stargate->destination->systemId}"] = [
-                    'from' => $solarSystem->position,
-                    'to' => EVE::universe()->solarSystem($stargate->destination->systemId)->position,
-                ];
+                $destinationSolarSystem = EVE::universe()->solarSystem($stargate->destination->systemId);
+                $relations["{$solarSystem->systemId}:{$stargate->destination->systemId}"] = new SolarSystemRelation($solarSystem, $destinationSolarSystem);
             }
         }
-
-        //$this->getView()->registerJsVar('solarSystems', $solarSystems);
-        $minX = abs(min($x))/100000000000000;
-        $minZ = abs(min($z))/100000000000000;
 
         return $this->render('index', [
             'solarSystems' => $solarSystems,
             'relations' => $relations,
             'minX' => $minX,
-            'minZ' => $minZ,
-
-            'width' => max($x)/100000000000000 + $minX,
-            'height' => max($z)/100000000000000 + $minZ,
+            'minY' => $minY,
+            'width' => $maxX - $minX,
+            'height' => $maxY - $minY,
         ]);
     }
 }

@@ -16,6 +16,8 @@ use yii\helpers\Html;
 
 class SolarSystem extends EVEObject
 {
+    const COORDINATES_MULTIPLIER = 100000000000000;
+
     /**
      * @var int
      */
@@ -75,6 +77,21 @@ class SolarSystem extends EVEObject
      * @var Stargate[]
      */
     private $stargatesList = [];
+
+    /**
+     * @var float
+     */
+    private $dx;
+
+    /**
+     * @var float
+     */
+    private $dy;
+
+    /**
+     * @var float
+     */
+    private $dz;
 
     const COLOR_NULL = '#ff0000';
     const COLOR_LOW = '#ff5e00';
@@ -166,5 +183,61 @@ class SolarSystem extends EVEObject
         }
 
         return $this->stargatesList;
+    }
+
+    public function getX()
+    {
+        if (!$this->dx) {
+            $this->dx = $this->position['x']/self::COORDINATES_MULTIPLIER;
+        }
+
+        return $this->dx;
+    }
+
+    public function getY($decart = false)
+    {
+        if (!$this->dy) {
+            $this->dy = $this->position['z']/self::COORDINATES_MULTIPLIER;
+        }
+
+        return $decart ? $this->dy : (-1)*$this->dy;
+    }
+
+    public function getZ()
+    {
+        if (!$this->dz) {
+            $this->dz = $this->position['y']/self::COORDINATES_MULTIPLIER;
+        }
+
+        return $this->dz;
+    }
+
+    public function getColor()
+    {
+        $ss = EVEFormatter::securityStatus($this->securityStatus);
+
+        switch ($ss) {
+            case 1:
+            case 0.9:
+                $color = self::COLOR_HIGH;
+                break;
+            case 0.8:
+            case 0.7:
+                $color = self::COLOR_ABOVE_MEDIUM;
+                break;
+            case 0.6:
+            case 0.5:
+                $color = self::COLOR_MEDIUM;
+                break;
+            case 0.4:
+            case 0.3:
+            case 0.2:
+                $color = self::COLOR_LOW;
+                break;
+            default:
+                $color = self::COLOR_NULL;
+        }
+
+        return $color;
     }
 }
