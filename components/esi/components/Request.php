@@ -17,6 +17,9 @@ class Request
     const TYPE_POST = 'POST';
     const TYPE_DELETE = 'DELETE';
 
+    const DURATION_DAY = 86400;
+    const DURATION_WEEK = 604800;
+
     protected $uri;
     protected $headers;
     protected $body;

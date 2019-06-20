@@ -93,6 +93,11 @@ class SolarSystem extends EVEObject
      */
     private $dz;
 
+    /**
+     * @var Constellation;
+     */
+    private $constellation;
+
     const COLOR_NULL = '#ff0000';
     const COLOR_LOW = '#ff5e00';
     const COLOR_MEDIUM = '#efff00';
@@ -239,5 +244,17 @@ class SolarSystem extends EVEObject
         }
 
         return $color;
+    }
+
+    /**
+     * @return Constellation
+     */
+    public function getConstellation()
+    {
+        if (!$this->constellation) {
+            $this->constellation = EVE::universe()->constellation($this->constellationId);
+        }
+
+        return $this->constellation;
     }
 }

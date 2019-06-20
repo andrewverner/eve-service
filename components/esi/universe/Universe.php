@@ -280,7 +280,10 @@ class Universe
         return $request->send(null, $cacheKey);
     }
 
-
+    /**
+     * @param $stargateId
+     * @return Stargate|null
+     */
     public function stargate($stargateId)
     {
         $cacheKey = "stargate:{$stargateId}";
@@ -292,5 +295,63 @@ class Universe
         }
 
         return new Stargate($data);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function constellations()
+    {
+        $cacheKey = 'constellations';
+        $request = EVE::request('/universe/constellations/');
+        $request->cacheDuration = 2 * Request::DURATION_WEEK;
+        return $request->send(null, $cacheKey);
+    }
+
+    /**
+     * @param int $constellationId
+     *
+     * @return Constellation|null
+     */
+    public function constellation($constellationId)
+    {
+        $cacheKey = "constellation:{$constellationId}";
+        $request = EVE::request('/universe/constellations/{constellation_id}/');
+        $request->cacheDuration = 4 * Request::DURATION_WEEK;
+        $constellation = $request->send(['constellation_id' => $constellationId], $cacheKey);
+        if (!$constellation) {
+            return null;
+        }
+
+        return new Constellation($constellation);
+    }
+
+    /**
+     * @return int[]
+     */
+    public function regions()
+    {
+        $cacheKey = 'regions';
+        $request = EVE::request('/universe/regions/');
+        $request->cacheDuration = 2 * Request::DURATION_WEEK;
+        return $request->send(null, $cacheKey);
+    }
+
+    /**
+     * @param $regionId
+     *
+     * @return Region
+     */
+    public function region($regionId)
+    {
+        $cacheKey = "region:{$regionId}";
+        $request = EVE::request('/universe/regions/{region_id}/');
+        $request->cacheDuration = 4 * Request::DURATION_WEEK;
+        $region = $request->send(['region_id' => $regionId], $cacheKey);
+        if (!$region) {
+            return null;
+        }
+
+        return new Region($region);
     }
 }
