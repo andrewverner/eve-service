@@ -1,26 +1,21 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Denis Khodakovskiy
- * Date: 18.10.18
- * Time: 10:38
- */
 
 namespace app\components\esi\calendar;
 
 use app\components\esi\components\EVEObject;
+use DateTime;
 
 class CharacterCalendarEvent extends EVEObject
 {
-    const EVENT_RESPONSE_NOT_RESPONDED = 'not_responded';
-    const EVENT_RESPONSE_TENTATIVE     = 'tentative';
-    const EVENT_RESPONSE_DECLINED      = 'declined';
-    const EVENT_RESPONSE_ACCEPTED      = 'accepted';
+    /**
+     * @var DateTime
+     */
+    public $date;
 
     /**
-     * @var \DateTime
+     * @var int
      */
-    public $eventDate;
+    public $duration;
 
     /**
      * @var int
@@ -28,23 +23,61 @@ class CharacterCalendarEvent extends EVEObject
     public $eventId;
 
     /**
-     * @var string
+     * @var int
      */
-    public $eventResponse;
+    public $importance;
 
     /**
      * @var int
      */
-    public $importance;
+    public $ownerId;
+
+    /**
+     * @var string
+     */
+    public $ownerName;
+
+    /**
+     * @var string
+     */
+    public $ownerType;
+
+    /**
+     * @var string
+     */
+    public $response;
+
+    /**
+     * @var string
+     */
+    public $text;
 
     /**
      * @var string
      */
     public $title;
 
+    /**
+     * @var CharacterCalendarEventOwner
+     */
+    private $owner;
+
     public function __construct(array $data)
     {
         parent::__construct($data);
-        $this->eventDate = new \DateTime($this->eventDate);
+
+        $this->date = new DateTime($this->date);
+    }
+
+    /**
+     * @return CharacterCalendarEventOwner
+     */
+    public function getOwner()
+    {
+        if (!$this->owner) {
+            $this->owner = new CharacterCalendarEventOwner($this);
+        }
+
+        return $this->owner;
     }
 }

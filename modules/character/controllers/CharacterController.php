@@ -87,6 +87,13 @@ class CharacterController extends Controller
         return $this->render('blueprints', ['dataProvider' => $dataProvider]);
     }
 
+    public function actionCalendar()
+    {
+        $calendar = $this->character->calendar();
+
+        return $this->render('calendar', ['calendar' => $calendar]);
+    }
+
     public function actionIndustryJobs()
     {
         $jobs = $this->character->industryJobs(false);

@@ -11,7 +11,7 @@ namespace app\components\esi\character;
 use app\components\esi\assets\CharacterAssetItem;
 use app\components\esi\bookmarks\CharacterBookmark;
 use app\components\esi\bookmarks\CharacterBookmarkFolder;
-use app\components\esi\calendar\CharacterCalendarEvent;
+use app\components\esi\calendar\CharacterCalendar;
 use app\components\esi\components\EVEObject;
 use app\components\esi\components\Request;
 use app\components\esi\corporation\Corporation;
@@ -116,9 +116,9 @@ class Character extends EVEObject
         $request->cacheDuration = 3600;
         $data = $request->send(['character_id' => $this->characterId], $cacheKey);
 
-        if (!$data) {
+        /*if (!$data) {
             throw new NotFoundHttpException('Character not found');
-        }
+        }*/
 
         parent::__construct($data);
         $this->birthday = new \DateTime($this->birthday);
@@ -372,9 +372,9 @@ class Character extends EVEObject
     }
 
     /**
-     * @return CharacterCalendarEvent[]
+     * @return CharacterCalendar[]
      */
-    public function calendarEvents()
+    public function calendar()
     {
         $request = EVE::secureRequest("/characters/{character_id}/calendar/", $this->token);
         $events = $request->send(['character_id' => $this->characterId]);
@@ -384,7 +384,7 @@ class Character extends EVEObject
         }
 
         foreach ($events as &$event) {
-            $event = new CharacterCalendarEvent($event);
+            $event = new CharacterCalendar($event, $this->token);
         }
 
         return $events;

@@ -190,7 +190,7 @@ class CharacterController extends Controller
         $character = $token->character();
 
         return $this->render('calendar', [
-            'events' => $character->calendarEvents(),
+            'events' => $character->calendar(),
             'character' => $character,
         ]);
     }

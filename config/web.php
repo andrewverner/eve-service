@@ -4,6 +4,7 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 
 $config = [
+    'name' => 'EVE Services',
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -59,6 +60,7 @@ $config = [
                 'character/<characterId:\d+>/agents' => 'character/character/agents',
                 'character/<characterId:\d+>/assets' => 'character/character/assets',
                 'character/<characterId:\d+>/bps' => 'character/character/bps',
+                'character/<characterId:\d+>/calendar' => 'character/character/calendar',
 
                 'character/<characterId:\d+>/industry-jobs' => 'character/character/industry-jobs',
 

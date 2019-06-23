@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \app\components\esi\character\Character $character
- * @var \app\components\esi\calendar\CharacterCalendarEvent $events
+ * @var \app\components\esi\calendar\CharacterCalendar $events
  */
 
 use app\assets\CharacterAsset;

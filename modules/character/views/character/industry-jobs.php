@@ -5,6 +5,7 @@ use app\widgets\BoxWidget;
 use yii\grid\GridView;
 use app\components\esi\industry\CharacterIndustryJob;
 use app\components\Html;
+use app\components\esi\helpers\EVEFormatter;
 
 /**
  * @var View $this
@@ -37,7 +38,6 @@ use app\components\Html;
         ],
         //'completedCharacterId',
         //'completedDate',
-        //'cost',
         [
             'label' => 'Ends in',
             'format' => 'raw',
@@ -54,6 +54,12 @@ use app\components\Html;
             'label' => 'Facility',
             'value' => function (CharacterIndustryJob $job) {
                 return $job->getFacility()->getName() ?? 'Unknown';
+            }
+        ],
+        [
+            'label' => 'Cost',
+            'value' => function (CharacterIndustryJob $job) {
+                return sprintf('%s ISK', EVEFormatter::isk($job->cost));
             }
         ],
         //'facilityId',
