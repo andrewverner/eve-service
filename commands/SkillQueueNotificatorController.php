@@ -11,6 +11,7 @@ namespace app\commands;
 use app\models\QueueTasks;
 use app\models\Scope;
 use app\models\CharacterService;
+use app\models\Service;
 use app\models\services\SkillQueueNotificator;
 use app\models\tasks\SkillQueueNotificatorEmail;
 use app\models\Token;
@@ -31,6 +32,16 @@ class SkillQueueNotificatorController extends ConsoleController
             'id' => 'characterId',
             'f' => 'force',
         ];
+    }
+
+    public function actionRun()
+    {
+        /**
+         * @var Service $service
+         */
+        $service = Service::find()->where(['code' => Service::SKILL_QUEUE_NOTIFICATOR])->one();
+        $characterServices = CharacterService::findAll(['service_id' => $service->id]);
+
     }
 
     public function actionCheck()
