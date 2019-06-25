@@ -11,6 +11,7 @@ use Yii;
  * @property string $code
  * @property string $title
  * @property string $description
+ * @property integer $cost
  */
 class Service extends \yii\db\ActiveRecord
 {
@@ -33,6 +34,7 @@ class Service extends \yii\db\ActiveRecord
             [['code', 'title'], 'required'],
             [['description'], 'string'],
             [['code', 'title'], 'string', 'max' => 255],
+            [['cost'], 'integer'],
         ];
     }
 
@@ -46,6 +48,7 @@ class Service extends \yii\db\ActiveRecord
             'code' => 'Code',
             'title' => 'Title',
             'description' => 'Description',
+            'cost' => 'Cost',
         ];
     }
 }

@@ -12,7 +12,12 @@ use app\models\CharacterService;
 
 class ServiceSetting
 {
-    public function __construct(CharacterService $service)
+    public function attributes()
+    {
+        return [];
+    }
+
+    public function __construct(CharacterService $service = null)
     {
         if ($service->settings) {
             foreach (unserialize($service->settings) as $key => $value) {

@@ -64,6 +64,8 @@ $config = [
 
                 'character/<characterId:\d+>/industry-jobs' => 'character/character/industry-jobs',
 
+                'character/<characterId:\d+>/service/<code>' => 'character/character/service',
+
                 /*'character/<id:\d+>' => 'character/index',
                 'character/<id:\d+>/assets' => 'character/assets',
                 'character/<id:\d+>/bps' => 'character/bps',

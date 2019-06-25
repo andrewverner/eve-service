@@ -13,7 +13,7 @@ use app\models\CharacterService;
 class ServiceFactory
 {
     /**
-     * @param CharacterService $service
+     * @param CharacterService|null $service
      * @return ServiceSetting
      */
     public static function initService(CharacterService $service)
@@ -24,10 +24,10 @@ class ServiceFactory
 
     /**
      * @param CharacterService $service
-     * @return SkillQueueNotificator|ServiceSetting
+     * @return SkillQueueNotificatorSettings|ServiceSetting
      */
     public static function skillQueueNotificator(CharacterService $service)
     {
-        return new SkillQueueNotificator($service);
+        return new SkillQueueNotificatorSettings($service);
     }
 }

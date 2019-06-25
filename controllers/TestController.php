@@ -9,12 +9,15 @@
 namespace app\controllers;
 
 use app\components\esi\EVE;
+use app\models\Service;
+use app\models\Token;
 use yii\web\Controller;
 
 class TestController extends Controller
 {
     public function actionIndex()
     {
-        var_dump(EVE::corporation(1000134));
+        $token = Token::findOne(3);
+        var_dump($token->getServices());
     }
 }

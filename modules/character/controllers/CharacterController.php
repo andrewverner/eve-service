@@ -9,9 +9,14 @@ use app\components\esi\character\Character;
 use app\components\esi\character\CharacterBlueprint;
 use app\components\esi\EVE;
 use app\components\esi\industry\CharacterIndustryJob;
+use app\models\CharacterService;
+use app\models\Service;
+use app\models\services\ServiceFactory;
+use app\models\services\SkillQueueNotificatorSettings;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 /**
  * Default controller for the `Character` module
@@ -110,5 +115,20 @@ class CharacterController extends Controller
                 ],
             ]),
         ]);
+    }
+
+    public function actionService($code)
+    {
+        $service = Service::findOne(['code' => $code]);
+        if (!$service) {
+            throw new NotFoundHttpException('Service not found');
+        }
+
+        $characterService = CharacterService::findOne([
+            'service_id' => $service->id,
+            'character_id' => $this->character->characterId,
+        ]);
+
+        return $this->render('skill-queue-notificator', ['settings' => $characterService->settings()]);
     }
 }

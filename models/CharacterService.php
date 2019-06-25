@@ -15,6 +15,7 @@ use Yii;
  * @property string $expired
  *
  * @property Service $service
+ * @property Token $token
  */
 class CharacterService extends \yii\db\ActiveRecord
 {
@@ -80,5 +81,11 @@ class CharacterService extends \yii\db\ActiveRecord
     public function getService()
     {
         return $this->hasOne(Service::className(), ['id' => 'service_id']);
+    }
+
+
+    public function getToken()
+    {
+        return $this->hasOne(Token::className(), ['character_id' => 'character_id']);
     }
 }

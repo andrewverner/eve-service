@@ -12,7 +12,7 @@ use app\models\QueueTasks;
 use app\models\Scope;
 use app\models\CharacterService;
 use app\models\Service;
-use app\models\services\SkillQueueNotificator;
+use app\models\services\SkillQueueNotificatorSettings;
 use app\models\tasks\SkillQueueNotificatorEmail;
 use app\models\Token;
 
@@ -40,8 +40,10 @@ class SkillQueueNotificatorController extends ConsoleController
          * @var Service $service
          */
         $service = Service::find()->where(['code' => Service::SKILL_QUEUE_NOTIFICATOR])->one();
-        $characterServices = CharacterService::findAll(['service_id' => $service->id]);
+        $characterServices = CharacterService::findOne(['service_id' => $service->id]);
+        if (!$queue = $characterServices->token->character()->skillQueue()) {
 
+        }
     }
 
     public function actionCheck()
@@ -93,7 +95,7 @@ class SkillQueueNotificatorController extends ConsoleController
             $diff = $lastSkill->finishDate->diff(new \DateTime());
 
             /**
-             * @var SkillQueueNotificator $serviceSettings
+             * @var SkillQueueNotificatorSettings $serviceSettings
              */
             $serviceSettings = $service->settings();
             $this->logInfo("Settings: -period={$serviceSettings->period} -email={$serviceSettings->email}");

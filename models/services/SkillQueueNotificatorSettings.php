@@ -8,7 +8,7 @@
 
 namespace app\models\services;
 
-class SkillQueueNotificator extends ServiceSetting
+class SkillQueueNotificatorSettings extends ServiceSetting
 {
     /**
      * @var int
@@ -18,5 +18,15 @@ class SkillQueueNotificator extends ServiceSetting
     /**
      * @var string
      */
-    public $email;
+    public $emails;
+
+    /**
+     * @var bool
+     */
+    public $daily;
+
+    /**
+     * @var
+     */
+    public $notifyEmpty;
 }
