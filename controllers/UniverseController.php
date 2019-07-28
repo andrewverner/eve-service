@@ -14,7 +14,7 @@ use yii\web\NotFoundHttpException;
 
 class UniverseController extends Controller
 {
-    public function actionSolarSystem($id)
+    public function actionSolarSystemById($id)
     {
         $solarSystem = EVE::universe()->solarSystem($id);
         if (!$solarSystem) {
@@ -22,5 +22,15 @@ class UniverseController extends Controller
         }
 
         return $this->render('solar-system', ['solarSystem' => $solarSystem]);
+    }
+
+    public function actionSolarSystemByName($name)
+    {
+        /*$solarSystem = EVE::universe()->solarSystem($id);
+        if (!$solarSystem) {
+            throw new NotFoundHttpException('Solar system not found');
+        }
+
+        return $this->render('solar-system', ['solarSystem' => $solarSystem]);*/
     }
 }

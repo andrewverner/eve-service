@@ -21,6 +21,8 @@ use app\components\esi\killmails\KillMail;
 use app\components\esi\location\CharacterOnline;
 use app\components\esi\location\CharacterShip;
 use app\components\esi\mail\MailBody;
+use app\components\esi\planetary\Planet;
+use app\components\esi\planetary\PlanetColony;
 use app\components\esi\skills\CharacterSkills;
 use app\components\esi\skills\QueuedSkill;
 use app\components\esi\wallet\CharacterWallet;
@@ -527,5 +529,47 @@ class Character extends EVEObject
         }
 
         return $jobs;
+    }
+
+    /**
+     * @return Planet[]
+     */
+    public function planets()
+    {
+        $cacheKey = "character:{$this->characterId}:planetary:planets";
+        $request = EVE::secureRequest('/characters/{character_id}/planets/', $this->token);
+        $request->cacheDuration = 3600;
+        $planets = $request->send(['character_id' => $this->characterId], $cacheKey);
+
+        if (!$planets) {
+            return [];
+        }
+
+        foreach ($planets as &$planet) {
+            $planet = new Planet($planet);
+        }
+
+        return $planets;
+    }
+
+    /**
+     * @param int $planetId
+     * @return PlanetColony|null
+     */
+    public function planet($planetId)
+    {
+        $cacheKey = "character:{$this->characterId}:planetary:planet:{$planetId}";
+        $request = EVE::secureRequest('/characters/{character_id}/planets/{planet_id}/', $this->token);
+        $request->cacheDuration = 1800;
+        $planetColony = $request->send([
+            'character_id' => $this->characterId,
+            'planet_id' => $planetId
+        ], $cacheKey);
+
+        if (!$planetColony) {
+            return null;
+        }
+
+        return new PlanetColony($planetColony);
     }
 }

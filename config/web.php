@@ -63,8 +63,13 @@ $config = [
                 'character/<characterId:\d+>/calendar' => 'character/character/calendar',
 
                 'character/<characterId:\d+>/industry-jobs' => 'character/character/industry-jobs',
+                'character/<characterId:\d+>/planetary' => 'character/character/planetary',
+                'character/<characterId:\d+>/planet/<planetId:\d+>' => 'character/character/planet',
 
                 'character/<characterId:\d+>/service/<code>' => 'character/character/service',
+
+                'universe/solar-system/<id:\d+>' => 'universe/solar-system-by-id',
+                'universe/solar-system/<name:\w+>' => 'universe/solar-system-by-name',
 
                 /*'character/<id:\d+>' => 'character/index',
                 'character/<id:\d+>/assets' => 'character/assets',

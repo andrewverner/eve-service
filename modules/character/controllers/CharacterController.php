@@ -9,6 +9,7 @@ use app\components\esi\character\Character;
 use app\components\esi\character\CharacterBlueprint;
 use app\components\esi\EVE;
 use app\components\esi\industry\CharacterIndustryJob;
+use app\components\esi\universe\Planet;
 use app\models\CharacterService;
 use app\models\Service;
 use app\models\services\ServiceFactory;
@@ -130,5 +131,22 @@ class CharacterController extends Controller
         ]);
 
         return $this->render('skill-queue-notificator', ['settings' => $characterService->settings()]);
+    }
+
+    public function actionPlanetary()
+    {
+        $planets = $this->character->planets();
+
+        return $this->render('planetary', ['planets' => $planets]);
+    }
+
+    public function actionPlanet($planetId)
+    {
+        $planetColony = $this->character->planet($planetId);
+
+        return $this->render('planet-colony', [
+            'colony' => $planetColony,
+            'planet' => new Planet(['planet_id' => $planetId]),
+        ]);
     }
 }

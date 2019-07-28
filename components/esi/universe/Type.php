@@ -114,7 +114,7 @@ class Type extends EVEObject
      * @param int $size
      * @return string
      */
-    public function image($size)
+    public function image($size = 64)
     {
         return "http://image.eveonline.com/Type/{$this->typeId}_{$size}.png";
     }

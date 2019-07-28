@@ -42,6 +42,8 @@ class SecureRequest extends Request
         '/characters/{character_id}/notifications/' => Scope::SCOPE_NOTIFICATIONS_READ,
         '/characters/{character_id}/industry/jobs/' => Scope::SCOPE_INDUSTRY_JOBS_READ,
         '/universe/structures/{structure_id}/' => Scope::SCOPE_STRUCTURES_READ,
+        '/characters/{character_id}/planets/' => Scope::SCOPE_PLANETARY_READ,
+        '/characters/{character_id}/planets/{planet_id}/' => Scope::SCOPE_PLANETARY_READ,
     ];
 
     public function __construct($uri, Token $token, string $type = null)
