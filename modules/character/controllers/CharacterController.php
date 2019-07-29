@@ -144,6 +144,10 @@ class CharacterController extends Controller
     {
         $planetColony = $this->character->planet($planetId);
 
+        if (!$planetColony) {
+            throw new NotFoundHttpException('Planet colony data not found');
+        }
+
         return $this->render('planet-colony', [
             'colony' => $planetColony,
             'planet' => new Planet(['planet_id' => $planetId]),

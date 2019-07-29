@@ -283,3 +283,10 @@ a.eve-btn {
 .solar-system-bread-crumbs li:first-child:before {
     display: none;
 }
+
+.character-planetary-planet-img {
+    background-size: cover;
+    background-position: 50% 50%;
+    display: block;
+    min-height: 150px;
+}

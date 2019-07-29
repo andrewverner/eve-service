@@ -2,6 +2,7 @@
 use app\components\esi\planetary\PlanetColony;
 use yii\web\View;
 use app\components\esi\planetary\PlanetColonyPin;
+use app\components\SVGHelper;
 
 /**
  * @var View $this
@@ -60,10 +61,139 @@ use app\components\esi\planetary\PlanetColonyPin;
             <circle cx="<?= ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
                 cy="<?= ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
                 r="8" fill="transparent" stroke-width="1" stroke="#ffffff"></circle>
+
+            <?= SVGHelper::arc(
+                ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                19,
+                280,
+                80,
+                [
+                    'fill' => 'none',
+                    'stroke' => '#880000',
+                    'stroke-width' => 2,
+                    'stroke-dasharray' => '2 1',
+                ]
+            ); ?>
+
+            <?= SVGHelper::arc(
+                ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                19,
+                100,
+                260,
+                [
+                    'fill' => 'none',
+                    'stroke' => '#008888',
+                    'stroke-width' => 2,
+                    'stroke-dasharray' => '2 1',
+                ]
+            ); ?>
         <?php endif; ?>
-        <circle cx="<?= ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+
+        <?php if (($pin->isStorageFacility() || $pin->isLaunchpad()) && $pin->contents): ?>
+            <?php $to = 270 + 360 * ($pin->getContentsVolume() / $pin->type()->capacity); ?>
+            <?php if ($to > 360) { $to -= 360; } ?>
+            <?php if ($pin->getContentsVolume() / $pin->type()->capacity >= 1): ?>
+                <circle cx="<?= ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+                    cy="<?= ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+                    r="19" fill="transparent" stroke="#eeeeee" stroke-width="2"></circle>
+            <?php else: ?>
+                <?= SVGHelper::arc(
+                    ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                    ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                    19,
+                    270,
+                    $to,
+                    [
+                        'fill' => 'none',
+                        'stroke' => '#eeeeee',
+                        'stroke-width' => 2,
+                    ]
+                ); ?>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if ($pin->isIndustryFacility()): ?>
+            <?php if (count($pin->schematicInput()) <= 2): ?>
+                <?= SVGHelper::arc(
+                    ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                    ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                    25,
+                    280,
+                    80,
+                    [
+                        'fill' => 'none',
+                        'stroke' => $pin->getPinColor(),
+                        'stroke-width' => 3,
+                    ]
+                ); ?>
+                <?= SVGHelper::arc(
+                    ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                    ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                    25,
+                    100,
+                    260,
+                    [
+                        'fill' => 'none',
+                        'stroke' => $pin->getPinColor(),
+                        'stroke-width' => 3,
+                    ]
+                ); ?>
+            <?php else: ?>
+                <?= SVGHelper::arc(
+                    ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                    ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                    25,
+                    280,
+                    20,
+                    [
+                        'fill' => 'none',
+                        'stroke' => $pin->getPinColor(),
+                        'stroke-width' => 3,
+                    ]
+                ); ?>
+                <?= SVGHelper::arc(
+                    ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                    ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                    25,
+                    40,
+                    140,
+                    [
+                        'fill' => 'none',
+                        'stroke' => $pin->getPinColor(),
+                        'stroke-width' => 3,
+                    ]
+                ); ?>
+                <?= SVGHelper::arc(
+                    ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50,
+                    ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50,
+                    25,
+                    160,
+                    260,
+                    [
+                        'fill' => 'none',
+                        'stroke' => $pin->getPinColor(),
+                        'stroke-width' => 3,
+                    ]
+                ); ?>
+            <?php endif; ?>
+
+            <?php if (!$pin->contents): ?>
+                <circle cx="<?= ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+                    cy="<?= ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+                    r="19" fill="transparent" stroke="#ee0000" stroke-width="2"></circle>
+            <?php endif; ?>
+
+            <circle cx="<?= ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+                cy="<?= ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
+                r="25" fill="transparent" stroke="transparent" stroke-width="3"
+                class="colony-pin" data-target="#<?= $pin->pinId; ?>" style="cursor: pointer;"></circle>
+        <?php else: ?>
+            <circle cx="<?= ($pin->longitude - $minLon) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
                 cy="<?= ($pin->latitude - $minLat) * PlanetColony::SVG_MULTIPLIER + 50; ?>"
                 r="25" fill="transparent" stroke="<?= $pin->getPinColor(); ?>" stroke-width="3"
                 class="colony-pin" data-target="#<?= $pin->pinId; ?>" style="cursor: pointer;"></circle>
+        <?php endif; ?>
     <?php endforeach; ?>
 </svg>

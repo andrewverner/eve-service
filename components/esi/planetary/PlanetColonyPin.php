@@ -4,7 +4,9 @@ namespace app\components\esi\planetary;
 
 use app\components\esi\components\EVEObject;
 use app\components\esi\EVE;
+use app\components\esi\SearchFactory;
 use app\components\esi\universe\Type;
+use app\models\PiSchematicInput;
 use DateTime;
 
 class PlanetColonyPin extends EVEObject
@@ -68,6 +70,16 @@ class PlanetColonyPin extends EVEObject
      * @var Type
      */
     private $type;
+
+    /**
+     * @var PiSchematicInput[]
+     */
+    private $schematicInput = [];
+
+    /**
+     * @var Type
+     */
+    private $schematicOutput;
 
     public function __construct(array $data)
     {
@@ -205,5 +217,59 @@ class PlanetColonyPin extends EVEObject
         }
 
         return $volume;
+    }
+
+    /**
+     * @return PiSchematicInput[]
+     */
+    public function schematicInput()
+    {
+        if (!$this->isIndustryFacility() || !$this->schematicId) {
+            return [];
+        }
+
+        if (!$this->schematicInput) {
+            $type = $this->schematicOutput();
+            if (!$type) {
+                return [];
+            }
+
+            $this->schematicInput = PiSchematicInput::find()->where(['output_type_id' => $type->typeId])->all();
+        }
+
+        return $this->schematicInput;
+    }
+
+    public function schematicOutput()
+    {
+        if (!$this->isIndustryFacility() || !$this->schematicId) {
+            return null;
+        }
+
+        if (!$this->schematicOutput) {
+            $schematic = EVE::universe()->planetarySchematic($this->schematicId);
+            $typesIds = EVE::universe()->search($schematic->schematicName, [SearchFactory::CATEGORY_INVENTORY_TYPE], true)
+                ->inventoryType;
+
+            if (!$typesIds) {
+                return [];
+            }
+
+            $types = [];
+            foreach ($typesIds as $typeId) {
+                $types[] = EVE::universe()->type($typeId);
+            }
+
+            $types = array_filter($types, function (Type $type) use ($schematic) {
+                return $type->name === $schematic->schematicName;
+            });
+
+            /**
+             * @var Type $type
+             */
+            $this->schematicOutput = reset($types);
+        }
+
+        return $this->schematicOutput;
     }
 }

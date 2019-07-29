@@ -17,7 +17,8 @@ PlanetColonyAsset::register($this);
 ?>
 <div class="character-planetary-planet-colony">
     <?php BoxWidget::begin(['title' => $planet->name]); ?>
-    <div style="background-image: url(/images/planetary/<?= strtolower(str_replace(['Planet (', ')'], '', $planet->type()->name)) ?>.png); background-position: 50% 50%">
+    <div style="background-image: url(/images/planetary/<?= strtolower(str_replace(['Planet (', ')'], '', $planet->type()->name)) ?>.png);
+    background-position: 50% 50%; overflow-x: scroll">
         <?= PlanetColonyWidget::widget(['colony' => $colony]); ?>
     </div>
     <?php BoxWidget::end(); ?>
@@ -34,14 +35,42 @@ PlanetColonyAsset::register($this);
                         <td><strong>Description</strong></td>
                         <td><?= $pin->type()->description ?></td>
                     </tr>
-                    <?php if ($pin->isStorageFacility()): ?>
+                    <tr>
+                        <td><strong>Volume</strong></td>
+                        <td><?= $pin->type()->capacity ?> m3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Contents volume</strong></td>
+                        <td><?= $pin->getContentsVolume() ?> m3</td>
+                    </tr>
+                    <?php if ($pin->isStorageFacility() || $pin->isLaunchpad()): ?>
+                        <tr>
+                            <td><strong>Capacity</strong></td>
+                            <td><?= $pin->getContentsVolume() * 100 / $pin->type()->capacity ?> %</td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php if ($pin->isIndustryFacility() ): ?>
+                        <tr>
+                            <td><strong>Schematic</strong></td>
+                            <td>
+                                <?php if (!$pin->schematicOutput()): ?>
+                                    <div class="note note-info">No schematic selected</div>
+                                <?php else: ?>
+                                    <?= Html::img($pin->schematicOutput()->image(32)) ?>
+                                    <?= Html::a(
+                                        $pin->schematicOutput()->name,
+                                        Yii::$app->urlManager->createUrl("/pi/schematic/{$pin->schematicOutput()->typeId}"),
+                                        ['target' => '_blank']
+                                    ); ?>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php if ($pin->contents): ?>
                         <tr>
                             <td><strong>Contents</strong></td>
                             <td>
-                                <?php if (!$pin->contents): ?>
-                                    <div class="note note-info">Storage is empty</div>
-                                <?php else: ?>
-                                    <table width="100%">
+                                <table width="100%">
                                     <?php foreach ($pin->contents as $pinContent): ?>
                                         <tr>
                                             <td><?= Html::img($pinContent->type()->image(32)); ?></td>
@@ -50,23 +79,9 @@ PlanetColonyAsset::register($this);
                                             <td><?= number_format($pinContent->type()->volume * $pinContent->amount) ?> m3</td>
                                         </tr>
                                     <?php endforeach; ?>
-                                    </table>
-                                <?php endif; ?>
+                                </table>
                             </td>
                         </tr>
-                        <tr>
-                            <td><strong>Capacity</strong></td>
-                            <td>
-                                <?php if (!$pin->contents): ?>
-                                    <?= $pin->type()->capacity; ?> m3 (0 %)
-                                <?php else: ?>
-                                    <?= $pin->type()->capacity; ?> m3
-                                    (<?= floor($pin->type()->capacity / $pin->getContentsVolume()); ?> %)
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php elseif ($pin->isStorageFacility()): ?>
-
                     <?php endif; ?>
                 </table>
             </div>

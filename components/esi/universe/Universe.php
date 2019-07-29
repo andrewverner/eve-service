@@ -354,4 +354,23 @@ class Universe
 
         return new Region($region);
     }
+
+    /**
+     * @param $schematicId
+     *
+     * @return PlanetarySchematic|null
+     */
+    public function planetarySchematic($schematicId)
+    {
+        $cacheKey = "planetary:schematic:{$schematicId}";
+        $request = EVE::request('/universe/schematics/{schematic_id}/');
+        $request->cacheDuration = Request::DURATION_WEEK * 4;
+        $schematic = $request->send(['schematic_id' => $schematicId], $cacheKey);
+
+        if (!$schematic) {
+            return null;
+        }
+
+        return new PlanetarySchematic($schematic);
+    }
 }
