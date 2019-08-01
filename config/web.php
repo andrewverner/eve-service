@@ -60,6 +60,7 @@ $config = [
                 'character/<characterId:\d+>/agents' => 'character/character/agents',
                 'character/<characterId:\d+>/assets' => 'character/character/assets',
                 'character/<characterId:\d+>/bps' => 'character/character/bps',
+                'character/<characterId:\d+>/bookmarks' => 'character/character/bookmarks',
                 'character/<characterId:\d+>/calendar' => 'character/character/calendar',
 
                 'character/<characterId:\d+>/industry-jobs' => 'character/character/industry-jobs',

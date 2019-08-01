@@ -249,7 +249,7 @@ class SolarSystem extends EVEObject
     /**
      * @return Constellation
      */
-    public function getConstellation()
+    public function constellation()
     {
         if (!$this->constellation) {
             $this->constellation = EVE::universe()->constellation($this->constellationId);

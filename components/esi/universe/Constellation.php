@@ -46,7 +46,7 @@ class Constellation extends EVEObject
     /**
      * @return Region
      */
-    public function getRegion()
+    public function region()
     {
         if (!$this->region) {
             $this->region = EVE::universe()->region($this->regionId);

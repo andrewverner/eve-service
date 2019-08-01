@@ -153,4 +153,26 @@ class CharacterController extends Controller
             'planet' => new Planet(['planet_id' => $planetId]),
         ]);
     }
+
+    public function actionBookmarks()
+    {
+        $data = $this->character->bookmarks();
+
+        $bookmarks = [];
+        foreach ($data as $bookmark) {
+            $bookmarks[$bookmark->folderId][] = $bookmark;
+        }
+
+        $foldersData = $this->character->bookmarksFolders();
+        $folders = [];
+        foreach ($foldersData as $folder) {
+            $folders[$folder->folderId] = $folder;
+        }
+
+        return $this->render('bookmarks', [
+            'character' => $this->character,
+            'bookmarks' => $bookmarks,
+            'folders' => $folders,
+        ]);
+    }
 }

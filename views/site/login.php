@@ -29,7 +29,8 @@ RegistrationAsset::register($this);
                                 <a class="eve-btn eve-btn-big eve-btn-default reg-btn" href="#">Cancel</a>
                             </div>
                             <div class="col-lg-6 text-right">
-                                <input type="submit" class="eve-btn eve-btn-big eve-btn-primary reg-btn" value="Login" />
+                                <input type="submit" class="eve-btn eve-btn-big eve-btn-primary reg-btn" value="Sign in
+" />
                             </div>
                         </div>
                     </div>

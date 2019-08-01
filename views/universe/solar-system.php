@@ -24,8 +24,8 @@ $this->title = sprintf('Solar system: %s (%s)', $solarSystem->name, $solarSystem
 
         <?= Html::ul([
             sprintf('%s (%s)', $solarSystem->name, $solarSystem->getFormattedSecurityStatus(true)),
-            $solarSystem->getConstellation()->name,
-            $solarSystem->getConstellation()->getRegion()->name,
+            $solarSystem->constellation()->name,
+            $solarSystem->constellation()->region()->name,
         ], [
             'class' => 'solar-system-bread-crumbs',
             'encode' => false,
